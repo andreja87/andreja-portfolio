@@ -1281,9 +1281,12 @@ export default function Portfolio() {
   const scrollToSection = (id) => {
     const section = document.getElementById(id);
     if (!section) return;
-    /* A full-height section (the formula band) is aligned by its own top edge,
-       so the whole screen is filled. Everything else aligns by its heading. */
-    const fullHeight = section.classList.contains("formula");
+    /* A section that fills the screen is aligned by its own top edge, so its
+       bottom does not fall below the fold. Shorter sections align by heading. */
+    const fullHeight =
+      section.classList.contains("formula") ||
+      (section.classList.contains("home-section") &&
+        section.getBoundingClientRect().height >= window.innerHeight - 80);
     const heading = fullHeight ? null : section.querySelector("h2");
     const anchor = heading || section;
     const barHeight = 56;
@@ -1506,8 +1509,9 @@ export default function Portfolio() {
         .story-portrait img {
           display: block; width: 100%; aspect-ratio: 4 / 5;
           object-fit: cover;
-          /* Shows more of the left of the frame, so she sits toward the text */
-          object-position: 38% center;
+          /* Left of frame, so she sits toward the text; slightly high, so the
+             face stays in view when the box is wider than it is tall */
+          object-position: 38% 22%;
           border-radius: 20px; border: 1px solid var(--line);
           box-shadow: 0 14px 34px rgba(43,36,29,.10);
         }
@@ -1862,7 +1866,9 @@ export default function Portfolio() {
           .entry-card { min-height: 0; }
           .story p { font-size: 15px; line-height: 1.5; margin-bottom: 8px; }
           .story-grid { gap: 26px; }
-          .story-grid.has-portrait .story-portrait img { min-height: 250px; max-height: 46vh; }
+          .story-grid.has-portrait .story-portrait img {
+            min-height: 220px; max-height: 44vh; object-position: 38% 18%;
+          }
           .formula-flow { margin: 6px 0 18px; }
           .formula-note { font-size: 16px; }
           .contact { padding: 30px 24px; }
