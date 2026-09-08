@@ -1488,7 +1488,7 @@ export default function Portfolio() {
         .band { background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 
         /* One section per screen, but only where there is room for it */
-        @media (min-width: 900px) and (min-height: 560px) {
+        @media (min-width: 900px) and (min-height: 470px) {
           .home-section {
             min-height: calc(100svh - 56px);
             display: flex; align-items: center;
@@ -1841,8 +1841,39 @@ export default function Portfolio() {
           .hero { padding: 86px 24px 56px; }
         }
 
+        /* Very short windows, around 550px of usable height */
+        @media (min-width: 641px) and (max-height: 620px) {
+          .hero { padding: 66px 24px 32px; }
+          .hero h1 { font-size: clamp(26px, 3.1vw, 36px); margin-bottom: 14px; }
+          .hero-sub { font-size: 16px; margin-bottom: 20px; }
+          .hero .btn { padding: 10px 22px; font-size: 14px; }
+          section { padding: 34px 24px; }
+          .section-title { font-size: clamp(21px, 2.4vw, 26px); margin-bottom: 14px; }
+          .section-title::after { margin-top: 10px; }
+          .section-intro { font-size: 15.5px; margin-bottom: 14px; }
+          .offer-grid, .card-grid { gap: 12px; }
+          .card { padding: 15px 16px; }
+          .card p { font-size: 14px; }
+          .entry-card { min-height: 0; }
+          .story p { font-size: 15px; line-height: 1.5; margin-bottom: 8px; }
+          .story-grid { gap: 26px; }
+          .story-grid.has-portrait .story-portrait img { min-height: 250px; max-height: 46svh; }
+          .formula-flow { margin: 6px 0 18px; }
+          .formula-note { font-size: 16px; }
+          .contact { padding: 30px 24px; }
+          .contact h2 { font-size: clamp(22px, 2.6vw, 28px); margin-bottom: 10px; }
+          .contact-lead { font-size: 15.5px; margin-bottom: 14px; }
+          .field { margin-bottom: 9px; }
+          .field span { font-size: 12px; margin-bottom: 4px; }
+          .field input, .field textarea { padding: 9px 12px; font-size: 15px; }
+          .field textarea { min-height: 62px; }
+          .contact-form .btn { padding: 10px 24px; }
+          .linkedin-note { margin-top: 10px; padding-top: 10px; font-size: 14.5px; }
+          footer { padding: 16px; font-size: 13px; }
+        }
+
         /* Short windows: scale the type down so a whole section still fits */
-        @media (min-width: 641px) and (max-height: 720px) {
+        @media (min-width: 641px) and (max-height: 720px) and (min-height: 621px) {
           .hero { padding: 74px 24px 40px; }
           .hero h1 { font-size: clamp(28px, 3.6vw, 42px); margin-bottom: 16px; }
           .hero-sub { font-size: 17px; margin-bottom: 26px; }
