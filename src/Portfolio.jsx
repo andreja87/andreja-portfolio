@@ -228,6 +228,7 @@ const CASE_FUTURE_FORWARD = {
 
     processTitle: "My Process",
     processVisualAlt: "Diagram of the five process steps",
+    processFlow: ["Understand", "Analyze", "Prioritize", "Design", "Plan"],
     process: [
       {
         title: "Understand",
@@ -1113,7 +1114,7 @@ function HomePage({ c, lang, goToSection, navigate }) {
 
       <CardSection
         id="projects"
-        sectionClass="band"
+        sectionClass="band home-section"
         title={c.projectsTitle}
         intro={c.projectsIntro}
         items={projects}
@@ -1125,7 +1126,7 @@ function HomePage({ c, lang, goToSection, navigate }) {
         emptySub={c.projectsComingSoonSub}
       />
 
-      <section id="offer">
+      <section className="home-section" id="offer">
         <div className="inner">
           <Reveal><h2 className="section-title">{c.offerTitle}</h2></Reveal>
           <Reveal delay={80}><p className="section-intro">{c.offerIntro}</p></Reveal>
@@ -1142,7 +1143,7 @@ function HomePage({ c, lang, goToSection, navigate }) {
         </div>
       </section>
 
-      <section className="story band" id="story">
+      <section className="story band home-section" id="story">
         <div className="inner">
           <Reveal><h2 className="section-title">{c.storyTitle}</h2></Reveal>
           <div className={PORTRAIT ? "story-grid has-portrait" : "story-grid"}>
@@ -1163,7 +1164,7 @@ function HomePage({ c, lang, goToSection, navigate }) {
       {SHOW_BLOG && (
         <CardSection
           id="blog"
-          sectionClass=""
+          sectionClass="home-section"
           title={c.blogTitle}
           intro={c.blogIntro}
           items={blogPosts}
@@ -1193,7 +1194,7 @@ function HomePage({ c, lang, goToSection, navigate }) {
         </div>
       </section>
 
-      <section className="contact" id="contact">
+      <section className="contact home-section" id="contact">
         <div className="inner">
           <Reveal>
             <h2>{c.contactTitle}</h2>
@@ -1417,7 +1418,7 @@ export default function Portfolio() {
 
         /* ---- Floating LinkedIn shortcut ---- */
         .floating-linkedin {
-          position: fixed; right: 20px; bottom: 22px; z-index: 55;
+          position: fixed; left: 20px; bottom: 22px; z-index: 55;
           width: 46px; height: 46px; border-radius: 50%;
           display: flex; align-items: center; justify-content: center;
           background: var(--ink); color: var(--bg);
@@ -1444,9 +1445,9 @@ export default function Portfolio() {
 
         /* Hero */
         .hero {
-          position: relative; min-height: 92vh;
+          position: relative; min-height: calc(100svh - 56px);
           display: flex; flex-direction: column; justify-content: center;
-          padding: 96px 24px 72px; max-width: 1080px; margin: 0 auto;
+          padding: 84px 24px 56px; max-width: 1080px; margin: 0 auto;
         }
         .monogram {
           position: absolute; top: 50%; right: -4%;
@@ -1487,8 +1488,17 @@ export default function Portfolio() {
         .section-intro { color: var(--muted); margin-bottom: 24px; font-size: 17px; max-width: 680px; }
         .band { background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 
+        /* One section per screen, but only where there is room for it */
+        @media (min-width: 900px) and (min-height: 680px) {
+          .home-section {
+            min-height: calc(100svh - 56px);
+            display: flex; align-items: center;
+          }
+          .home-section > .inner { width: 100%; }
+        }
+
         /* Story */
-        .story p { max-width: 680px; margin-bottom: 13px; font-size: 17px; line-height: 1.58; }
+        .story p { max-width: 680px; margin-bottom: 12px; font-size: 16.5px; line-height: 1.55; }
         .story p:last-child { margin-bottom: 0; }
         .story-grid { display: grid; grid-template-columns: 1fr; gap: 36px; align-items: start; }
         .story-portrait img {
@@ -1547,7 +1557,7 @@ export default function Portfolio() {
         /* ---- Formula (signature section) ---- */
         .formula {
           background: var(--ink); color: var(--bg); text-align: center;
-          min-height: 100vh; display: flex; align-items: center;
+          min-height: calc(100svh - 56px); display: flex; align-items: center;
         }
         .formula .inner { width: 100%; }
         .formula .section-title { color: var(--bg); }
@@ -1602,6 +1612,10 @@ export default function Portfolio() {
           margin-top: 52px; padding-top: 28px; border-top: 1px solid var(--line);
           display: flex; flex-wrap: wrap; gap: 12px;
         }
+        @media (max-width: 700px) {
+          .project-footer-nav { justify-content: center; }
+          .project-footer-nav .btn { flex: 1 1 100%; text-align: center; }
+        }
         .project-footer-nav .btn { font-size: 14.5px; padding: 11px 22px; }
 
         /* ---- Case study ---- */
@@ -1649,6 +1663,9 @@ export default function Portfolio() {
         .process-flow {
           display: flex; flex-wrap: wrap; align-items: center;
           gap: 8px; margin: 0 0 26px;
+        }
+        @media (max-width: 700px) {
+          .process-flow { justify-content: center; text-align: center; }
         }
         .flow-item { display: inline-flex; align-items: center; gap: 8px; }
         .flow-chip {
