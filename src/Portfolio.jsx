@@ -24,11 +24,10 @@ const t = {
     closeMenu: "Close menu",
     storyTitle: "My story",
     storyBody: [
-      "I've worked in different roles and industries. Each experience showed me how respect, opportunities to grow, communication and team atmosphere affect how employees feel and work.",
-      "I've been part of teams where support and room to grow were part of everyday work. I've also seen how their absence can affect employees' energy, motivation and well-being. These experiences strengthened my belief that respect, support and a sense of belonging are the foundation of a workplace where employees feel valued.",
-      "Personal development and communication are not just professional interests for me. For more than a decade, I've actively worked on my own development and explored how people think, communicate and change.",
-      "Today, I combine that interest with my professional experience and formal education in HR, organizational behavior and business organization.",
-      "I want to contribute to workplaces where employees can grow, communicate openly, support one another and feel that their work is valued. I believe in teams where success is not only individual, but shared.",
+      "I've worked in different roles and industries. These experiences showed me how respect, opportunities to grow, communication and team atmosphere affect how employees feel and work.",
+      "I've been part of teams where support and development were part of everyday work, but I've also seen how their absence affects employees' energy and motivation. That is why I believe respect, support and a strong sense of community are the foundation of a healthy workplace.",
+      "For more than a decade, I've actively worked on my personal development and explored communication and human behavior. Today, I combine that interest with my professional experience and formal education in HR, organizational behavior and business organization.",
+      "My goal is to contribute to workplaces where employees can grow, communicate openly, support one another and build success together.",
     ],
     offerTitle: "How I can contribute",
     offerIntro: "I combine professional experience, continuous learning and L&D principles to develop practical approaches focused on employees and their work environment.",
@@ -1489,7 +1488,7 @@ export default function Portfolio() {
         .band { background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 
         /* One section per screen, but only where there is room for it */
-        @media (min-width: 900px) and (min-height: 680px) {
+        @media (min-width: 900px) and (min-height: 560px) {
           .home-section {
             min-height: calc(100svh - 56px);
             display: flex; align-items: center;
@@ -1840,6 +1839,27 @@ export default function Portfolio() {
         @media (min-width: 641px) and (max-height: 820px) {
           section { padding: 60px 24px; }
           .hero { padding: 86px 24px 56px; }
+        }
+
+        /* Short windows: scale the type down so a whole section still fits */
+        @media (min-width: 641px) and (max-height: 720px) {
+          .hero { padding: 74px 24px 40px; }
+          .hero h1 { font-size: clamp(28px, 3.6vw, 42px); margin-bottom: 16px; }
+          .hero-sub { font-size: 17px; margin-bottom: 26px; }
+          .hero-name { font-size: 18px; }
+          .eyebrow { margin-bottom: 14px; }
+          section { padding: 44px 24px; }
+          .section-title { font-size: clamp(22px, 2.6vw, 28px); margin-bottom: 18px; }
+          .section-intro { font-size: 16px; margin-bottom: 18px; }
+          .card { padding: 18px 18px; }
+          .card h3 { font-size: 17.5px; }
+          .card p { font-size: 14.5px; }
+          .story p { font-size: 15.5px; margin-bottom: 10px; }
+          .contact { padding: 40px 24px; }
+          .contact-lead { font-size: 16px; margin-bottom: 16px; }
+          .field { margin-bottom: 10px; }
+          .field textarea { min-height: 74px; }
+          .linkedin-note { margin-top: 12px; padding-top: 12px; font-size: 15px; }
         }
 
         @media (max-width: 640px) {
