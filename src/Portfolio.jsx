@@ -1444,7 +1444,9 @@ export default function Portfolio() {
 
         /* Hero */
         .hero {
-          position: relative; min-height: calc(100svh - 56px);
+          position: relative;
+          min-height: calc(100vh - 56px);
+          min-height: calc(100svh - 56px);
           display: flex; flex-direction: column; justify-content: center;
           padding: 84px 24px 56px; max-width: 1080px; margin: 0 auto;
         }
@@ -1490,6 +1492,7 @@ export default function Portfolio() {
         /* One section per screen, but only where there is room for it */
         @media (min-width: 900px) and (min-height: 470px) {
           .home-section {
+            min-height: calc(100vh - 56px);
             min-height: calc(100svh - 56px);
             display: flex; align-items: center;
           }
@@ -1556,7 +1559,9 @@ export default function Portfolio() {
         /* ---- Formula (signature section) ---- */
         .formula {
           background: var(--ink); color: var(--bg); text-align: center;
-          min-height: calc(100svh - 56px); display: flex; align-items: center;
+          min-height: calc(100vh - 56px);
+          min-height: calc(100svh - 56px);
+          display: flex; align-items: center;
         }
         .formula .inner { width: 100%; }
         .formula .section-title { color: var(--bg); }
@@ -1857,7 +1862,7 @@ export default function Portfolio() {
           .entry-card { min-height: 0; }
           .story p { font-size: 15px; line-height: 1.5; margin-bottom: 8px; }
           .story-grid { gap: 26px; }
-          .story-grid.has-portrait .story-portrait img { min-height: 250px; max-height: 46svh; }
+          .story-grid.has-portrait .story-portrait img { min-height: 250px; max-height: 46vh; }
           .formula-flow { margin: 6px 0 18px; }
           .formula-note { font-size: 16px; }
           .contact { padding: 30px 24px; }
