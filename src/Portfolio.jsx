@@ -1224,6 +1224,7 @@ export default function Portfolio() {
     typeof window === "undefined" ? "" : window.location.hash
   );
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState("");
   const c = t[lang];
 
@@ -1248,6 +1249,7 @@ export default function Portfolio() {
   /* Tracks which section is currently on screen, for the active menu item */
   useEffect(() => {
     const onScroll = () => {
+      setScrolled(window.scrollY > 400);
       if (isProjectRoute) return;
       let current = "";
       NAV_IDS.forEach((id) => {
@@ -1418,17 +1420,26 @@ export default function Portfolio() {
           .mobile-menu.is-open { display: flex; }
         }
 
-        /* ---- Floating LinkedIn shortcut ---- */
-        .floating-linkedin {
-          position: fixed; left: 20px; bottom: 22px; z-index: 55;
+        /* ---- Floating controls, stacked bottom right ---- */
+        .floating-actions {
+          position: fixed; right: 20px; bottom: 22px; z-index: 55;
+          display: flex; flex-direction: column; align-items: center; gap: 10px;
+        }
+        .floating-linkedin, .to-top {
           width: 46px; height: 46px; border-radius: 50%;
           display: flex; align-items: center; justify-content: center;
-          background: var(--ink); color: var(--bg);
+          background: var(--ink); color: var(--bg); border: none;
           box-shadow: 0 6px 18px rgba(43,36,29,.18);
-          transition: background .25s ease, transform .25s ease;
+          transition: background .25s ease, transform .25s ease,
+                      opacity .3s ease, visibility .3s;
         }
-        .floating-linkedin:hover { background: var(--accent); transform: translateY(-2px); }
+        .floating-linkedin:hover, .to-top:hover {
+          background: var(--accent); transform: translateY(-2px);
+        }
         .floating-linkedin svg { display: block; }
+        .to-top { cursor: pointer; font-size: 20px; line-height: 1; }
+        .to-top { opacity: 0; visibility: hidden; transform: translateY(8px); }
+        .to-top.is-visible { opacity: 1; visibility: visible; transform: none; }
         .lang-toggle button {
           font-family: 'Karla', sans-serif; font-weight: 700; font-size: 13px;
           letter-spacing: .06em; padding: 6px 14px; border: none; border-radius: 999px;
@@ -1441,6 +1452,7 @@ export default function Portfolio() {
         .brand:focus-visible,
         .burger:focus-visible,
         .floating-linkedin:focus-visible,
+        .to-top:focus-visible,
         .card-link:focus-visible,
         .back-link:focus-visible,
         .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
@@ -1986,18 +1998,28 @@ export default function Portfolio() {
         <HomePage c={c} lang={lang} goToSection={goToSection} navigate={navigate} />
       )}
 
-      <a
-        className="floating-linkedin"
-        href={LINKEDIN_URL}
-        target="_blank"
-        rel="noreferrer"
-        aria-label={c.linkedinLink}
-        title={c.linkedinLink}
-      >
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
-          <path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.25 8h4.5V23H.25V8zm7.5 0h4.31v2.05h.06c.6-1.14 2.07-2.34 4.26-2.34 4.56 0 5.4 3 5.4 6.9V23h-4.5v-7.5c0-1.79-.03-4.09-2.49-4.09-2.5 0-2.88 1.95-2.88 3.96V23h-4.5V8z" />
-        </svg>
-      </a>
+      <div className="floating-actions">
+        <button
+          className={scrolled ? "to-top is-visible" : "to-top"}
+          onClick={goToTop}
+          aria-label={c.backToTop}
+          title={c.backToTop}
+        >
+          ↑
+        </button>
+        <a
+          className="floating-linkedin"
+          href={LINKEDIN_URL}
+          target="_blank"
+          rel="noreferrer"
+          aria-label={c.linkedinLink}
+          title={c.linkedinLink}
+        >
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+            <path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.25 8h4.5V23H.25V8zm7.5 0h4.31v2.05h.06c.6-1.14 2.07-2.34 4.26-2.34 4.56 0 5.4 3 5.4 6.9V23h-4.5v-7.5c0-1.79-.03-4.09-2.49-4.09-2.5 0-2.88 1.95-2.88 3.96V23h-4.5V8z" />
+          </svg>
+        </a>
+      </div>
 
       <footer>
         <span>{c.footer}</span>
