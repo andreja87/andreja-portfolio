@@ -83,6 +83,7 @@ const t = {
     formError: "Something went wrong. Please try again.",
     formIncomplete: "Please fill in all three fields.",
     formBadEmail: "Please check the email address.",
+    formPrivacy: "Your details are used only to reply to your message and are never shared with third parties.",
     linkedinBefore: "You can also find me on ",
     linkedinLink: "LinkedIn",
     linkedinAfter: ".",
@@ -166,6 +167,7 @@ const t = {
     formError: "Do\u0161lo je do gre\u0161ke. Poku\u0161ajte ponovo.",
     formIncomplete: "Molimo popunite sva tri polja.",
     formBadEmail: "Proverite adresu e-po\u0161te.",
+    formPrivacy: "Va\u0161i podaci koriste se isklju\u010divo za odgovor na poruku i ne prosle\u0111uju se tre\u0107im licima.",
     linkedinBefore: "Tu sam i na ",
     linkedinLink: "LinkedIn-u",
     linkedinAfter: ".",
@@ -1082,6 +1084,8 @@ function ContactForm({ c }) {
       <button className="btn btn-primary" onClick={submit} disabled={status === "sending"}>
         {status === "sending" ? c.formSending : c.formSend}
       </button>
+
+      <p className="form-privacy">{c.formPrivacy}</p>
     </div>
   );
 }
@@ -1329,8 +1333,6 @@ export default function Portfolio() {
   return (
     <div className="site">
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Karla:wght@400;500;700&display=swap');
-
         :root {
           --bg: #F0EAE0;
           --surface: #F7F3EA;
@@ -1344,12 +1346,12 @@ export default function Portfolio() {
         .site {
           background: var(--bg);
           color: var(--ink);
-          font-family: 'Karla', sans-serif;
+          font-family: 'Karla Variable', system-ui, sans-serif;
           font-size: 17px;
           line-height: 1.65;
           overflow-x: hidden;
         }
-        h1, h2, h3 { font-family: 'Fraunces', serif; font-weight: 500; line-height: 1.15; }
+        h1, h2, h3 { font-family: 'Fraunces Variable', Georgia, serif; font-weight: 500; line-height: 1.15; }
 
         .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s ease; }
         .reveal.is-visible { opacity: 1; transform: none; }
@@ -1370,7 +1372,7 @@ export default function Portfolio() {
           display: flex; align-items: center; gap: 14px;
         }
         .brand {
-          font-family: 'Fraunces', serif; font-size: 20px; font-weight: 600;
+          font-family: 'Fraunces Variable', Georgia, serif; font-size: 20px; font-weight: 600;
           letter-spacing: .04em; background: none; border: none; cursor: pointer;
           color: var(--ink); padding: 4px 2px; line-height: 1;
         }
@@ -1380,7 +1382,7 @@ export default function Portfolio() {
           margin-left: auto;
         }
         .nav-link {
-          font-family: 'Karla', sans-serif; font-size: 14px; font-weight: 500;
+          font-family: 'Karla Variable', system-ui, sans-serif; font-size: 14px; font-weight: 500;
           background: none; border: none; cursor: pointer; color: var(--muted);
           padding: 7px 10px; border-radius: 999px; white-space: nowrap;
           transition: all .2s ease;
@@ -1413,7 +1415,7 @@ export default function Portfolio() {
           border-top: 1px solid var(--line); background: var(--surface);
         }
         .mobile-link {
-          font-family: 'Karla', sans-serif; font-size: 16px; font-weight: 500;
+          font-family: 'Karla Variable', system-ui, sans-serif; font-size: 16px; font-weight: 500;
           text-align: left; padding: 14px 24px; background: none; border: none;
           border-bottom: 1px solid var(--line); color: var(--ink); cursor: pointer;
         }
@@ -1448,7 +1450,7 @@ export default function Portfolio() {
         .to-top { opacity: 0; visibility: hidden; transform: translateY(8px); }
         .to-top.is-visible { opacity: 1; visibility: visible; transform: none; }
         .lang-toggle button {
-          font-family: 'Karla', sans-serif; font-weight: 700; font-size: 13px;
+          font-family: 'Karla Variable', system-ui, sans-serif; font-weight: 700; font-size: 13px;
           letter-spacing: .06em; padding: 6px 14px; border: none; border-radius: 999px;
           background: transparent; color: var(--muted); cursor: pointer; transition: all .25s ease;
         }
@@ -1475,7 +1477,7 @@ export default function Portfolio() {
         .monogram {
           position: absolute; top: 50%; right: -4%;
           transform: translateY(-52%);
-          font-family: 'Fraunces', serif; font-weight: 600;
+          font-family: 'Fraunces Variable', Georgia, serif; font-weight: 600;
           font-size: clamp(280px, 46vw, 620px);
           color: var(--ink); opacity: .05;
           user-select: none; pointer-events: none; line-height: 1;
@@ -1487,10 +1489,10 @@ export default function Portfolio() {
         .hero h1 { font-size: clamp(34px, 5.4vw, 62px); max-width: 760px; margin-bottom: 22px; }
         .hero h1 em { font-style: italic; color: var(--accent); }
         .hero-sub { font-size: 19px; color: var(--muted); max-width: 540px; margin-bottom: 36px; }
-        .hero-name { font-family: 'Fraunces', serif; font-size: 20px; margin-bottom: 6px; }
+        .hero-name { font-family: 'Fraunces Variable', Georgia, serif; font-size: 20px; margin-bottom: 6px; }
         .cta-row { display: flex; gap: 14px; flex-wrap: wrap; }
         .btn {
-          font-family: 'Karla', sans-serif; font-weight: 700; font-size: 15px;
+          font-family: 'Karla Variable', system-ui, sans-serif; font-weight: 700; font-size: 15px;
           padding: 13px 26px; border-radius: 999px; cursor: pointer;
           border: 1.5px solid var(--ink); transition: all .25s ease;
           text-decoration: none; display: inline-block;
@@ -1592,7 +1594,7 @@ export default function Portfolio() {
         .formula-flow {
           display: flex; flex-wrap: nowrap; align-items: center; justify-content: center;
           gap: clamp(9px, 1.2vw, 16px);
-          font-family: 'Fraunces', serif;
+          font-family: 'Fraunces Variable', Georgia, serif;
           font-size: clamp(13px, 1.55vw, 23px);
           margin: 10px 0 34px;
         }
@@ -1603,9 +1605,9 @@ export default function Portfolio() {
           border: 1.5px solid rgba(240,234,224,.35);
         }
         .f-chip.result { background: var(--accent); border-color: var(--accent); }
-        .f-op { font-family: 'Karla', sans-serif; opacity: .7; line-height: 1; display: inline-block; }
+        .f-op { font-family: 'Karla Variable', system-ui, sans-serif; opacity: .7; line-height: 1; display: inline-block; }
         .formula-note {
-          font-family: 'Fraunces', serif; font-style: italic; font-weight: 400;
+          font-family: 'Fraunces Variable', Georgia, serif; font-style: italic; font-weight: 400;
           /* Lightened accent: same colour family, readable on the dark band */
           color: #B7C3A8;
           font-size: clamp(17px, 2vw, 20px); line-height: 1.45;
@@ -1669,7 +1671,7 @@ export default function Portfolio() {
           text-transform: uppercase; color: var(--accent); margin-bottom: 10px;
         }
         .callout-text {
-          font-family: 'Fraunces', serif; font-size: clamp(18px, 2.1vw, 22px);
+          font-family: 'Fraunces Variable', Georgia, serif; font-size: clamp(18px, 2.1vw, 22px);
           line-height: 1.4; color: var(--ink); margin: 0; max-width: 820px;
         }
 
@@ -1696,7 +1698,7 @@ export default function Portfolio() {
         }
         .flow-item { display: inline-flex; align-items: center; gap: 8px; }
         .flow-chip {
-          font-family: 'Fraunces', serif; font-size: 15px;
+          font-family: 'Fraunces Variable', Georgia, serif; font-size: 15px;
           padding: 7px 14px; border-radius: 999px;
           border: 1.5px solid rgba(90,107,79,.35); color: var(--ink);
           white-space: nowrap;
@@ -1747,7 +1749,7 @@ export default function Portfolio() {
           display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
         }
         .future-badge {
-          font-family: 'Karla', sans-serif; font-size: 12px; font-weight: 700;
+          font-family: 'Karla Variable', system-ui, sans-serif; font-size: 12px; font-weight: 700;
           letter-spacing: .08em; text-transform: uppercase;
           color: var(--accent); background: rgba(90,107,79,.12);
           border: 1px solid rgba(90,107,79,.3);
@@ -1757,7 +1759,7 @@ export default function Portfolio() {
         .measure-flow > .reveal { display: flex; }
         .measure-card { display: flex; flex-direction: column; width: 100%; }
         .measure-card h4 {
-          font-family: 'Karla', sans-serif; font-size: 12.5px; font-weight: 700;
+          font-family: 'Karla Variable', system-ui, sans-serif; font-size: 12.5px; font-weight: 700;
           letter-spacing: .14em; text-transform: uppercase; color: var(--accent);
           margin-bottom: 12px;
         }
@@ -1793,7 +1795,7 @@ export default function Portfolio() {
         }
         .outcome-item { display: inline-flex; align-items: center; gap: 10px; }
         .outcome-chip {
-          font-family: 'Fraunces', serif; font-size: clamp(15px, 1.7vw, 18px);
+          font-family: 'Fraunces Variable', Georgia, serif; font-size: clamp(15px, 1.7vw, 18px);
           padding: 10px 18px; border-radius: 999px;
           border: 1.5px solid rgba(90,107,79,.35); color: var(--ink);
         }
@@ -1823,7 +1825,7 @@ export default function Portfolio() {
           text-transform: uppercase; color: var(--muted); margin-bottom: 5px;
         }
         .field input, .field textarea {
-          width: 100%; font-family: 'Karla', sans-serif; font-size: 16px; color: var(--ink);
+          width: 100%; font-family: 'Karla Variable', system-ui, sans-serif; font-size: 16px; color: var(--ink);
           background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
           padding: 11px 13px; transition: border-color .2s ease, box-shadow .2s ease;
         }
@@ -1836,6 +1838,10 @@ export default function Portfolio() {
         .contact-form .btn { display: block; width: 100%; margin-top: 2px; padding: 12px 26px; text-align: center; }
         .contact-form .btn:disabled { opacity: .6; cursor: default; }
         .form-problem { color: #8C3B2E; font-size: 15px; margin: 4px 0 12px; }
+        .form-privacy {
+          margin-top: 10px; font-size: 13.5px; line-height: 1.45;
+          color: var(--muted); text-align: center;
+        }
         .form-success {
           max-width: 760px; margin: 0 auto;
           border: 1.5px solid var(--accent); border-radius: 16px;
@@ -1899,6 +1905,7 @@ export default function Portfolio() {
           .field textarea { min-height: 62px; }
           .contact-form .btn { padding: 10px 24px; }
           .linkedin-note { margin-top: 10px; padding-top: 10px; font-size: 14.5px; }
+          .form-privacy { font-size: 12.5px; margin-top: 8px; }
           footer { padding: 16px; font-size: 13px; }
         }
 
