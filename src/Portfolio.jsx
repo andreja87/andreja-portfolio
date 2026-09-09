@@ -910,7 +910,7 @@ function CaseStudyBody({ d, lang }) {
 }
 
 /* ============ Project detail page ============ */
-function ProjectPage({ project, c, lang, setLang, goToSection, goToTop, navigate }) {
+function ProjectPage({ project, c, lang, setLang, goToSection, navigate }) {
   const detail = project.detail ? project.detail[lang] : null;
   /* True while this language is missing sections the English version has */
   const reference = project.detail ? project.detail.en : null;
@@ -984,7 +984,6 @@ function ProjectPage({ project, c, lang, setLang, goToSection, goToTop, navigate
             >
               ← {c.backToWork}
             </a>
-            <button className="btn btn-ghost" onClick={goToTop}>↑ {c.backToTop}</button>
             <button className="btn btn-primary" onClick={() => goToSection("contact")}>
               {c.ctaSecondary}
             </button>
@@ -1310,11 +1309,19 @@ export default function Portfolio() {
     scrollToSection(id);
   };
 
-  const goToTop = () => {
+  /* The monogram in the bar goes home, from wherever you are */
+  const goHome = () => {
     if (isProjectRoute) {
       navigate("#/");
       return;
     }
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    setMenuOpen(false);
+  };
+
+  /* The arrow only scrolls the current page. It never changes page, so nobody
+     is thrown out of a case study by mistake. */
+  const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
     setMenuOpen(false);
   };
@@ -1926,7 +1933,7 @@ export default function Portfolio() {
 
       <nav className="topbar" aria-label="Main">
         <div className="topbar-inner">
-          <button className="brand" onClick={goToTop} aria-label={c.backToTop}>AT</button>
+          <button className="brand" onClick={goHome} aria-label={c.name}>AT</button>
 
           <ul className="nav-links">
             {NAV_IDS.map((id) => (
@@ -1974,7 +1981,6 @@ export default function Portfolio() {
             lang={lang}
             setLang={setLang}
             goToSection={goToSection}
-            goToTop={goToTop}
             navigate={navigate}
           />
         ) : (
@@ -2001,7 +2007,7 @@ export default function Portfolio() {
       <div className="floating-actions">
         <button
           className={scrolled ? "to-top is-visible" : "to-top"}
-          onClick={goToTop}
+          onClick={scrollToTop}
           aria-label={c.backToTop}
           title={c.backToTop}
         >
