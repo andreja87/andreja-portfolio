@@ -1448,8 +1448,8 @@ export default function Portfolio() {
         /* Hero */
         .hero {
           position: relative;
-          min-height: calc(100vh - 56px);
-          min-height: calc(100svh - 56px);
+          min-height: 100vh;
+          min-height: 100svh;
           display: flex; flex-direction: column; justify-content: center;
           padding: 84px 24px 56px; max-width: 1080px; margin: 0 auto;
         }
