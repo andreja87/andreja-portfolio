@@ -615,13 +615,6 @@ const CERTIFICATE = "/certificate.jpg";
 const COACHING = {
   sr: {
     pageTitle: "Individualni coaching · Andreja Trajković",
-    localNavLabel: "Na ovoj stranici",
-    localLinks: [
-      { id: "coaching-for", label: "Za koga" },
-      { id: "coaching-how", label: "Kako radimo" },
-      { id: "coaching-about", label: "O meni" },
-      { id: "coaching-contact", label: "Kontakt" },
-    ],
     label: "Individualni coaching",
     h1Before: "Prostor da zastaneš, čuješ sebe i ",
     h1Em: "izabereš sledeći korak.",
@@ -733,13 +726,6 @@ const COACHING = {
   },
   en: {
     pageTitle: "Individual coaching · Andreja Trajkovic",
-    localNavLabel: "On this page",
-    localLinks: [
-      { id: "coaching-for", label: "Who it's for" },
-      { id: "coaching-how", label: "How we work" },
-      { id: "coaching-about", label: "About me" },
-      { id: "coaching-contact", label: "Contact" },
-    ],
     label: "Individual coaching",
     h1Before: "Room to pause, hear yourself and ",
     h1Em: "choose your next step.",
@@ -1567,16 +1553,6 @@ function CoachingPage({ c, lang, scrollToSection }) {
     <main className="coaching">
       <section className="c-section c-hero">
         <div className="c-inner">
-          <nav className="c-local" aria-label={d.localNavLabel}>
-            <ul>
-              {d.localLinks.map((l) => (
-                <li key={l.id}>
-                  <a href="#/coaching" onClick={go(l.id)}>{l.label}</a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
           <div className="c-hero-grid">
             <Reveal className="c-hero-text">
               <p className="c-label">{d.label}</p>
@@ -2465,17 +2441,6 @@ export default function Portfolio() {
         }
         .c-inner { max-width: 1080px; margin: 0 auto; }
 
-        /* Discreet local links */
-        .c-local ul {
-          list-style: none; display: flex; flex-wrap: wrap; gap: 0 26px; margin-bottom: 52px;
-        }
-        .c-local a {
-          display: inline-block; padding: 8px 0; font-size: 14px; font-weight: 500;
-          color: var(--muted); text-decoration: none;
-          border-bottom: 1px solid transparent; transition: color .2s ease, border-color .2s ease;
-        }
-        .c-local a:hover { color: var(--ink); border-bottom-color: var(--line); }
-
         /* Hero */
         .c-hero-grid { display: grid; grid-template-columns: 1fr; gap: 40px; align-items: center; }
         .c-label {
@@ -2659,7 +2624,6 @@ export default function Portfolio() {
         .c-form-card .contact-form, .c-form-card .form-success { max-width: none; }
         .c-form-card .form-success { margin: 0; }
 
-        .c-local a:focus-visible,
         .c-textlink:focus-visible,
         .c-faq-q:focus-visible,
         .c-cert-btn:focus-visible,
@@ -2668,14 +2632,13 @@ export default function Portfolio() {
         .c-faq-q:focus-visible { outline-offset: -2px; }
 
         @media (prefers-reduced-motion: reduce) {
-          .c-faq-icon::before, .c-faq-icon::after, .c-local a, .c-faq-q { transition: none; }
+          .c-faq-icon::before, .c-faq-icon::after, .c-faq-q { transition: none; }
         }
 
         @media (max-width: 640px) {
           .coaching section.c-section { padding: 56px 22px; }
           .coaching section.c-hero { padding: 88px 22px 56px; }
           .coaching section.c-section.c-flush { padding-top: 0; }
-          .c-local ul { gap: 0 20px; margin-bottom: 32px; }
           .c-hero-grid { gap: 36px; }
           .c-hero-intro { font-size: 17.5px; margin-bottom: 28px; }
           .c-hero-cta { flex-direction: column; align-items: stretch; gap: 18px; }
