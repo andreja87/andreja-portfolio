@@ -696,12 +696,11 @@ const COACHING = {
       },
       {
         q: "Kako da napravim prvi korak?",
-        a: "Javi mi se putem [[form|kontakt forme]] ili [[email|emaila]] i ukratko napiši na čemu želiš da radiš. Zatim dogovaramo termin uvodnog razgovora.",
+        a: "Javi mi se putem [[form|kontakt forme]] ili piši na [[email|andrejatrajkovic999@gmail.com]] i ukratko napiši na čemu želiš da radiš. Zatim dogovaramo termin uvodnog razgovora.",
       },
     ],
     contactTitle: "Prijavi se za besplatan coaching",
     emailLead: "Ili piši na",
-    copyLabel: "Kopiraj",
     copiedLabel: "Kopirano",
     copyAria: "Kopiraj email adresu",
     /* Used instead of the wording above and below when COACHING_OPEN is false */
@@ -713,13 +712,13 @@ const COACHING = {
       faqStart: "Prijavi se na listu čekanja putem [[form|kontakt forme]]. Kada se otvori nova tura, javiću ti se putem emaila i dogovaramo termin uvodnog razgovora.",
       contactTitle: "Prijavi se na listu čekanja",
       form: {
-        formSend: "Prijavi se na listu čekanja",
+        formSend: "Prijavi se",
         formSuccess: "Hvala. Tvoja prijava za listu čekanja je primljena. Javiću ti se putem emaila kada se otvori nova tura.",
       },
     },
     /* Same form and same notice as the rest of the site, worded with "ti" */
     form: {
-      formSend: "Prijavi se za besplatan coaching",
+      formSend: "Prijavi se",
       formIncomplete: "Popuni ime i email.",
       formFillAll: "Polja označena sa * su obavezna.",
       formSuccess: "Hvala. Tvoja poruka je poslata.",
@@ -811,12 +810,11 @@ const COACHING = {
       },
       {
         q: "How do I take the first step?",
-        a: "Get in touch through the [[form|contact form]] or by [[email|email]] and briefly write what you'd like to work on. Then we arrange a time for the introductory conversation.",
+        a: "Get in touch through the [[form|contact form]] or write to [[email|andrejatrajkovic999@gmail.com]] and briefly describe what you'd like to work on. Then we arrange a time for the introductory conversation.",
       },
     ],
     contactTitle: "Apply for free coaching",
     emailLead: "Or write to",
-    copyLabel: "Copy",
     copiedLabel: "Copied",
     copyAria: "Copy email address",
     closed: {
@@ -827,12 +825,12 @@ const COACHING = {
       faqStart: "Join the waiting list through the [[form|contact form]]. When a new round opens, I'll email you and we'll arrange a time for the introductory conversation.",
       contactTitle: "Join the waiting list",
       form: {
-        formSend: "Join the waiting list",
+        formSend: "Apply",
         formSuccess: "Thank you. Your waiting list request has been received. I'll email you when a new round opens.",
       },
     },
     form: {
-      formSend: "Apply for free coaching",
+      formSend: "Apply",
       formIncomplete: "Please fill in your name and email.",
       formFillAll: "Fields marked with * are required.",
     },
@@ -1776,8 +1774,23 @@ function CoachingPage({ c, lang, scrollToSection }) {
             <p className="c-email-line">
               <span>{d.emailLead}</span>
               <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
-              <button type="button" className="c-copy-btn" onClick={copyEmail} aria-label={d.copyAria}>
-                {copied ? d.copiedLabel : d.copyLabel}
+              <button
+                type="button"
+                className="c-copy-btn"
+                onClick={copyEmail}
+                aria-label={d.copyAria}
+                title={copied ? d.copiedLabel : d.copyAria}
+              >
+                {copied ? (
+                  <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                    <path d="M5 12.5l4.5 4.5L19 7.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+                  </svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                    <rect x="9" y="9" width="11" height="11" rx="2.5" stroke="currentColor" strokeWidth="1.8" fill="none" />
+                    <path d="M15 9V6.5A2.5 2.5 0 0 0 12.5 4h-6A2.5 2.5 0 0 0 4 6.5v6A2.5 2.5 0 0 0 6.5 15H9" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" fill="none" />
+                  </svg>
+                )}
               </button>
               <span className="c-sr-only" role="status" aria-live="polite">{copied ? d.copiedLabel : ""}</span>
             </p>
@@ -2675,7 +2688,8 @@ export default function Portfolio() {
         .c-email-line a:hover { color: #B7C3A8; }
         .c-copy-btn {
           font-family: 'Karla Variable', system-ui, sans-serif; font-size: 13.5px; font-weight: 700;
-          padding: 6px 16px; border-radius: 999px; cursor: pointer; min-width: 84px;
+          width: 36px; height: 36px; padding: 0; border-radius: 50%; cursor: pointer;
+          display: inline-flex; align-items: center; justify-content: center;
           background: transparent; color: var(--bg); border: 1.5px solid rgba(240,234,224,.45);
           transition: background .2s ease, color .2s ease, border-color .2s ease;
         }
