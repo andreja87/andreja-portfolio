@@ -700,6 +700,10 @@ const COACHING = {
       },
     ],
     contactTitle: "Prijavi se za besplatan coaching",
+    emailLead: "Ili piši na",
+    copyLabel: "Kopiraj",
+    copiedLabel: "Kopirano",
+    copyAria: "Kopiraj email adresu",
     /* Used instead of the wording above and below when COACHING_OPEN is false */
     closed: {
       pill: "Trenutna pro bono tura je popunjena",
@@ -811,6 +815,10 @@ const COACHING = {
       },
     ],
     contactTitle: "Apply for free coaching",
+    emailLead: "Or write to",
+    copyLabel: "Copy",
+    copiedLabel: "Copied",
+    copyAria: "Copy email address",
     closed: {
       pill: "Current pro bono round is full",
       ctaPrimary: "Join the waiting list",
@@ -1494,6 +1502,37 @@ function CoachingPage({ c, lang, scrollToSection }) {
       };
   const [openFaq, setOpenFaq] = useState({});
   const [certOpen, setCertOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const copyTimer = useRef(null);
+  useEffect(() => () => clearTimeout(copyTimer.current), []);
+
+  /* Copies the address; falls back to a hidden field where the clipboard API is blocked */
+  const copyEmail = async () => {
+    let done = false;
+    try {
+      await navigator.clipboard.writeText(EMAIL);
+      done = true;
+    } catch (err) {
+      try {
+        const ta = document.createElement("textarea");
+        ta.value = EMAIL;
+        ta.setAttribute("readonly", "");
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.select();
+        done = document.execCommand("copy");
+        document.body.removeChild(ta);
+      } catch (err2) {
+        done = false;
+      }
+    }
+    if (done) {
+      setCopied(true);
+      clearTimeout(copyTimer.current);
+      copyTimer.current = setTimeout(() => setCopied(false), 2200);
+    }
+  };
   const certTrigger = useRef(null);
   const certClose = useRef(null);
   const formText = { ...c, ...d.form };
@@ -1734,6 +1773,14 @@ function CoachingPage({ c, lang, scrollToSection }) {
             <div className="c-form-card">
               <ContactForm c={formText} source={COACHING_OPEN ? "coaching" : "coaching-waitlist"} strict />
             </div>
+            <p className="c-email-line">
+              <span>{d.emailLead}</span>
+              <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
+              <button type="button" className="c-copy-btn" onClick={copyEmail} aria-label={d.copyAria}>
+                {copied ? d.copiedLabel : d.copyLabel}
+              </button>
+              <span className="c-sr-only" role="status" aria-live="polite">{copied ? d.copiedLabel : ""}</span>
+            </p>
           </Reveal>
         </div>
       </section>
@@ -2620,6 +2667,25 @@ export default function Portfolio() {
           background: var(--surface); color: var(--ink);
           border-radius: 20px; padding: 32px;
         }
+        .c-email-line {
+          margin-top: 22px; display: flex; flex-wrap: wrap; align-items: center;
+          justify-content: center; gap: 8px 12px; font-size: 16px; color: #D9D1C3;
+        }
+        .c-email-line a { color: var(--bg); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
+        .c-email-line a:hover { color: #B7C3A8; }
+        .c-copy-btn {
+          font-family: 'Karla Variable', system-ui, sans-serif; font-size: 13.5px; font-weight: 700;
+          padding: 6px 16px; border-radius: 999px; cursor: pointer; min-width: 84px;
+          background: transparent; color: var(--bg); border: 1.5px solid rgba(240,234,224,.45);
+          transition: background .2s ease, color .2s ease, border-color .2s ease;
+        }
+        .c-copy-btn:hover { background: var(--bg); color: var(--ink); border-color: var(--bg); }
+        .c-email-line a:focus-visible, .c-copy-btn:focus-visible { outline: 2px solid var(--bg); outline-offset: 3px; border-radius: 4px; }
+        .c-copy-btn:focus-visible { border-radius: 999px; }
+        .c-sr-only {
+          position: absolute; width: 1px; height: 1px; overflow: hidden;
+          clip: rect(0 0 0 0); white-space: nowrap;
+        }
         .c-form-card .field input, .c-form-card .field textarea { background: var(--bg); }
         .c-form-card .contact-form, .c-form-card .form-success { max-width: none; }
         .c-form-card .form-success { margin: 0; }
@@ -2632,7 +2698,7 @@ export default function Portfolio() {
         .c-faq-q:focus-visible { outline-offset: -2px; }
 
         @media (prefers-reduced-motion: reduce) {
-          .c-faq-icon::before, .c-faq-icon::after, .c-faq-q { transition: none; }
+          .c-faq-icon::before, .c-faq-icon::after, .c-faq-q, .c-copy-btn { transition: none; }
         }
 
         @media (max-width: 640px) {
