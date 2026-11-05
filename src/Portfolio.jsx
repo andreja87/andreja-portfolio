@@ -14,6 +14,7 @@ const t = {
     nav: {
       projects: "Projects",
       offer: "Focus areas",
+      coaching: "Coaching",
       story: "My story",
       blog: "Articles",
       formula: "Formula",
@@ -98,6 +99,7 @@ const t = {
     nav: {
       projects: "Projekti",
       offer: "Oblasti rada",
+      coaching: "Coaching",
       story: "O meni",
       blog: "Blog",
       formula: "Formula",
@@ -571,8 +573,17 @@ const blogPosts = [];
    between "My story" and "Formula". */
 const SHOW_BLOG = false;
 
+/* Coaching page switch. true = the current pro bono round is open for sign-ups.
+   When the ten places are taken, change it to false: the page then offers the
+   waiting list instead (wording lives under `closed` in COACHING below). */
+const COACHING_OPEN = true;
+
 /* Section order on the page and in the fixed menu */
 const NAV_IDS = ["projects", "offer", "story", ...(SHOW_BLOG ? ["blog"] : []), "formula", "contact"];
+
+/* Menu order: the Coaching page sits right after "Focus areas". It is a page,
+   not a section, so it opens its own route instead of scrolling. */
+const NAV_ENTRIES = NAV_IDS.flatMap((id) => (id === "offer" ? [id, "coaching"] : [id]));
 
 /* Where the contact form posts. Create a free form at formspree.io or
    web3forms.com, point it at the email address below, and paste the
@@ -591,6 +602,248 @@ const PORTRAIT_ALT = {
 /* Replace with the real LinkedIn profile URL */
 const LINKEDIN_URL = "https://www.linkedin.com/in/andreja-trajkovic";
 const EMAIL = "andrejatrajkovic999@gmail.com";
+
+/* Certificate image for the coaching page, in the `public` folder */
+const CERTIFICATE = "/certificate.jpg";
+
+/* =========================================================
+   COACHING PAGE — COPY
+   Serbian uses "ti" throughout. Nothing about price, duration, format,
+   number of sessions or certificates is stated: add those only once they
+   are confirmed. The FAQ shows only questions that have confirmed answers.
+   ========================================================= */
+const COACHING = {
+  sr: {
+    pageTitle: "Individualni coaching · Andreja Trajković",
+    localNavLabel: "Na ovoj stranici",
+    localLinks: [
+      { id: "coaching-for", label: "Za koga" },
+      { id: "coaching-how", label: "Kako radimo" },
+      { id: "coaching-about", label: "O meni" },
+      { id: "coaching-contact", label: "Kontakt" },
+    ],
+    label: "Individualni coaching",
+    h1Before: "Prostor da zastaneš, čuješ sebe i ",
+    h1Em: "izabereš sledeći korak.",
+    intro: "Kroz coaching istražujemo ono što ti je važno, sagledavamo mogućnosti i definišemo konkretne korake koji će ti pomoći da ostvariš svoj cilj.",
+    ctaPrimary: "Dogovori uvodni razgovor",
+    ctaSecondary: "Kako izgleda coaching",
+    pill: "Online pro bono program · 10 klijenata",
+    recognizeTitle: "Za koga je coaching?",
+    recognizeIntro: "Coaching je za tebe ako želiš da radiš na ličnom ili profesionalnom cilju, uz podršku da jasnije sagledaš svoju situaciju i preduzmeš konkretne korake.",
+    recognize: [
+      {
+        title: "Želiš promenu",
+        text: "Nešto u tvom životu ili poslu više ti ne odgovara, ali još ne znaš šta želiš umesto toga ili odakle da počneš.",
+      },
+      {
+        title: "Pred važnom si odlukom",
+        text: "Razmatraš više mogućnosti i želiš da napraviš izbor u skladu sa svojim potrebama i prioritetima.",
+      },
+      {
+        title: "Znaš šta želiš, ali odlažeš prvi korak",
+        text: "Imaš cilj, ali te nesigurnost, navike ili druge prepreke usporavaju da kreneš ka njemu.",
+      },
+      {
+        title: "Želiš da razviješ svoje veštine",
+        text: "Želiš da jasnije izražavaš svoje potrebe, postavljaš granice ili sigurnije komuniciraš u ličnim i poslovnim situacijama.",
+      },
+    ],
+    recognizeOutro: "Ako se prepoznaješ u nekoj od ovih situacija, coaching može biti podrška za tvoj sledeći korak.",
+    howTitle: "Kako izgleda coaching",
+    how: [
+      {
+        title: "Upoznavanje i dogovor o saradnji",
+        text: "Upoznajemo se i sagledavamo šta želiš da promeniš ili postigneš. Objašnjavam ti kako ćemo raditi, a zajedno dogovaramo fokus saradnje i šta možeš da očekuješ od nje.",
+      },
+      {
+        title: "Jasniji cilj i mogućnosti",
+        text: "Pomažem ti da razjasniš svoj cilj, prepoznaš šta te koči i na koje svoje sposobnosti i iskustva možeš da se osloniš. Sagledavaš situaciju iz novih uglova i pronalaziš nove mogućnosti za ostvarenje cilja.",
+      },
+      {
+        title: "Od odluke do primene",
+        text: "Zajedno definišemo konkretne korake koje ćeš preduzeti ka svom cilju. Kroz naredne susrete pratimo kako napreduje primena, šta se menja i gde ti je potrebna dodatna podrška da nastaviš.",
+      },
+    ],
+    programTitle: "Pro bono coaching paket",
+    programText: "Nudim 10 besplatnih coaching paketa. Svaki paket obuhvata pet online sesija od po sat vremena. Pre početka saradnje imamo informativni razgovor od 30 minuta, tokom kojeg se upoznajemo i dogovaramo dalji rad.",
+    aboutTitle: "Moj coaching pristup",
+    about: [
+      "U coachingu primenjujem znanja i veštine stečene na treningu za mentore, uz više od decenije rada na ličnom razvoju i istraživanja komunikacije i ponašanja ljudi. Pažljivim slušanjem i pitanjima pomažem ti da prepoznaš šta te ograničava, sagledaš svoje mogućnosti i definišeš konkretne korake ka ostvarenju svog cilja.",
+      "Ti biraš svoj cilj i donosiš odluke. Moja uloga je da te podržim i podstaknem da sagledaš situaciju iz drugog ugla i isprobaš drugačiji pristup.",
+      "Verujem da su poverenje, poštovanje i podrška osnova za lični razvoj i promenu. U radu sa mnom imaš prostor da otvoreno govoriš o onome što ti je važno.",
+    ],
+    certTitle: "Profesionalni mentor",
+    certOrg: "International Centre for Coaching and Mentoring, London, United Kingdom · 2026.",
+    certAlt: "Sertifikat o završenoj obuci za profesionalne mentore, International Centre for Coaching and Mentoring, 2026.",
+    certEnlarge: "Uvećaj",
+    certClose: "Zatvori",
+    quote: "Verujem da svako ima sposobnost za razvoj i promenu, uz prostor i podršku da pronađe svoj put.",
+    faqTitle: "Česta pitanja",
+    faq: [
+      {
+        q: "Da li se coaching naplaćuje?",
+        a: "Za prvih deset osoba koje se prijave coaching paket je pro bono, bez novčane naknade. Paket obuhvata pet online sesija od po sat vremena i uvodni razgovor od 30 minuta.",
+      },
+      {
+        q: "Čemu služi uvodni razgovor?",
+        a: "Tokom uvodnog razgovora od 30 minuta upoznajemo se, razjašnjavamo šta želiš da promeniš ili postigneš i dogovaramo temu na kojoj ćemo raditi.",
+      },
+      {
+        q: "Kako se dogovara saradnja?",
+        a: "Pre početka rada potpisujemo ugovor o coachingu kojim definišemo temu i cilj saradnje, broj i trajanje sesija, način održavanja, poverljivost i međusobne odgovornosti.",
+      },
+      {
+        q: "Kako se održavaju sesije?",
+        a: "Sesije se održavaju online i traju po sat vremena. Termine dogovaramo zajedno.",
+      },
+      {
+        q: "Da li moram unapred da znam svoj cilj?",
+        a: "Ne moraš da imaš potpuno definisan cilj. Možeš da dođeš sa situacijom, dilemom ili promenom koju želiš da napraviš. Tokom uvodnog razgovora zajedno razjašnjavamo temu i cilj saradnje.",
+      },
+      {
+        q: "Kako da napravim prvi korak?",
+        a: "Javi mi se putem [[form|kontakt forme]] ili [[email|emaila]] i ukratko napiši na čemu želiš da radiš. Zatim dogovaramo termin uvodnog razgovora.",
+      },
+    ],
+    contactTitle: "Prijavi se za besplatan coaching",
+    /* Used instead of the wording above and below when COACHING_OPEN is false */
+    closed: {
+      pill: "Trenutna pro bono tura je popunjena",
+      ctaPrimary: "Prijavi se na listu čekanja",
+      programText: "Trenutna tura od 10 besplatnih coaching paketa je popunjena. Svaki paket obuhvata pet online sesija od po sat vremena, uz uvodni razgovor od 30 minuta. Prijavi se na listu čekanja i javiću ti putem emaila kada se otvori nova tura.",
+      faqFee: "Trenutna tura pro bono coaching paketa je popunjena. Prijavi se na listu čekanja i javiću ti putem emaila kada se otvori nova pro bono tura.",
+      faqStart: "Prijavi se na listu čekanja putem [[form|kontakt forme]]. Kada se otvori nova tura, javiću ti se putem emaila i dogovaramo termin uvodnog razgovora.",
+      contactTitle: "Prijavi se na listu čekanja",
+      form: {
+        formSend: "Prijavi se na listu čekanja",
+        formSuccess: "Hvala. Tvoja prijava za listu čekanja je primljena. Javiću ti se putem emaila kada se otvori nova tura.",
+      },
+    },
+    /* Same form and same notice as the rest of the site, worded with "ti" */
+    form: {
+      formSend: "Prijavi se za besplatan coaching",
+      formIncomplete: "Popuni ime i email.",
+      formFillAll: "Polja označena sa * su obavezna.",
+      formSuccess: "Hvala. Tvoja poruka je poslata.",
+      formError: "Došlo je do greške. Pokušaj ponovo.",
+      formBadEmail: "Proveri adresu e-pošte.",
+      formPrivacy: "Tvoji podaci koriste se isključivo za odgovor na poruku i ne prosleđuju se trećim licima.",
+    },
+  },
+  en: {
+    pageTitle: "Individual coaching · Andreja Trajkovic",
+    localNavLabel: "On this page",
+    localLinks: [
+      { id: "coaching-for", label: "Who it's for" },
+      { id: "coaching-how", label: "How we work" },
+      { id: "coaching-about", label: "About me" },
+      { id: "coaching-contact", label: "Contact" },
+    ],
+    label: "Individual coaching",
+    h1Before: "Room to pause, hear yourself and ",
+    h1Em: "choose your next step.",
+    intro: "Through coaching, we explore what matters to you, look at your options and define concrete steps that will help you reach your goal.",
+    ctaPrimary: "Arrange an introductory conversation",
+    ctaSecondary: "What coaching looks like",
+    pill: "Online pro bono program · 10 clients",
+    recognizeTitle: "Who is coaching for?",
+    recognizeIntro: "Coaching is for you if you want to work on a personal or professional goal, with support to see your situation more clearly and take concrete steps.",
+    recognize: [
+      {
+        title: "You want a change",
+        text: "Something in your life or work no longer suits you, but you don't yet know what you want instead or where to begin.",
+      },
+      {
+        title: "You're facing an important decision",
+        text: "You're weighing several options and want to make a choice that fits your needs and priorities.",
+      },
+      {
+        title: "You know what you want, but keep putting off the first step",
+        text: "You have a goal, but uncertainty, habits or other obstacles are slowing you down from moving toward it.",
+      },
+      {
+        title: "You want to develop your skills",
+        text: "You want to express your needs more clearly, set boundaries or communicate more confidently in personal and professional situations.",
+      },
+    ],
+    recognizeOutro: "If you recognize yourself in any of these situations, coaching can support your next step.",
+    howTitle: "What coaching looks like",
+    how: [
+      {
+        title: "Getting acquainted and agreeing how we'll work",
+        text: "We get to know each other and look at what you want to change or achieve. I explain how we will work, and together we agree on the focus of our work and what you can expect from it.",
+      },
+      {
+        title: "A clearer goal and new possibilities",
+        text: "I help you clarify your goal, recognize what is holding you back and identify the strengths and experiences you can build on. You look at your situation from new angles and discover new ways to reach your goal.",
+      },
+      {
+        title: "From decision to action",
+        text: "Together we define the concrete steps you will take toward your goal. Over the following sessions, we track how putting them into practice is going, what is changing and where you need extra support to keep going.",
+      },
+    ],
+    programTitle: "Pro bono coaching package",
+    programText: "I'm offering 10 free coaching packages. Each package includes five one-hour online sessions. Before we start working together, we have a 30-minute introductory conversation, during which we get to know each other and agree on how to continue.",
+    aboutTitle: "My coaching approach",
+    about: [
+      "In coaching, I apply the knowledge and skills gained in mentor training, along with more than a decade of working on my personal development and exploring communication and human behavior. Through careful listening and questions, I help you recognize what is limiting you, see your options and define concrete steps toward achieving your goal.",
+      "You choose your goal and make your decisions. My role is to support you and encourage you to look at your situation from a different angle and try a different approach.",
+      "I believe trust, respect and support are the foundation of personal growth and change. Working with me, you have room to speak openly about what matters to you.",
+    ],
+    certTitle: "Professional Mentor",
+    certOrg: "International Centre for Coaching and Mentoring, London, United Kingdom · 2026",
+    certAlt: "Certificate of completion of the Training for Professional Mentors, International Centre for Coaching and Mentoring, 2026.",
+    certEnlarge: "Enlarge",
+    certClose: "Close",
+    quote: "I believe everyone has the ability to grow and change, with the space and support to find their own way.",
+    faqTitle: "Frequently asked questions",
+    faq: [
+      {
+        q: "Is coaching paid?",
+        a: "For the first ten people who apply, the coaching package is pro bono, free of charge. The package includes five one-hour online sessions and a 30-minute introductory conversation.",
+      },
+      {
+        q: "What is the introductory conversation for?",
+        a: "During the 30-minute introductory conversation, we get to know each other, clarify what you want to change or achieve and agree on the topic we'll work on.",
+      },
+      {
+        q: "How is the collaboration arranged?",
+        a: "Before we start, we sign a coaching agreement that defines the topic and goal of our work, the number and length of sessions, how they take place, confidentiality and mutual responsibilities.",
+      },
+      {
+        q: "How do the sessions take place?",
+        a: "Sessions take place online and last one hour each. We agree on dates together.",
+      },
+      {
+        q: "Do I need to know my goal in advance?",
+        a: "You don't need a fully defined goal. You can come with a situation, a dilemma or a change you want to make. During the introductory conversation, we clarify the topic and goal together.",
+      },
+      {
+        q: "How do I take the first step?",
+        a: "Get in touch through the [[form|contact form]] or by [[email|email]] and briefly write what you'd like to work on. Then we arrange a time for the introductory conversation.",
+      },
+    ],
+    contactTitle: "Apply for free coaching",
+    closed: {
+      pill: "Current pro bono round is full",
+      ctaPrimary: "Join the waiting list",
+      programText: "The current round of 10 free coaching packages is full. Each package includes five one-hour online sessions, with a 30-minute introductory conversation. Join the waiting list and I'll email you when a new round opens.",
+      faqFee: "The current round of pro bono coaching packages is full. Join the waiting list and I'll email you when a new pro bono round opens.",
+      faqStart: "Join the waiting list through the [[form|contact form]]. When a new round opens, I'll email you and we'll arrange a time for the introductory conversation.",
+      contactTitle: "Join the waiting list",
+      form: {
+        formSend: "Join the waiting list",
+        formSuccess: "Thank you. Your waiting list request has been received. I'll email you when a new round opens.",
+      },
+    },
+    form: {
+      formSend: "Apply for free coaching",
+      formIncomplete: "Please fill in your name and email.",
+      formFillAll: "Fields marked with * are required.",
+    },
+  },
+};
 
 /* ============ Scroll reveal helper ============ */
 function Reveal({ children, delay = 0, className = "" }) {
@@ -997,10 +1250,16 @@ function ProjectPage({ project, c, lang, setLang, goToSection, navigate }) {
 }
 
 /* ============ Contact form ============ */
-function ContactForm({ c }) {
+function ContactForm({ c, source, strict = false }) {
   const [values, setValues] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState("idle"); // idle | sending | sent | error
   const [problem, setProblem] = useState("");
+
+  /* In strict mode only name and email are required (marked with *) and the
+     button stays disabled until both hold something other than spaces. The
+     message is optional. */
+  const incomplete = strict && (!values.name.trim() || !values.email.trim());
+  const mark = strict ? <em className="field-req" aria-hidden="true">*</em> : null;
 
   const update = (field) => (e) => {
     setValues((v) => ({ ...v, [field]: e.target.value }));
@@ -1013,7 +1272,7 @@ function ContactForm({ c }) {
     const email = values.email.trim();
     const message = values.message.trim();
 
-    if (!name || !email || !message) {
+    if (!name || !email || (!strict && !message)) {
       setProblem(c.formIncomplete);
       return;
     }
@@ -1028,7 +1287,7 @@ function ContactForm({ c }) {
       const res = await fetch(FORM_ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({ name, email, message }),
+        body: JSON.stringify(source ? { name, email, message, source } : { name, email, message }),
       });
       if (!res.ok) throw new Error("Request failed");
       setStatus("sent");
@@ -1050,29 +1309,31 @@ function ContactForm({ c }) {
     <div className="contact-form">
       <div className="field-row">
         <label className="field">
-          <span>{c.formName}</span>
+          <span>{c.formName}{mark}</span>
           <input
             type="text"
             value={values.name}
             onChange={update("name")}
             autoComplete="name"
             required
+            aria-required="true"
           />
         </label>
         <label className="field">
-          <span>{c.formEmail}</span>
+          <span>{c.formEmail}{mark}</span>
           <input
             type="email"
             value={values.email}
             onChange={update("email")}
             autoComplete="email"
             required
+            aria-required="true"
           />
         </label>
       </div>
       <label className="field">
         <span>{c.formMessage}</span>
-        <textarea rows="5" value={values.message} onChange={update("message")} required />
+        <textarea rows="5" value={values.message} onChange={update("message")} required={!strict} aria-required={strict ? undefined : "true"} />
       </label>
 
       {(problem || status === "error") && (
@@ -1081,9 +1342,17 @@ function ContactForm({ c }) {
         </p>
       )}
 
-      <button className="btn btn-primary" onClick={submit} disabled={status === "sending"}>
+      <button
+        className="btn btn-primary"
+        onClick={submit}
+        disabled={status === "sending" || incomplete}
+        aria-describedby={strict ? "form-fill-all" : undefined}
+      >
         {status === "sending" ? c.formSending : c.formSend}
       </button>
+      {strict && (
+        <p className="form-hint" id="form-fill-all">{c.formFillAll}</p>
+      )}
 
       <p className="form-privacy">{c.formPrivacy}</p>
     </div>
@@ -1221,8 +1490,285 @@ function HomePage({ c, lang, goToSection, navigate }) {
   );
 }
 
+/* ============ Coaching page ============ */
+function CoachingPage({ c, lang, scrollToSection }) {
+  const base = COACHING[lang];
+  /* With the round full, the closed wording replaces the sign-up wording */
+  const d = COACHING_OPEN
+    ? base
+    : {
+        ...base,
+        ...base.closed,
+        faq: base.faq.map((f, i) =>
+          i === 0 ? { ...f, a: base.closed.faqFee }
+          : i === base.faq.length - 1 ? { ...f, a: base.closed.faqStart }
+          : f
+        ),
+        form: { ...base.form, ...base.closed.form },
+      };
+  const [openFaq, setOpenFaq] = useState({});
+  const [certOpen, setCertOpen] = useState(false);
+  const certTrigger = useRef(null);
+  const certClose = useRef(null);
+  const formText = { ...c, ...d.form };
+
+  /* Enlarged certificate: Escape closes it, the page behind stops scrolling,
+     focus moves to the close button and returns to the thumbnail afterwards */
+  useEffect(() => {
+    if (!certOpen) return;
+    const trigger = certTrigger.current;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    certClose.current?.focus();
+    const onKey = (e) => {
+      if (e.key === "Escape") setCertOpen(false);
+      if (e.key === "Tab") {
+        e.preventDefault();
+        certClose.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = previousOverflow;
+      trigger?.focus();
+    };
+  }, [certOpen]);
+
+  /* FAQ answers can hold two kinds of link, written as [[form|label]] and
+     [[email|label]]: the first scrolls to the form, the second opens a message */
+  const richText = (text) =>
+    text.split(/(\[\[(?:form|email)\|[^\]]+\]\])/).map((part, i) => {
+      const m = part.match(/^\[\[(form|email)\|([^\]]+)\]\]$/);
+      if (!m) return part;
+      return m[1] === "form" ? (
+        <a
+          key={i}
+          href="#/coaching"
+          onClick={(e) => {
+            e.preventDefault();
+            scrollToSection("coaching-contact");
+          }}
+        >
+          {m[2]}
+        </a>
+      ) : (
+        <a key={i} href={`mailto:${EMAIL}`}>{m[2]}</a>
+      );
+    });
+
+  /* Links keep a real href so they can be opened normally, but scroll in place */
+  const go = (id) => (e) => {
+    e.preventDefault();
+    scrollToSection(id);
+  };
+
+  return (
+    <main className="coaching">
+      <section className="c-section c-hero">
+        <div className="c-inner">
+          <nav className="c-local" aria-label={d.localNavLabel}>
+            <ul>
+              {d.localLinks.map((l) => (
+                <li key={l.id}>
+                  <a href="#/coaching" onClick={go(l.id)}>{l.label}</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          <div className="c-hero-grid">
+            <Reveal className="c-hero-text">
+              <p className="c-label">{d.label}</p>
+              <h1>
+                {d.h1Before}
+                <em>{d.h1Em}</em>
+              </h1>
+              <p className="c-hero-intro">{d.intro}</p>
+              <div className="c-hero-cta">
+                <button className="btn btn-primary" onClick={() => scrollToSection("coaching-contact")}>
+                  {d.ctaPrimary}
+                </button>
+                <a className="c-textlink" href="#/coaching" onClick={go("coaching-how")}>
+                  {d.ctaSecondary}
+                </a>
+              </div>
+              <p className="c-pill">{d.pill}</p>
+            </Reveal>
+
+            {PORTRAIT && (
+              <Reveal className="c-hero-portrait" delay={120}>
+                <img src={PORTRAIT} alt={PORTRAIT_ALT[lang]} />
+              </Reveal>
+            )}
+          </div>
+        </div>
+      </section>
+
+      <section className="c-section c-flush" id="coaching-for">
+        <div className="c-inner">
+          <Reveal><h2 className="c-h2 has-intro">{d.recognizeTitle}</h2></Reveal>
+          <Reveal delay={60}><p className="c-lead">{d.recognizeIntro}</p></Reveal>
+          <ul className="c-cards">
+            {d.recognize.map((r, i) => (
+              <li key={r.title}>
+                <Reveal delay={i * 90}>
+                  <article className="c-card">
+                    <h3>{r.title}</h3>
+                    <p>{r.text}</p>
+                  </article>
+                </Reveal>
+              </li>
+            ))}
+          </ul>
+          <Reveal delay={100}><p className="c-outro">{d.recognizeOutro}</p></Reveal>
+        </div>
+      </section>
+
+      <section className="c-section c-band" id="coaching-how">
+        <div className="c-inner">
+          <Reveal><h2 className="c-h2">{d.howTitle}</h2></Reveal>
+          <ol className="c-steps">
+            {d.how.map((s, i) => (
+              <li key={s.title}>
+                <Reveal delay={i * 90}>
+                  <div className="c-step">
+                    <span className="c-step-num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+                    <h3>{s.title}</h3>
+                    <p>{s.text}</p>
+                  </div>
+                </Reveal>
+              </li>
+            ))}
+          </ol>
+          <Reveal delay={150}>
+            <div className="c-note">
+              <h3>{d.programTitle}</h3>
+              <p>{d.programText}</p>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      <section className="c-section" id="coaching-about">
+        <div className="c-inner">
+          <Reveal><h2 className="c-h2">{d.aboutTitle}</h2></Reveal>
+          <div className="c-about-grid">
+            <div className="c-about-text">
+              {d.about.map((p, i) => (
+                <Reveal key={i} delay={i * 100}><p>{p}</p></Reveal>
+              ))}
+            </div>
+            <Reveal delay={150}>
+              <blockquote className="c-quote">
+                <p>{d.quote}</p>
+              </blockquote>
+            </Reveal>
+          </div>
+
+          <Reveal delay={100}>
+            <figure className="c-cert">
+              <button
+                type="button"
+                ref={certTrigger}
+                className="c-cert-btn"
+                onClick={() => setCertOpen(true)}
+                aria-haspopup="dialog"
+              >
+                <img src={CERTIFICATE} alt={d.certAlt} loading="lazy" width="1600" height="1131" />
+                <span className="c-cert-hint">{d.certEnlarge}</span>
+              </button>
+              <figcaption className="c-cert-info">
+                <h3>{d.certTitle}</h3>
+                <p className="c-cert-org">{d.certOrg}</p>
+              </figcaption>
+            </figure>
+          </Reveal>
+        </div>
+      </section>
+
+      {certOpen && (
+        <div
+          className="c-lightbox"
+          role="dialog"
+          aria-modal="true"
+          aria-label={d.certAlt}
+          onClick={() => setCertOpen(false)}
+        >
+          <button
+            type="button"
+            ref={certClose}
+            className="c-lightbox-close"
+            onClick={() => setCertOpen(false)}
+            aria-label={d.certClose}
+          >
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+              <path d="M5 5l14 14M19 5L5 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none" />
+            </svg>
+          </button>
+          <img src={CERTIFICATE} alt={d.certAlt} onClick={(e) => e.stopPropagation()} />
+        </div>
+      )}
+
+      <section className="c-section c-band" id="coaching-faq">
+        <div className="c-inner">
+          <Reveal><h2 className="c-h2">{d.faqTitle}</h2></Reveal>
+          <Reveal delay={80}>
+            <div className="c-faq">
+              {d.faq.map((item, i) => {
+                const open = Boolean(openFaq[i]);
+                return (
+                  <div className="c-faq-item" key={item.q}>
+                    <h3>
+                      <button
+                        type="button"
+                        id={`faq-q-${i}`}
+                        className="c-faq-q"
+                        aria-expanded={open}
+                        aria-controls={`faq-a-${i}`}
+                        onClick={() => setOpenFaq((o) => ({ ...o, [i]: !o[i] }))}
+                      >
+                        <span>{item.q}</span>
+                        <span className="c-faq-icon" aria-hidden="true" />
+                      </button>
+                    </h3>
+                    <div
+                      id={`faq-a-${i}`}
+                      role="region"
+                      aria-labelledby={`faq-q-${i}`}
+                      className="c-faq-a"
+                      hidden={!open}
+                    >
+                      <p>{richText(item.a)}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      <section className="c-section c-contact" id="coaching-contact">
+        <div className="c-inner">
+          <Reveal>
+            <h2 className="c-h2">{d.contactTitle}</h2>
+          </Reveal>
+          <Reveal delay={120}>
+            <div className="c-form-card">
+              <ContactForm c={formText} source={COACHING_OPEN ? "coaching" : "coaching-waitlist"} strict />
+            </div>
+          </Reveal>
+        </div>
+      </section>
+    </main>
+  );
+}
+
 export default function Portfolio() {
-  const [lang, setLang] = useState("en");
+  /* The whole site opens in Serbian, since that is the main audience.
+     English is one click away and is kept while moving around the site. */
+  const [lang, setLang] = useState("sr");
   const [hash, setHash] = useState(() =>
     typeof window === "undefined" ? "" : window.location.hash
   );
@@ -1234,6 +1780,16 @@ export default function Portfolio() {
   useEffect(() => {
     document.documentElement.lang = lang === "sr" ? "sr-Latn" : "en";
   }, [lang]);
+
+  /* Escape closes the mobile menu */
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (e) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [menuOpen]);
 
   useEffect(() => {
     const onHashChange = () => {
@@ -1248,12 +1804,20 @@ export default function Portfolio() {
   const match = hash.match(/^#\/work\/(.+)$/);
   const project = match ? projects.find((p) => p.slug === match[1]) : null;
   const isProjectRoute = Boolean(match);
+  const isCoachingRoute = /^#\/coaching\/?$/.test(hash);
+  const isSubRoute = isProjectRoute || isCoachingRoute;
+
+  /* The coaching page gets its own tab title; every other page keeps the original */
+  const baseTitle = useRef(typeof document === "undefined" ? "" : document.title);
+  useEffect(() => {
+    document.title = isCoachingRoute ? COACHING[lang].pageTitle : baseTitle.current;
+  }, [isCoachingRoute, lang]);
 
   /* Tracks which section is currently on screen, for the active menu item */
   useEffect(() => {
     const onScroll = () => {
       setScrolled(window.scrollY > 400);
-      if (isProjectRoute) return;
+      if (isSubRoute) return;
       let current = "";
       NAV_IDS.forEach((id) => {
         const el = document.getElementById(id);
@@ -1264,7 +1828,7 @@ export default function Portfolio() {
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, [isProjectRoute]);
+  }, [isSubRoute]);
 
   /* Route changes are driven by state, with the address bar updated when the
      browser allows it. Sandboxed previews block hash writes, so state comes first. */
@@ -1305,7 +1869,7 @@ export default function Portfolio() {
   /* Menu links work from the project page too: go home first, then scroll */
   const goToSection = (id) => {
     setMenuOpen(false);
-    if (isProjectRoute) {
+    if (isSubRoute) {
       navigate("#/");
       setTimeout(() => scrollToSection(id), 90);
       return;
@@ -1313,9 +1877,22 @@ export default function Portfolio() {
     scrollToSection(id);
   };
 
+  const openNavEntry = (id) => {
+    if (id === "coaching") {
+      if (isCoachingRoute) {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        setMenuOpen(false);
+      } else {
+        navigate("#/coaching");
+      }
+      return;
+    }
+    goToSection(id);
+  };
+
   /* The monogram in the bar goes home, from wherever you are */
   const goHome = () => {
-    if (isProjectRoute) {
+    if (isSubRoute) {
       navigate("#/");
       return;
     }
@@ -1837,6 +2414,12 @@ export default function Portfolio() {
         }
         .contact-form .btn { display: block; width: 100%; margin-top: 2px; padding: 12px 26px; text-align: center; }
         .contact-form .btn:disabled { opacity: .6; cursor: default; }
+        .field-req {
+          font-style: normal; font-weight: 700; letter-spacing: 0; text-transform: none;
+          font-size: 15px; line-height: 1; margin-left: 4px; color: var(--terra, #9B5F49);
+        }
+        .form-hint { margin-top: 8px; font-size: 14px; line-height: 1.45; color: var(--muted); text-align: center; }
+        .contact-form .btn:disabled { cursor: not-allowed; }
         .form-problem { color: #8C3B2E; font-size: 15px; margin: 4px 0 12px; }
         .form-privacy {
           margin-top: 10px; font-size: 13.5px; line-height: 1.45;
@@ -1866,6 +2449,248 @@ export default function Portfolio() {
         footer {
           text-align: center; padding: 26px; font-size: 14px;
           color: var(--muted); border-top: 1px solid var(--line);
+        }
+        .footer-sep { margin: 0 10px; }
+        .footer-link { color: var(--accent); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+        .footer-link:hover { color: var(--ink); }
+
+        /* ---- Coaching page: two extra tones, used only here ---- */
+        .coaching { --terra: #9B5F49; --clay: #EAD8CC; }
+        .coaching section.c-section { padding: 88px 24px; scroll-margin-top: 64px; }
+        .coaching section.c-hero { padding: 112px 24px 88px; }
+        .coaching section.c-section.c-flush { padding-top: 0; }
+        .coaching section.c-band {
+          background: var(--surface);
+          border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+        }
+        .c-inner { max-width: 1080px; margin: 0 auto; }
+
+        /* Discreet local links */
+        .c-local ul {
+          list-style: none; display: flex; flex-wrap: wrap; gap: 0 26px; margin-bottom: 52px;
+        }
+        .c-local a {
+          display: inline-block; padding: 8px 0; font-size: 14px; font-weight: 500;
+          color: var(--muted); text-decoration: none;
+          border-bottom: 1px solid transparent; transition: color .2s ease, border-color .2s ease;
+        }
+        .c-local a:hover { color: var(--ink); border-bottom-color: var(--line); }
+
+        /* Hero */
+        .c-hero-grid { display: grid; grid-template-columns: 1fr; gap: 40px; align-items: center; }
+        .c-label {
+          font-size: 13px; font-weight: 700; letter-spacing: .16em;
+          text-transform: uppercase; color: var(--accent); margin-bottom: 18px;
+        }
+        .c-hero h1 {
+          font-size: clamp(34px, 4.2vw, 56px); line-height: 1.12; margin-bottom: 24px;
+        }
+        .c-hero h1 em { font-style: italic; color: var(--accent); }
+        .c-hero-intro {
+          font-size: 18px; line-height: 1.65; color: var(--muted);
+          max-width: 520px; margin-bottom: 34px;
+        }
+        .c-hero-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; }
+        .c-textlink {
+          font-size: 15px; font-weight: 700; color: var(--accent);
+          text-decoration: underline; text-underline-offset: 4px;
+        }
+        .c-textlink:hover { color: var(--ink); }
+        .c-hero-portrait img {
+          display: block; width: 100%; max-width: 440px;
+          aspect-ratio: 4 / 5; object-fit: cover; object-position: 46% 20%;
+          border-radius: 20px; border: 1px solid var(--line);
+        }
+        @media (min-width: 860px) {
+          .c-hero-grid { grid-template-columns: minmax(0, 55fr) minmax(0, 45fr); gap: 64px; }
+          .c-hero-portrait img { margin-left: auto; }
+        }
+
+        /* Section headings */
+        .c-h2 { font-size: clamp(28px, 3.2vw, 36px); line-height: 1.15; margin-bottom: 36px; }
+        .c-h2::after {
+          content: ""; display: block; width: 48px; height: 3px;
+          background: var(--accent); margin-top: 14px; border-radius: 2px;
+        }
+
+        .c-h2.has-intro { margin-bottom: 20px; }
+        .c-lead { font-size: 18px; line-height: 1.65; color: var(--muted); max-width: 62ch; margin-bottom: 36px; }
+        .c-outro {
+          margin-top: 40px; max-width: 62ch;
+          font-family: 'Fraunces Variable', Georgia, serif; font-weight: 500;
+          font-size: clamp(19px, 2vw, 22px); line-height: 1.4; color: var(--ink);
+        }
+
+        /* Recognition cards */
+        .c-cards { list-style: none; display: grid; grid-template-columns: 1fr; gap: 18px; }
+        .c-cards > li { display: flex; }
+        .c-cards > li > .reveal { width: 100%; }
+        .c-card {
+          background: var(--surface); border: 1px solid var(--line);
+          border-radius: 16px; padding: 28px; height: 100%;
+        }
+        .c-card h3 { font-size: 21px; line-height: 1.25; margin-bottom: 10px; }
+        .c-card p { color: var(--muted); font-size: 16.5px; line-height: 1.6; }
+        @media (min-width: 700px) {
+          .c-cards { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        }
+
+        .c-pill {
+          display: inline-block; margin-top: 26px; padding: 7px 16px; border-radius: 999px;
+          background: var(--clay); color: var(--ink); font-size: 14px; font-weight: 700;
+        }
+        .c-note {
+          margin-top: 48px; max-width: 760px; padding: 24px 28px; border-radius: 16px;
+          background: var(--bg); border: 1px solid var(--line);
+        }
+        .c-note h3 { font-size: 19px; margin-bottom: 8px; }
+        .c-note p { color: var(--muted); font-size: 16.5px; line-height: 1.6; }
+
+        /* Steps */
+        .c-steps { list-style: none; display: grid; grid-template-columns: 1fr; gap: 34px; }
+        .c-step { border-top: 1px solid var(--line); padding-top: 22px; }
+        .c-step-num {
+          display: block; font-family: 'Fraunces Variable', Georgia, serif; font-weight: 500;
+          font-size: 40px; line-height: 1; color: var(--terra); margin-bottom: 16px;
+        }
+        .c-step h3 { font-size: 22px; line-height: 1.25; margin-bottom: 10px; }
+        .c-step p { color: var(--muted); font-size: 16.5px; line-height: 1.6; }
+        @media (min-width: 860px) {
+          .c-steps { grid-template-columns: repeat(3, 1fr); gap: 44px; }
+        }
+
+        /* Approach + pull quote */
+        .c-about-grid { display: grid; grid-template-columns: 1fr; gap: 40px; align-items: center; }
+        .c-about-text p { max-width: 60ch; margin-bottom: 16px; font-size: 17.5px; line-height: 1.65; }
+        /* Certificate */
+        .c-cert {
+          margin: 56px 0 0; display: grid; grid-template-columns: 1fr; gap: 24px; align-items: center;
+          background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 24px;
+        }
+        .c-cert-btn {
+          position: relative; display: block; width: 100%; padding: 0; border: none;
+          background: none; cursor: zoom-in; border-radius: 10px;
+        }
+        .c-cert-btn img {
+          display: block; width: 100%; height: auto; border-radius: 10px;
+          border: 1px solid var(--line);
+        }
+        .c-cert-hint {
+          position: absolute; right: 14px; top: 14px; padding: 5px 14px; border-radius: 999px;
+          background: rgba(247,243,234,.94); color: var(--ink); border: 1px solid var(--line);
+          font-size: 13px; font-weight: 700;
+        }
+        .c-cert-info h3 { font-size: clamp(21px, 2.2vw, 26px); line-height: 1.25; margin-bottom: 10px; }
+        .c-cert-org { font-size: 17px; line-height: 1.5; color: var(--muted); }
+        @media (min-width: 860px) {
+          .c-cert { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 48px; padding: 28px; }
+        }
+
+        .c-lightbox {
+          position: fixed; inset: 0; z-index: 100; display: flex;
+          align-items: center; justify-content: center; padding: 56px 20px 24px;
+          background: rgba(43,36,29,.9); cursor: zoom-out;
+        }
+        .c-lightbox img {
+          display: block; max-width: 100%; max-height: 100%; width: auto; height: auto;
+          object-fit: contain; border-radius: 8px; cursor: default;
+        }
+        .c-lightbox-close {
+          position: absolute; top: 14px; right: 16px; width: 44px; height: 44px;
+          display: flex; align-items: center; justify-content: center; border-radius: 50%;
+          background: var(--surface); color: var(--ink); border: none; cursor: pointer;
+        }
+        .c-lightbox-close:hover { background: var(--bg); }
+        .c-lightbox-close:focus-visible { outline: 2px solid var(--bg); outline-offset: 3px; }
+        .c-quote { background: var(--clay); border-radius: 20px; padding: 40px 36px; }
+        .c-quote::before {
+          content: ""; display: block; width: 40px; height: 2px;
+          background: var(--terra); margin-bottom: 22px;
+        }
+        .c-quote p {
+          font-family: 'Fraunces Variable', Georgia, serif; font-weight: 500;
+          font-size: clamp(22px, 2.4vw, 28px); line-height: 1.3; color: var(--ink);
+        }
+        @media (min-width: 900px) {
+          .c-about-grid { grid-template-columns: minmax(0, 1fr) minmax(0, .9fr); gap: 72px; }
+        }
+
+        /* FAQ accordion */
+        .c-faq { max-width: 760px; border-bottom: 1px solid var(--line); }
+        .c-faq-item { border-top: 1px solid var(--line); }
+        .c-faq-item h3 { font-size: inherit; font-weight: inherit; line-height: inherit; }
+        .c-faq-q {
+          width: 100%; min-height: 56px; display: flex; align-items: center;
+          justify-content: space-between; gap: 20px; text-align: left;
+          background: none; border: none; cursor: pointer; padding: 20px 4px;
+          font-family: 'Fraunces Variable', Georgia, serif; font-weight: 500;
+          font-size: clamp(18px, 2vw, 21px); line-height: 1.3; color: var(--ink);
+          transition: color .2s ease;
+        }
+        .c-faq-q:hover { color: var(--accent); }
+        .c-faq-icon { position: relative; flex: none; width: 18px; height: 18px; }
+        .c-faq-icon::before, .c-faq-icon::after {
+          content: ""; position: absolute; left: 0; top: 8px; width: 18px; height: 2px;
+          background: var(--accent); border-radius: 2px; transition: transform .25s ease;
+        }
+        .c-faq-icon::after { transform: rotate(90deg); }
+        .c-faq-q[aria-expanded="true"] .c-faq-icon::after { transform: rotate(0deg); }
+        .c-faq-a p {
+          padding: 0 44px 24px 4px; color: var(--muted); max-width: 62ch;
+          font-size: 17px; line-height: 1.65;
+        }
+        .c-faq-a[hidden] { display: none; }
+        .c-faq-a a {
+          color: var(--accent); font-weight: 700;
+          text-decoration: underline; text-underline-offset: 3px;
+        }
+        .c-faq-a a:hover { color: var(--ink); }
+
+        /* Closing contact block, same dark band as the Formula */
+        .coaching section.c-contact { background: var(--ink); color: var(--bg); text-align: center; }
+        .c-contact .c-h2 { color: var(--bg); margin-bottom: 36px; }
+        .c-contact .c-h2::after { margin-left: auto; margin-right: auto; }
+        .c-form-card {
+          max-width: 640px; margin: 0 auto; text-align: left;
+          background: var(--surface); color: var(--ink);
+          border-radius: 20px; padding: 32px;
+        }
+        .c-form-card .field input, .c-form-card .field textarea { background: var(--bg); }
+        .c-form-card .contact-form, .c-form-card .form-success { max-width: none; }
+        .c-form-card .form-success { margin: 0; }
+
+        .c-local a:focus-visible,
+        .c-textlink:focus-visible,
+        .c-faq-q:focus-visible,
+        .c-cert-btn:focus-visible,
+        .c-faq-a a:focus-visible,
+        .footer-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+        .c-faq-q:focus-visible { outline-offset: -2px; }
+
+        @media (prefers-reduced-motion: reduce) {
+          .c-faq-icon::before, .c-faq-icon::after, .c-local a, .c-faq-q { transition: none; }
+        }
+
+        @media (max-width: 640px) {
+          .coaching section.c-section { padding: 56px 22px; }
+          .coaching section.c-hero { padding: 88px 22px 56px; }
+          .coaching section.c-section.c-flush { padding-top: 0; }
+          .c-local ul { gap: 0 20px; margin-bottom: 32px; }
+          .c-hero-grid { gap: 36px; }
+          .c-hero-intro { font-size: 17.5px; margin-bottom: 28px; }
+          .c-hero-cta { flex-direction: column; align-items: stretch; gap: 18px; }
+          .c-hero-cta .btn { width: 100%; min-height: 50px; text-align: center; }
+          .c-textlink { text-align: center; padding: 6px 0; }
+          .c-hero-portrait img { max-width: none; }
+          .c-h2 { margin-bottom: 28px; }
+          .c-card { padding: 24px; }
+          .c-note { margin-top: 36px; padding: 22px 22px; }
+          .c-lead { font-size: 17.5px; margin-bottom: 28px; }
+          .c-outro { margin-top: 32px; }
+          .c-cert { margin-top: 40px; padding: 18px; }
+          .c-quote { padding: 30px 26px; }
+          .c-faq-a p { padding-right: 8px; }
+          .c-form-card { padding: 24px 20px; }
         }
 
         /* Laptops with short screens: trim the vertical padding so more of each
@@ -1943,16 +2768,20 @@ export default function Portfolio() {
           <button className="brand" onClick={goHome} aria-label={c.name}>AT</button>
 
           <ul className="nav-links">
-            {NAV_IDS.map((id) => (
-              <li key={id}>
-                <button
-                  className={active === id ? "nav-link is-active" : "nav-link"}
-                  onClick={() => goToSection(id)}
-                >
-                  {c.nav[id]}
-                </button>
-              </li>
-            ))}
+            {NAV_ENTRIES.map((id) => {
+              const isActive = id === "coaching" ? isCoachingRoute : active === id;
+              return (
+                <li key={id}>
+                  <button
+                    className={isActive ? "nav-link is-active" : "nav-link"}
+                    aria-current={id === "coaching" && isCoachingRoute ? "page" : undefined}
+                    onClick={() => openNavEntry(id)}
+                  >
+                    {c.nav[id]}
+                  </button>
+                </li>
+              );
+            })}
           </ul>
 
           <div className="topbar-right">
@@ -1965,15 +2794,21 @@ export default function Portfolio() {
               onClick={() => setMenuOpen((v) => !v)}
               aria-label={menuOpen ? c.closeMenu : c.openMenu}
               aria-expanded={menuOpen}
+              aria-controls="mobile-menu"
             >
               <span /><span /><span />
             </button>
           </div>
         </div>
 
-        <div className={menuOpen ? "mobile-menu is-open" : "mobile-menu"}>
-          {NAV_IDS.map((id) => (
-            <button key={id} className="mobile-link" onClick={() => goToSection(id)}>
+        <div id="mobile-menu" className={menuOpen ? "mobile-menu is-open" : "mobile-menu"}>
+          {NAV_ENTRIES.map((id) => (
+            <button
+              key={id}
+              className="mobile-link"
+              aria-current={id === "coaching" && isCoachingRoute ? "page" : undefined}
+              onClick={() => openNavEntry(id)}
+            >
               {c.nav[id]}
             </button>
           ))}
@@ -2007,6 +2842,8 @@ export default function Portfolio() {
             </div>
           </article>
         )
+      ) : isCoachingRoute ? (
+        <CoachingPage c={c} lang={lang} scrollToSection={scrollToSection} />
       ) : (
         <HomePage c={c} lang={lang} goToSection={goToSection} navigate={navigate} />
       )}
@@ -2020,6 +2857,7 @@ export default function Portfolio() {
         >
           ↑
         </button>
+        {!isCoachingRoute && (
         <a
           className="floating-linkedin"
           href={LINKEDIN_URL}
@@ -2032,10 +2870,19 @@ export default function Portfolio() {
             <path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.25 8h4.5V23H.25V8zm7.5 0h4.31v2.05h.06c.6-1.14 2.07-2.34 4.26-2.34 4.56 0 5.4 3 5.4 6.9V23h-4.5v-7.5c0-1.79-.03-4.09-2.49-4.09-2.5 0-2.88 1.95-2.88 3.96V23h-4.5V8z" />
           </svg>
         </a>
+        )}
       </div>
 
       <footer>
         <span>{c.footer}</span>
+        {isCoachingRoute && (
+          <>
+            <span className="footer-sep" aria-hidden="true">·</span>
+            <a className="footer-link" href={LINKEDIN_URL} target="_blank" rel="noreferrer">
+              LinkedIn
+            </a>
+          </>
+        )}
       </footer>
     </div>
   );
