@@ -25,7 +25,7 @@ oba jezika.
 Ispod prevoda su dva niza: `projects` i `blogPosts`. Rade na isti način.
 
 Svaki projekat ima `slug`, koji postaje adresa njegove stranice
-(`#/work/future-forward`). Klik na karticu otvara tu stranicu. Ako dodaš
+(`/work/future-forward/`). Klik na karticu otvara tu stranicu. Ako dodaš
 `caseStudy: true`, dugme samo promeni natpis u "Pogledaj studiju slučaja".
 
 Sadržaj stranice projekta piše se u `detail.sections`. Dok je taj niz
