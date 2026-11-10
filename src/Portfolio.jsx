@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { routes as SEO_ROUTES } from "./seo.js";
 
 /* =========================================================
    TRANSLATIONS
@@ -533,7 +534,7 @@ const PROCESS_VISUAL = { en: "", sr: "" };
    PROJECTS
 
    Each project needs a `slug`. It becomes the address of that
-   project's own page: #/work/<slug>. Clicking the card opens it.
+   project's own page: /work/<slug>/. Clicking the card opens it.
 
    Set caseStudy: true and the button label changes on its own.
 
@@ -907,7 +908,7 @@ function CardSection({
         ) : (
           <div className="card-grid">
             {items.map((item, i) => {
-              const href = item.slug ? `#/work/${item.slug}` : item.url;
+              const href = item.slug ? `/work/${item.slug}/` : item.url;
               const isExternal = !item.slug && !!item.url;
               const label = item.caseStudy && caseStudyLabel ? caseStudyLabel : linkLabel;
               const inner = (
@@ -1173,10 +1174,10 @@ function ProjectPage({ project, c, lang, setLang, goToSection, navigate }) {
         <Reveal>
           <a
             className="back-link"
-            href="#/"
+            href="/"
             onClick={(e) => {
               e.preventDefault();
-              navigate("#/");
+              navigate("/");
             }}
           >
             ← {c.backToWork}
@@ -1223,10 +1224,10 @@ function ProjectPage({ project, c, lang, setLang, goToSection, navigate }) {
           <div className="project-footer-nav">
             <a
               className="btn btn-ghost"
-              href="#/"
+              href="/"
               onClick={(e) => {
                 e.preventDefault();
-                navigate("#/");
+                navigate("/");
               }}
             >
               ← {c.backToWork}
@@ -1567,7 +1568,7 @@ function CoachingPage({ c, lang, scrollToSection }) {
       return m[1] === "form" ? (
         <a
           key={i}
-          href="#/coaching"
+          href="/coaching/"
           onClick={(e) => {
             e.preventDefault();
             scrollToSection("coaching-contact");
@@ -1602,7 +1603,7 @@ function CoachingPage({ c, lang, scrollToSection }) {
                 <button className="btn btn-primary" onClick={() => scrollToSection("coaching-contact")}>
                   {d.ctaPrimary}
                 </button>
-                <a className="c-textlink" href="#/coaching" onClick={go("coaching-how")}>
+                <a className="c-textlink" href="/coaching/" onClick={go("coaching-how")}>
                   {d.ctaSecondary}
                 </a>
               </div>
@@ -1801,12 +1802,27 @@ function CoachingPage({ c, lang, scrollToSection }) {
   );
 }
 
-export default function Portfolio() {
+/* Turns any address into the route form the app uses: "/", "/coaching/",
+   "/work/<slug>/". Old "#/..." links (shared before the switch to real
+   addresses) are read the same way, so they keep working. */
+function normalizePath(pathname = "/", hash = "") {
+  let path = hash && hash.startsWith("#/") && hash.length > 2 ? hash.slice(1) : pathname;
+  path = path.split(/[?#]/)[0] || "/";
+  if (!path.startsWith("/")) path = "/" + path;
+  if (!path.endsWith("/")) path += "/";
+  return path;
+}
+
+export default function Portfolio({ initialPath }) {
   /* The whole site opens in Serbian, since that is the main audience.
      English is one click away and is kept while moving around the site. */
   const [lang, setLang] = useState("sr");
-  const [hash, setHash] = useState(() =>
-    typeof window === "undefined" ? "" : window.location.hash
+  const [path, setPath] = useState(() =>
+    initialPath
+      ? normalizePath(initialPath)
+      : typeof window === "undefined"
+        ? "/"
+        : normalizePath(window.location.pathname)
   );
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -1827,27 +1843,48 @@ export default function Portfolio() {
     return () => window.removeEventListener("keydown", onKey);
   }, [menuOpen]);
 
+  /* Old "#/coaching" style links are rewritten to the real address, and the
+     browser's back and forward buttons move between pages */
   useEffect(() => {
-    const onHashChange = () => {
-      setHash(window.location.hash);
+    const { hash } = window.location;
+    if (hash.startsWith("#/") && hash.length > 2) {
+      const target = normalizePath("/", hash);
+      try {
+        window.history.replaceState(null, "", target);
+      } catch (err) {
+        /* preview sandbox: the page still shows the right content */
+      }
+      setPath(target);
+    }
+    const onPopState = () => {
+      setPath(normalizePath(window.location.pathname, window.location.hash));
       setMenuOpen(false);
       window.scrollTo(0, 0);
     };
-    window.addEventListener("hashchange", onHashChange);
-    return () => window.removeEventListener("hashchange", onHashChange);
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
   }, []);
 
-  const match = hash.match(/^#\/work\/(.+)$/);
+  const match = path.match(/^\/work\/([^/]+)\/$/);
   const project = match ? projects.find((p) => p.slug === match[1]) : null;
   const isProjectRoute = Boolean(match);
-  const isCoachingRoute = /^#\/coaching\/?$/.test(hash);
+  const isCoachingRoute = path === "/coaching/";
   const isSubRoute = isProjectRoute || isCoachingRoute;
 
-  /* The coaching page gets its own tab title; every other page keeps the original */
-  const baseTitle = useRef(typeof document === "undefined" ? "" : document.title);
+  /* Tab title: in Serbian it matches what Google sees (src/seo.js);
+     in English it follows the English wording of the page */
   useEffect(() => {
-    document.title = isCoachingRoute ? COACHING[lang].pageTitle : baseTitle.current;
-  }, [isCoachingRoute, lang]);
+    const seo = SEO_ROUTES.find((r) => r.path === path) || SEO_ROUTES[0];
+    if (lang === "sr") {
+      document.title = seo.title;
+    } else {
+      document.title = isCoachingRoute
+        ? COACHING.en.pageTitle
+        : project
+          ? `${project.title.en} · Andreja Trajkovic`
+          : "Andreja Trajkovic — People Development Consultant";
+    }
+  }, [path, isCoachingRoute, project, lang]);
 
   /* Tracks which section is currently on screen, for the active menu item */
   useEffect(() => {
@@ -1867,14 +1904,16 @@ export default function Portfolio() {
   }, [isSubRoute]);
 
   /* Route changes are driven by state, with the address bar updated when the
-     browser allows it. Sandboxed previews block hash writes, so state comes first. */
+     browser allows it. Sandboxed previews block history writes, so state comes first. */
   const navigate = (target) => {
-    const next = target === "#/" ? "" : target;
-    setHash(next);
+    const next = normalizePath(target);
+    setPath(next);
     setMenuOpen(false);
     window.scrollTo(0, 0);
     try {
-      window.location.hash = target === "#/" ? "/" : target.replace(/^#/, "");
+      if (window.location.pathname !== next || window.location.hash) {
+        window.history.pushState(null, "", next);
+      }
     } catch (err) {
       /* preview sandbox: state has already changed, nothing else to do */
     }
@@ -1906,7 +1945,7 @@ export default function Portfolio() {
   const goToSection = (id) => {
     setMenuOpen(false);
     if (isSubRoute) {
-      navigate("#/");
+      navigate("/");
       setTimeout(() => scrollToSection(id), 90);
       return;
     }
@@ -1919,7 +1958,7 @@ export default function Portfolio() {
         window.scrollTo({ top: 0, behavior: "smooth" });
         setMenuOpen(false);
       } else {
-        navigate("#/coaching");
+        navigate("/coaching/");
       }
       return;
     }
@@ -1929,7 +1968,7 @@ export default function Portfolio() {
   /* The monogram in the bar goes home, from wherever you are */
   const goHome = () => {
     if (isSubRoute) {
-      navigate("#/");
+      navigate("/");
       return;
     }
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -1945,7 +1984,9 @@ export default function Portfolio() {
 
   return (
     <div className="site">
-      <style>{`
+      {/* Set as raw CSS so the built HTML keeps quotes intact (React would
+          escape them as text, which breaks the fonts before the page loads) */}
+      <style dangerouslySetInnerHTML={{ __html: `
         :root {
           --bg: #F0EAE0;
           --surface: #F7F3EA;
@@ -2002,6 +2043,7 @@ export default function Portfolio() {
         }
         .nav-link:hover { color: var(--ink); background: rgba(43,36,29,.06); }
         .nav-link.is-active { color: var(--ink); font-weight: 700; }
+        a.nav-link { display: inline-block; text-decoration: none; line-height: normal; }
         .topbar-right { display: flex; align-items: center; gap: 10px; margin-left: 8px; }
 
         .lang-toggle {
@@ -2804,7 +2846,7 @@ export default function Portfolio() {
           section { padding: 64px 20px; }
           .project-page { padding: 80px 20px 64px; }
         }
-      `}</style>
+      ` }} />
 
       <nav className="topbar" aria-label="Main">
         <div className="topbar-inner">
@@ -2815,13 +2857,26 @@ export default function Portfolio() {
               const isActive = id === "coaching" ? isCoachingRoute : active === id;
               return (
                 <li key={id}>
-                  <button
-                    className={isActive ? "nav-link is-active" : "nav-link"}
-                    aria-current={id === "coaching" && isCoachingRoute ? "page" : undefined}
-                    onClick={() => openNavEntry(id)}
-                  >
-                    {c.nav[id]}
-                  </button>
+                  {id === "coaching" ? (
+                    <a
+                      className={isActive ? "nav-link is-active" : "nav-link"}
+                      href="/coaching/"
+                      aria-current={isCoachingRoute ? "page" : undefined}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        openNavEntry(id);
+                      }}
+                    >
+                      {c.nav[id]}
+                    </a>
+                  ) : (
+                    <button
+                      className={isActive ? "nav-link is-active" : "nav-link"}
+                      onClick={() => openNavEntry(id)}
+                    >
+                      {c.nav[id]}
+                    </button>
+                  )}
                 </li>
               );
             })}
@@ -2873,10 +2928,10 @@ export default function Portfolio() {
             <div className="inner">
               <a
             className="back-link"
-            href="#/"
+            href="/"
             onClick={(e) => {
               e.preventDefault();
-              navigate("#/");
+              navigate("/");
             }}
           >
             ← {c.backToWork}
