@@ -593,12 +593,12 @@ const NAV_IDS = ["projects", "offer", "story", ...(SHOW_BLOG ? ["blog"] : []), "
 const NAV_ENTRIES = NAV_IDS.flatMap((id) => (id === "offer" ? [id, "coaching"] : [id]));
 
 /* Coaching submenu, in menu order. "Pro bono" is the existing coaching page
-   (the printed QR code points to #/coaching; old #/ links are sent to /coaching/ automatically).
+   (the printed QR code points to #/coaching; it is sent to /coaching/pro-bono/ automatically).
    The other two are short "coming soon" pages until their text is ready. */
 const COACHING_LINKS = [
   { id: "companies", href: "/coaching/kompanije/", key: "coachingCompanies" },
   { id: "individuals", href: "/coaching/pojedinci/", key: "coachingIndividuals" },
-  { id: "probono", href: "/coaching/", key: "coachingProBono" },
+  { id: "probono", href: "/coaching/pro-bono/", key: "coachingProBono" },
 ];
 
 /* Addresses of the home page sections, used by the menu links (/#kontakt).
@@ -1385,7 +1385,7 @@ function HomePage({ c, lang, goToSection, navigate }) {
               { href: "/coaching/kompanije/", title: c.nav.coachingCompanies, text: COACHING_COMPANIES[lang].intro.split(". ")[0] + "." },
               { href: "/coaching/pojedinci/", title: c.nav.coachingIndividuals, text: COACHING[lang].intro },
               ...(COACHING_OPEN
-                ? [{ href: "/coaching/", title: c.nav.coachingProBono, text: PROBONO[lang].intro.split("? ").slice(-1)[0] }]
+                ? [{ href: "/coaching/pro-bono/", title: c.nav.coachingProBono, text: PROBONO[lang].intro.split("? ").slice(-1)[0] }]
                 : []),
             ].map((item, i) => (
               <Reveal key={item.href} delay={i * 100}>
@@ -1707,7 +1707,7 @@ const COACHING_INDIVIDUALS = {
   },
 };
 
-/* Pro bono page (/coaching/). COACHING_OPEN switches between the sign-up and the
+/* Pro bono page (/coaching/pro-bono/). COACHING_OPEN switches between the sign-up and the
    waiting-list wording: `open` / `closed` below replace the matching parts. */
 const PROBONO = {
   sr: {
@@ -2450,7 +2450,12 @@ function IndividualsPage({ c, lang, scrollToSection }) {
   );
 }
 
-/* Turns any address into the route form the app uses: "/", "/coaching/",
+/* Old addresses that now live elsewhere. "/coaching/" (and the printed QR
+   code, #/coaching) was the pro bono page before it got its own address.
+   The same move is made on the server in public/_redirects. */
+const MOVED = { "/coaching/": "/coaching/pro-bono/" };
+
+/* Turns any address into the route form the app uses: "/", "/coaching/pro-bono/",
    "/coaching/kompanije/", "/work/<slug>/". Old "#/..." links (the printed QR
    code, links shared before the switch) are read the same way, so they keep working. */
 function normalizePath(pathname = "/", hash = "") {
@@ -2458,7 +2463,7 @@ function normalizePath(pathname = "/", hash = "") {
   path = path.split(/[?#]/)[0] || "/";
   if (!path.startsWith("/")) path = "/" + path;
   if (!path.endsWith("/")) path += "/";
-  return path;
+  return MOVED[path] || path;
 }
 
 export default function Portfolio({ initialPath }) {
@@ -2513,9 +2518,11 @@ export default function Portfolio({ initialPath }) {
   /* Old "#/coaching" style links are rewritten to the real address, and the
      browser's back and forward buttons move between pages */
   useEffect(() => {
-    const { hash } = window.location;
-    if (hash.startsWith("#/") && hash.length > 2) {
-      const target = normalizePath("/", hash);
+    const { hash, pathname } = window.location;
+    const legacyHash = hash.startsWith("#/") && hash.length > 2;
+    /* Also tidies an old or slash-less address, e.g. /coaching to /coaching/pro-bono/ */
+    if (legacyHash || normalizePath(pathname) !== pathname) {
+      const target = legacyHash ? normalizePath("/", hash) : normalizePath(pathname);
       try {
         window.history.replaceState(null, "", target);
       } catch (err) {
@@ -2535,7 +2542,7 @@ export default function Portfolio({ initialPath }) {
   const match = path.match(/^\/work\/([^/]+)\/$/);
   const project = match ? projects.find((p) => p.slug === match[1]) : null;
   const isProjectRoute = Boolean(match);
-  const isCoachingRoute = path === "/coaching/";
+  const isCoachingRoute = path === "/coaching/pro-bono/";
   const soonMatch = path.match(/^\/coaching\/(kompanije|pojedinci)\/$/);
   const soonKind = soonMatch ? (soonMatch[1] === "kompanije" ? "companies" : "individuals") : null;
   const isCoachingArea = isCoachingRoute || Boolean(soonKind);

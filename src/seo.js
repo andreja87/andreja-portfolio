@@ -154,7 +154,7 @@ export const routes = [
   {
     /* When the pro bono round is full (COACHING_OPEN = false in
        Portfolio.jsx), change the description to mention the waiting list. */
-    path: "/coaching/",
+    path: "/coaching/pro-bono/",
     title: "Pro bono coaching online | Andreja Trajković",
     description:
       "Pro bono program individualnog coachinga za 10 osoba: pet online sesija od 60 minuta i besplatan uvodni razgovor, bez novčane naknade.",
@@ -169,7 +169,7 @@ export const routes = [
           "@type": "Service",
           name: "Pro bono individualni coaching",
           serviceType: "Individualni coaching",
-          url: `${SITE_URL}/coaching/`,
+          url: `${SITE_URL}/coaching/pro-bono/`,
           provider: { "@id": PERSON_ID },
           areaServed: serbia,
           inLanguage: "sr-Latn",
@@ -177,7 +177,7 @@ export const routes = [
         },
         crumbs([
           ["Početna", "/"],
-          ["Pro bono coaching", "/coaching/"],
+          ["Pro bono coaching", "/coaching/pro-bono/"],
         ]),
       ],
     },
