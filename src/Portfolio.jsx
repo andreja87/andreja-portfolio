@@ -1961,6 +1961,117 @@ function ProBonoPage({ c, lang, scrollToSection, navigate }) {
   );
 }
 
+function CoachingCompaniesPage({ c, lang, scrollToSection }) {
+  const d = { ...COACHING[lang], ...COACHING_COMPANIES[lang] };
+  const formText = { ...c, ...d.form };
+
+  /* Links keep a real href so they can be opened normally, but scroll in place */
+  const go = (id) => (e) => {
+    e.preventDefault();
+    scrollToSection(id);
+  };
+
+  return (
+    <main className="coaching">
+      <section className="c-section c-hero">
+        <div className="c-inner">
+          <div className="c-hero-grid">
+            <Reveal className="c-hero-text">
+              <p className="c-label">{d.label}</p>
+              <h1>
+                {d.h1Before}
+                <em>{d.h1Em}</em>
+              </h1>
+              <p className="c-hero-intro">{d.intro}</p>
+              <div className="c-hero-cta">
+                <button className="btn btn-primary" onClick={() => scrollToSection("coaching-contact")}>
+                  {d.ctaPrimary}
+                </button>
+                <a className="c-textlink" href="#/coaching/kompanije" onClick={go("coaching-how")}>
+                  {d.ctaSecondary}
+                </a>
+              </div>
+            </Reveal>
+
+            {PORTRAIT && (
+              <Reveal className="c-hero-portrait" delay={120}>
+                <img src={PORTRAIT} alt={PORTRAIT_ALT[lang]} />
+              </Reveal>
+            )}
+          </div>
+        </div>
+      </section>
+
+      <section className="c-section c-flush" id="coaching-for">
+        <div className="c-inner">
+          <Reveal><h2 className="c-h2 has-intro">{d.recognizeTitle}</h2></Reveal>
+          <Reveal delay={60}><p className="c-lead c-lead-wide">{d.recognizeIntro}</p></Reveal>
+          <ul className="c-cards">
+            {d.recognize.map((r, i) => (
+              <li key={r.title}>
+                <Reveal delay={i * 90}>
+                  <article className="c-card">
+                    <h3>{r.title}</h3>
+                    <p>{r.text}</p>
+                  </article>
+                </Reveal>
+              </li>
+            ))}
+          </ul>
+          <Reveal delay={100}><p className="c-outro">{d.recognizeOutro}</p></Reveal>
+        </div>
+      </section>
+
+      <section className="c-section c-band" id="coaching-how">
+        <div className="c-inner">
+          <Reveal><h2 className="c-h2">{d.howTitle}</h2></Reveal>
+          <ol className="c-steps">
+            {d.how.map((s, i) => (
+              <li key={s.title}>
+                <Reveal delay={i * 90}>
+                  <div className="c-step">
+                    <span className="c-step-num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+                    <h3>{s.title}</h3>
+                    <p>{s.text}</p>
+                  </div>
+                </Reveal>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section className="c-section" id="coaching-about">
+        <div className="c-inner">
+          <Reveal><h2 className="c-h2">{d.aboutTitle}</h2></Reveal>
+          <div className="c-about-grid is-single">
+            <div className="c-about-text">
+              {d.about.map((p, i) => (
+                <Reveal key={i} delay={i * 100}><p>{p}</p></Reveal>
+              ))}
+            </div>
+          </div>
+          <CertFigure d={d} />
+        </div>
+      </section>
+
+      <section className="c-section c-band c-contact" id="coaching-contact">
+        <div className="c-inner">
+          <Reveal>
+            <h2 className="c-h2">{d.contactTitle}</h2>
+          </Reveal>
+          <Reveal delay={120}>
+            <div className="c-form-card">
+              <ContactForm c={formText} source="coaching-companies" strict company />
+            </div>
+            <EmailLine d={d} />
+          </Reveal>
+        </div>
+      </section>
+    </main>
+  );
+}
+
 /* Certificate with an enlarged view. Escape closes it, the page behind stops
    scrolling, focus moves to the close button and returns to the thumbnail. */
 function CertFigure({ d }) {
