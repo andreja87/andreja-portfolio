@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import { routes as SEO_ROUTES } from "./seo.js";
 
 /* =========================================================
    TRANSLATIONS
@@ -16,6 +15,9 @@ const t = {
       projects: "Projects",
       offer: "Focus areas",
       coaching: "Coaching",
+      coachingCompanies: "For companies",
+      coachingIndividuals: "For individuals",
+      coachingProBono: "Pro bono",
       story: "My story",
       blog: "Articles",
       formula: "Formula",
@@ -101,6 +103,9 @@ const t = {
       projects: "Projekti",
       offer: "Oblasti rada",
       coaching: "Coaching",
+      coachingCompanies: "Za kompanije",
+      coachingIndividuals: "Za pojedince",
+      coachingProBono: "Pro bono",
       story: "O meni",
       blog: "Blog",
       formula: "Formula",
@@ -534,7 +539,7 @@ const PROCESS_VISUAL = { en: "", sr: "" };
    PROJECTS
 
    Each project needs a `slug`. It becomes the address of that
-   project's own page: /work/<slug>/. Clicking the card opens it.
+   project's own page: #/work/<slug>. Clicking the card opens it.
 
    Set caseStudy: true and the button label changes on its own.
 
@@ -574,17 +579,26 @@ const blogPosts = [];
    between "My story" and "Formula". */
 const SHOW_BLOG = false;
 
-/* Coaching page switch. true = the current pro bono round is open for sign-ups.
+/* Pro bono page switch. true = the current pro bono round is open for sign-ups.
    When the ten places are taken, change it to false: the page then offers the
-   waiting list instead (wording lives under `closed` in COACHING below). */
+   waiting list instead (wording lives under `closed` in PROBONO below). */
 const COACHING_OPEN = true;
 
 /* Section order on the page and in the fixed menu */
-const NAV_IDS = ["projects", "offer", "story", ...(SHOW_BLOG ? ["blog"] : []), "formula", "contact"];
+const NAV_IDS = ["projects", "offer", "story", ...(SHOW_BLOG ? ["blog"] : []), "contact"];
 
 /* Menu order: the Coaching page sits right after "Focus areas". It is a page,
    not a section, so it opens its own route instead of scrolling. */
 const NAV_ENTRIES = NAV_IDS.flatMap((id) => (id === "offer" ? [id, "coaching"] : [id]));
+
+/* Coaching submenu, in menu order. "Pro bono" is the existing coaching page
+   (the printed QR code points to #/coaching, so that address must not change).
+   The other two are short "coming soon" pages until their text is ready. */
+const COACHING_LINKS = [
+  { id: "companies", hash: "#/coaching/kompanije", key: "coachingCompanies" },
+  { id: "individuals", hash: "#/coaching/pojedinci", key: "coachingIndividuals" },
+  { id: "probono", hash: "#/coaching", key: "coachingProBono" },
+];
 
 /* Where the contact form posts. Create a free form at formspree.io or
    web3forms.com, point it at the email address below, and paste the
@@ -622,7 +636,6 @@ const COACHING = {
     intro: "Kroz coaching istražujemo ono što ti je važno, sagledavamo mogućnosti i definišemo konkretne korake koji će ti pomoći da ostvariš svoj cilj.",
     ctaPrimary: "Dogovori uvodni razgovor",
     ctaSecondary: "Kako izgleda coaching",
-    pill: "Online pro bono program · 10 klijenata",
     recognizeTitle: "Za koga je coaching?",
     recognizeIntro: "Coaching je za tebe ako želiš da radiš na ličnom ili profesionalnom cilju, uz podršku da jasnije sagledaš svoju situaciju i preduzmeš konkretne korake.",
     recognize: [
@@ -659,14 +672,7 @@ const COACHING = {
         text: "Zajedno definišemo konkretne korake koje ćeš preduzeti ka svom cilju. Kroz naredne susrete pratimo kako napreduje primena, šta se menja i gde ti je potrebna dodatna podrška da nastaviš.",
       },
     ],
-    programTitle: "Pro bono coaching paket",
-    programText: "Nudim 10 besplatnih coaching paketa. Svaki paket obuhvata pet online sesija od po sat vremena. Pre početka saradnje imamo informativni razgovor od 30 minuta, tokom kojeg se upoznajemo i dogovaramo dalji rad.",
     aboutTitle: "Moj coaching pristup",
-    about: [
-      "U coachingu primenjujem znanja i veštine stečene na treningu za mentore, uz više od decenije rada na ličnom razvoju i istraživanja komunikacije i ponašanja ljudi. Pažljivim slušanjem i pitanjima pomažem ti da prepoznaš šta te ograničava, sagledaš svoje mogućnosti i definišeš konkretne korake ka ostvarenju svog cilja.",
-      "Ti biraš svoj cilj i donosiš odluke. Moja uloga je da te podržim i podstaknem da sagledaš situaciju iz drugog ugla i isprobaš drugačiji pristup.",
-      "Verujem da su poverenje, poštovanje i podrška osnova za lični razvoj i promenu. U radu sa mnom imaš prostor da otvoreno govoriš o onome što ti je važno.",
-    ],
     certTitle: "Profesionalni mentor",
     certOrg: "International Centre for Coaching and Mentoring, London, United Kingdom · 2026.",
     certAlt: "Sertifikat o završenoj obuci za profesionalne mentore, International Centre for Coaching and Mentoring, 2026.",
@@ -674,49 +680,9 @@ const COACHING = {
     certClose: "Zatvori",
     quote: "Verujem da svako ima sposobnost za razvoj i promenu, uz prostor i podršku da pronađe svoj put.",
     faqTitle: "Česta pitanja",
-    faq: [
-      {
-        q: "Da li se coaching naplaćuje?",
-        a: "Za prvih deset osoba koje se prijave coaching paket je pro bono, bez novčane naknade. Paket obuhvata pet online sesija od po sat vremena i uvodni razgovor od 30 minuta.",
-      },
-      {
-        q: "Čemu služi uvodni razgovor?",
-        a: "Tokom uvodnog razgovora od 30 minuta upoznajemo se, razjašnjavamo šta želiš da promeniš ili postigneš i dogovaramo temu na kojoj ćemo raditi.",
-      },
-      {
-        q: "Kako se dogovara saradnja?",
-        a: "Pre početka rada potpisujemo ugovor o coachingu kojim definišemo temu i cilj saradnje, broj i trajanje sesija, način održavanja, poverljivost i međusobne odgovornosti.",
-      },
-      {
-        q: "Kako se održavaju sesije?",
-        a: "Sesije se održavaju online i traju po sat vremena. Termine dogovaramo zajedno.",
-      },
-      {
-        q: "Da li moram unapred da znam svoj cilj?",
-        a: "Ne moraš da imaš potpuno definisan cilj. Možeš da dođeš sa situacijom, dilemom ili promenom koju želiš da napraviš. Tokom uvodnog razgovora zajedno razjašnjavamo temu i cilj saradnje.",
-      },
-      {
-        q: "Kako da napravim prvi korak?",
-        a: "Javi mi se putem [[form|kontakt forme]] ili piši na [[email|andrejatrajkovic999@gmail.com]] i ukratko napiši na čemu želiš da radiš. Zatim dogovaramo termin uvodnog razgovora.",
-      },
-    ],
-    contactTitle: "Prijavi se za besplatan coaching",
     emailLead: "Ili piši na",
     copiedLabel: "Kopirano",
     copyAria: "Kopiraj email adresu",
-    /* Used instead of the wording above and below when COACHING_OPEN is false */
-    closed: {
-      pill: "Trenutna pro bono tura je popunjena",
-      ctaPrimary: "Prijavi se na listu čekanja",
-      programText: "Trenutna tura od 10 besplatnih coaching paketa je popunjena. Svaki paket obuhvata pet online sesija od po sat vremena, uz uvodni razgovor od 30 minuta. Prijavi se na listu čekanja i javiću ti putem emaila kada se otvori nova tura.",
-      faqFee: "Trenutna tura pro bono coaching paketa je popunjena. Prijavi se na listu čekanja i javiću ti putem emaila kada se otvori nova pro bono tura.",
-      faqStart: "Prijavi se na listu čekanja putem [[form|kontakt forme]]. Kada se otvori nova tura, javiću ti se putem emaila i dogovaramo termin uvodnog razgovora.",
-      contactTitle: "Prijavi se na listu čekanja",
-      form: {
-        formSend: "Prijavi se",
-        formSuccess: "Hvala. Tvoja prijava za listu čekanja je primljena. Javiću ti se putem emaila kada se otvori nova tura.",
-      },
-    },
     /* Same form and same notice as the rest of the site, worded with "ti" */
     form: {
       formSend: "Prijavi se",
@@ -736,7 +702,6 @@ const COACHING = {
     intro: "Through coaching, we explore what matters to you, look at your options and define concrete steps that will help you reach your goal.",
     ctaPrimary: "Arrange an introductory conversation",
     ctaSecondary: "What coaching looks like",
-    pill: "Online pro bono program · 10 clients",
     recognizeTitle: "Who is coaching for?",
     recognizeIntro: "Coaching is for you if you want to work on a personal or professional goal, with support to see your situation more clearly and take concrete steps.",
     recognize: [
@@ -773,14 +738,7 @@ const COACHING = {
         text: "Together we define the concrete steps you will take toward your goal. Over the following sessions, we track how putting them into practice is going, what is changing and where you need extra support to keep going.",
       },
     ],
-    programTitle: "Pro bono coaching package",
-    programText: "I'm offering 10 free coaching packages. Each package includes five one-hour online sessions. Before we start working together, we have a 30-minute introductory conversation, during which we get to know each other and agree on how to continue.",
     aboutTitle: "My coaching approach",
-    about: [
-      "In coaching, I apply the knowledge and skills gained in mentor training, along with more than a decade of working on my personal development and exploring communication and human behavior. Through careful listening and questions, I help you recognize what is limiting you, see your options and define concrete steps toward achieving your goal.",
-      "You choose your goal and make your decisions. My role is to support you and encourage you to look at your situation from a different angle and try a different approach.",
-      "I believe trust, respect and support are the foundation of personal growth and change. Working with me, you have room to speak openly about what matters to you.",
-    ],
     certTitle: "Professional Mentor",
     certOrg: "International Centre for Coaching and Mentoring, London, United Kingdom · 2026",
     certAlt: "Certificate of completion of the Training for Professional Mentors, International Centre for Coaching and Mentoring, 2026.",
@@ -788,48 +746,9 @@ const COACHING = {
     certClose: "Close",
     quote: "I believe everyone has the ability to grow and change, with the space and support to find their own way.",
     faqTitle: "Frequently asked questions",
-    faq: [
-      {
-        q: "Is coaching paid?",
-        a: "For the first ten people who apply, the coaching package is pro bono, free of charge. The package includes five one-hour online sessions and a 30-minute introductory conversation.",
-      },
-      {
-        q: "What is the introductory conversation for?",
-        a: "During the 30-minute introductory conversation, we get to know each other, clarify what you want to change or achieve and agree on the topic we'll work on.",
-      },
-      {
-        q: "How is the collaboration arranged?",
-        a: "Before we start, we sign a coaching agreement that defines the topic and goal of our work, the number and length of sessions, how they take place, confidentiality and mutual responsibilities.",
-      },
-      {
-        q: "How do the sessions take place?",
-        a: "Sessions take place online and last one hour each. We agree on dates together.",
-      },
-      {
-        q: "Do I need to know my goal in advance?",
-        a: "You don't need a fully defined goal. You can come with a situation, a dilemma or a change you want to make. During the introductory conversation, we clarify the topic and goal together.",
-      },
-      {
-        q: "How do I take the first step?",
-        a: "Get in touch through the [[form|contact form]] or write to [[email|andrejatrajkovic999@gmail.com]] and briefly describe what you'd like to work on. Then we arrange a time for the introductory conversation.",
-      },
-    ],
-    contactTitle: "Apply for free coaching",
     emailLead: "Or write to",
     copiedLabel: "Copied",
     copyAria: "Copy email address",
-    closed: {
-      pill: "Current pro bono round is full",
-      ctaPrimary: "Join the waiting list",
-      programText: "The current round of 10 free coaching packages is full. Each package includes five one-hour online sessions, with a 30-minute introductory conversation. Join the waiting list and I'll email you when a new round opens.",
-      faqFee: "The current round of pro bono coaching packages is full. Join the waiting list and I'll email you when a new pro bono round opens.",
-      faqStart: "Join the waiting list through the [[form|contact form]]. When a new round opens, I'll email you and we'll arrange a time for the introductory conversation.",
-      contactTitle: "Join the waiting list",
-      form: {
-        formSend: "Apply",
-        formSuccess: "Thank you. Your waiting list request has been received. I'll email you when a new round opens.",
-      },
-    },
     form: {
       formSend: "Apply",
       formIncomplete: "Please fill in your name and email.",
@@ -908,7 +827,7 @@ function CardSection({
         ) : (
           <div className="card-grid">
             {items.map((item, i) => {
-              const href = item.slug ? `/work/${item.slug}/` : item.url;
+              const href = item.slug ? `#/work/${item.slug}` : item.url;
               const isExternal = !item.slug && !!item.url;
               const label = item.caseStudy && caseStudyLabel ? caseStudyLabel : linkLabel;
               const inner = (
@@ -1174,10 +1093,10 @@ function ProjectPage({ project, c, lang, setLang, goToSection, navigate }) {
         <Reveal>
           <a
             className="back-link"
-            href="/"
+            href="#/"
             onClick={(e) => {
               e.preventDefault();
-              navigate("/");
+              navigate("#/");
             }}
           >
             ← {c.backToWork}
@@ -1224,10 +1143,10 @@ function ProjectPage({ project, c, lang, setLang, goToSection, navigate }) {
           <div className="project-footer-nav">
             <a
               className="btn btn-ghost"
-              href="/"
+              href="#/"
               onClick={(e) => {
                 e.preventDefault();
-                navigate("/");
+                navigate("#/");
               }}
             >
               ← {c.backToWork}
@@ -1243,15 +1162,16 @@ function ProjectPage({ project, c, lang, setLang, goToSection, navigate }) {
 }
 
 /* ============ Contact form ============ */
-function ContactForm({ c, source, strict = false }) {
-  const [values, setValues] = useState({ name: "", email: "", message: "" });
+function ContactForm({ c, source, strict = false, company = false, hideMessage = false }) {
+  const [values, setValues] = useState({ name: "", email: "", company: "", message: "" });
   const [status, setStatus] = useState("idle"); // idle | sending | sent | error
   const [problem, setProblem] = useState("");
 
   /* In strict mode only name and email are required (marked with *) and the
      button stays disabled until both hold something other than spaces. The
      message is optional. */
-  const incomplete = strict && (!values.name.trim() || !values.email.trim());
+  const incomplete =
+    strict && (!values.name.trim() || !values.email.trim() || (company && !values.company.trim()));
   const mark = strict ? <em className="field-req" aria-hidden="true">*</em> : null;
 
   const update = (field) => (e) => {
@@ -1263,9 +1183,10 @@ function ContactForm({ c, source, strict = false }) {
   const submit = async () => {
     const name = values.name.trim();
     const email = values.email.trim();
+    const companyName = values.company.trim();
     const message = values.message.trim();
 
-    if (!name || !email || (!strict && !message)) {
+    if (!name || !email || (company && !companyName) || (!strict && !message)) {
       setProblem(c.formIncomplete);
       return;
     }
@@ -1280,11 +1201,17 @@ function ContactForm({ c, source, strict = false }) {
       const res = await fetch(FORM_ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify(source ? { name, email, message, source } : { name, email, message }),
+        body: JSON.stringify({
+          name,
+          email,
+          ...(company ? { company: companyName } : {}),
+          message,
+          ...(source ? { source } : {}),
+        }),
       });
       if (!res.ok) throw new Error("Request failed");
       setStatus("sent");
-      setValues({ name: "", email: "", message: "" });
+      setValues({ name: "", email: "", company: "", message: "" });
     } catch (err) {
       setStatus("error");
     }
@@ -1324,10 +1251,25 @@ function ContactForm({ c, source, strict = false }) {
           />
         </label>
       </div>
-      <label className="field">
-        <span>{c.formMessage}</span>
-        <textarea rows="5" value={values.message} onChange={update("message")} required={!strict} aria-required={strict ? undefined : "true"} />
-      </label>
+      {company && (
+        <label className="field">
+          <span>{c.formCompany}{mark}</span>
+          <input
+            type="text"
+            value={values.company}
+            onChange={update("company")}
+            autoComplete="organization"
+            required
+            aria-required="true"
+          />
+        </label>
+      )}
+      {!hideMessage && (
+        <label className="field">
+          <span>{c.formMessage}</span>
+          <textarea rows="5" value={values.message} onChange={update("message")} required={!strict} aria-required={strict ? undefined : "true"} />
+        </label>
+      )}
 
       {(problem || status === "error") && (
         <p className="form-problem" role="alert">
@@ -1484,28 +1426,623 @@ function HomePage({ c, lang, goToSection, navigate }) {
 }
 
 /* ============ Coaching page ============ */
-function CoachingPage({ c, lang, scrollToSection }) {
-  const base = COACHING[lang];
-  /* With the round full, the closed wording replaces the sign-up wording */
-  const d = COACHING_OPEN
-    ? base
-    : {
-        ...base,
-        ...base.closed,
-        faq: base.faq.map((f, i) =>
-          i === 0 ? { ...f, a: base.closed.faqFee }
-          : i === base.faq.length - 1 ? { ...f, a: base.closed.faqStart }
-          : f
-        ),
-        form: { ...base.form, ...base.closed.form },
-      };
-  const [openFaq, setOpenFaq] = useState({});
+/* "Coaching za kompanije" page (#/coaching/kompanije). Certificate and e-mail
+   wording are shared with the pro bono page (COACHING). Companies are addressed
+   with "vi". */
+const COACHING_COMPANIES = {
+  sr: {
+    pageTitle: "Coaching za kompanije · Andreja Trajković",
+    label: "Coaching za kompanije",
+    h1Before: "Individualni coaching ",
+    h1Em: "zaposlenih i menadžera",
+    intro:
+      "Kroz individualni coaching podržavam zaposlene i menadžere da unaprede veštine važne za njihov rad i ciljeve kompanije. Sagledavamo šta vam je potrebno i dogovaramo cilj saradnje, a sa zaposlenima definišemo konkretne korake ka tom cilju. U coaching možete uključiti jednog ili više zaposlenih.",
+    ctaPrimary: "Razgovarajmo",
+    ctaSecondary: "Kako izgleda coaching",
+    recognizeTitle: "Za koga je coaching?",
+    recognizeIntro:
+      "Coaching je za kompanije koje žele da kroz razvoj veština zaposlenih i menadžera unaprede organizacionu kulturu i doprinesu većoj produktivnosti, proaktivnosti i zadovoljstvu zaposlenih, boljim međuljudskim odnosima i zdravijem radnom okruženju.",
+    recognize: [
+      {
+        title: "Komunikacija",
+        text: "Jasna komunikacija je osnova dobre saradnje i podržavajućeg radnog okruženja. Kako zaposleni izražavaju ono što im je važno, slušaju jedni druge i proveravaju da li su se razumeli?",
+      },
+      {
+        title: "Primanje i davanje feedback",
+        text: "Da li zaposleni dobijaju konkretan feedback i znaju šta se od njih očekuje? Kako daju i primaju povratne informacije i koriste ih da unaprede svoj rad?",
+      },
+      {
+        title: "Organizacija vremena",
+        text: "Gde se gubi vreme i kako se određuju prioriteti? Kako zaposleni organizuju zadatke u skladu sa njihovom važnošću i hitnošću?",
+      },
+      {
+        title: "Proaktivnost",
+        text: "Da li se zaposleni usuđuju da istupe, podele ideje i preduzmu korake ili čekaju odobrenje menadžmenta? Da li im je jasno šta mogu da odluče sami, a kada je potrebno da se konsultuju?",
+      },
+    ],
+    recognizeOutro:
+      "Ako prepoznajete svoju kompaniju u nekoj od ovih situacija, coaching može da podrži vaše zaposlene i menadžere da unaprede svoj rad i doprinesu boljim rezultatima.",
+    howTitle: "Kako izgleda coaching",
+    how: [
+      {
+        title: "Upoznavanje i dogovor o saradnji",
+        text: "Upoznajemo se i sagledavamo ciljeve kompanije i šta je moguće postići coachingom. Objašnjavam kako radim, a zajedno dogovaramo fokus saradnje i šta kompanija može da očekuje.",
+      },
+      {
+        title: "Jasan cilj za svakog učesnika",
+        text: "Sa kompanijom definišemo razvojni cilj za svakog zaposlenog koji će učestvovati u coachingu. Sa zaposlenim zatim sagledavamo konkretne situacije na kojima ćemo raditi i dogovaramo kako ćemo pratiti napredak.",
+      },
+      {
+        title: "Od cilja do primene",
+        text: "Sa zaposlenim definišemo konkretne korake ka dogovorenom cilju. Kroz naredne susrete pratimo primenu i napredak, a kompaniji ili sponzoru dajem povratne informacije u unapred dogovorenom obimu, uz čuvanje poverljivosti ličnih sadržaja razgovora.",
+      },
+    ],
+    aboutTitle: "Moj coaching pristup",
+    about: [
+      "U coachingu primenjujem znanja i veštine stečene na treningu za mentore, kao i one koje stičem kroz edukaciju Coaching Plus metodologije, koju trenutno pohađam.",
+      "U radu koristim različite coaching metode i pristupe, u skladu sa ciljem i potrebama učesnika. Pomažem zaposlenima i menadžerima da sagledaju izazove, prepoznaju šta ih ograničava i pronađu drugačije načine da pristupe situacijama na poslu. Rad usmeravamo ka dogovorenim ciljevima kompanije, a sa svakim učesnikom definišemo konkretne korake i pratimo njihovu primenu.",
+      "Vodim se principima poverljivosti, poštovanja i odgovornosti. Pre početka saradnje jasno dogovaramo ciljeve, uloge i način izveštavanja kompanije. Čuvam poverljivost ličnih sadržaja razgovora, poštujem samostalnost učesnika u donošenju odluka i radim u granicama svojih kompetencija.",
+      "Verujem da kompanije ulaganjem u razvoj zaposlenih mogu da unaprede komunikaciju, međuljudske odnose i produktivnost. Coaching vidim kao podršku da se taj razvoj pokaže u svakodnevnom radu: kroz jasnije dogovore, više inicijative i bolju saradnju.",
+    ],
+    contactTitle: "Razgovarajmo o potrebama vaše kompanije",
+    emailLead: "Ili pišite na",
+    form: {
+      formCompany: "Kompanija",
+      formSend: "Pošaljite upit",
+      formIncomplete: "Popunite ime, email i kompaniju.",
+      formFillAll: "Polja označena sa * su obavezna.",
+      formSuccess: "Hvala. Vaša poruka je poslata.",
+      formError: "Došlo je do greške. Pokušajte ponovo.",
+      formBadEmail: "Proverite adresu e-pošte.",
+      formPrivacy: "Vaši podaci koriste se isključivo za odgovor na poruku i ne prosleđuju se trećim licima.",
+    },
+  },
+  en: {
+    pageTitle: "Coaching for companies · Andreja Trajkovic",
+    label: "Coaching for companies",
+    h1Before: "Individual coaching for ",
+    h1Em: "employees and managers",
+    intro:
+      "Through individual coaching, I support employees and managers in developing the skills that matter for their work and for the company's goals. We look at what you need and agree on the goal of our work together, and with the employees we define concrete steps towards that goal. You can include one or more employees in coaching.",
+    ctaPrimary: "Let's talk",
+    ctaSecondary: "What coaching looks like",
+    recognizeTitle: "Who is coaching for?",
+    recognizeIntro:
+      "Coaching is for companies that want to improve their organizational culture by developing the skills of employees and managers, and to contribute to greater productivity, proactivity and employee satisfaction, better working relationships and a healthier work environment.",
+    recognize: [
+      {
+        title: "Communication",
+        text: "Clear communication is the foundation of good collaboration and a supportive work environment. How do employees express what matters to them, listen to one another and check that they have understood each other?",
+      },
+      {
+        title: "Giving and receiving feedback",
+        text: "Do employees receive concrete feedback and know what is expected of them? How do they give and receive feedback and use it to improve their work?",
+      },
+      {
+        title: "Time management",
+        text: "Where is time lost and how are priorities set? How do employees organize tasks according to their importance and urgency?",
+      },
+      {
+        title: "Proactivity",
+        text: "Do employees dare to speak up, share ideas and take steps, or do they wait for management's approval? Is it clear to them what they can decide on their own and when they need to consult?",
+      },
+    ],
+    recognizeOutro:
+      "If you recognize your company in any of these situations, coaching can support your employees and managers in improving their work and contributing to better results.",
+    howTitle: "What coaching looks like",
+    how: [
+      {
+        title: "Getting to know each other and agreeing on the collaboration",
+        text: "We get to know each other and look at the company's goals and what coaching can achieve. I explain how I work, and together we agree on the focus of our work and on what the company can expect.",
+      },
+      {
+        title: "A clear goal for every participant",
+        text: "With the company, we define a development goal for each employee who will take part in coaching. With the employee, we then look at the concrete situations we will work on and agree on how we will track progress.",
+      },
+      {
+        title: "From goal to application",
+        text: "With the employee, we define concrete steps towards the agreed goal. Over the following sessions we follow the application and progress, and I give the company or sponsor feedback to an extent agreed in advance, while keeping the personal content of the conversations confidential.",
+      },
+    ],
+    aboutTitle: "My coaching approach",
+    about: [
+      "In coaching I apply the knowledge and skills gained in my mentor training, as well as those I am gaining through the Coaching Plus methodology programme, which I am currently attending.",
+      "I use a range of coaching methods and approaches, in line with the goal and needs of the participants. I help employees and managers see their challenges, recognize what holds them back and find different ways of approaching situations at work. We direct the work towards the company's agreed goals, and with each participant we define concrete steps and follow how they are applied.",
+      "I am guided by the principles of confidentiality, respect and responsibility. Before we begin, we clearly agree on goals, roles and how the company will be reported to. I keep the personal content of the conversations confidential, respect participants' autonomy in making decisions and work within the limits of my competence.",
+      "I believe that by investing in the development of their employees, companies can improve communication, working relationships and productivity. I see coaching as support for that development to show in everyday work: through clearer agreements, more initiative and better collaboration.",
+    ],
+    contactTitle: "Let's talk about your company's needs",
+    emailLead: "Or write to",
+    form: {
+      formCompany: "Company",
+      formSend: "Send inquiry",
+      formIncomplete: "Please fill in your name, email and company.",
+      formFillAll: "Fields marked with * are required.",
+      formSuccess: "Thank you. Your message has been sent.",
+      formError: "Something went wrong. Please try again.",
+      formBadEmail: "Please check the email address.",
+      formPrivacy: "Your details are used only to reply to your message and are not shared with third parties.",
+    },
+  },
+};
+
+/* "Coaching za pojedince" page (#/coaching/pojedinci). Same page as the pro bono one;
+   only the keys below differ, everything else (hero, "Za koga", steps, quote,
+   certificate, form wording) is taken from COACHING. */
+const COACHING_INDIVIDUALS = {
+  sr: {
+    pageTitle: "Coaching za pojedince · Andreja Trajković",
+    pill: "Individualni coaching · Online",
+    aboutTitle: "Moj coaching pristup",
+    about: [
+      "U coachingu primenjujem znanja i veštine stečene na treningu za mentore, kao i one koje stičem kroz edukaciju Coaching Plus metodologije, koju trenutno pohađam.",
+      "Koristim različite coaching metode i pristupe, u skladu sa tvojim ciljem i potrebama. Pomažem ti da sagledaš izazove, prepoznaš šta te ograničava i pronađeš drugačije načine da pristupiš situacijama koje su ti važne. Zajedno definišemo konkretne korake i pratimo njihovu primenu.",
+      "Vodim se principima poverljivosti, poštovanja i odgovornosti. Pre početka saradnje jasno dogovaramo cilj, način rada i međusobne odgovornosti. Čuvam poverljivost naših razgovora u dogovorenim granicama i radim u okviru svojih kompetencija.",
+      "Ti donosiš odluke o svom životu. Moja uloga je da te podržim, podstaknem da preispitaš dosadašnje pristupe i istražiš druge mogućnosti.",
+    ],
+    faq: [
+      {
+        q: "Koliko košta coaching i kako se plaća?",
+        a: "Jedna online coaching sesija od 60 minuta košta 3.000 dinara i plaća se pre zakazanog termina.\n\nZa paket od pet sesija ostvaruješ 10% popusta uz plaćanje unapred. Cena paketa je 13.500 dinara umesto 15.000 dinara.\n\nUvodni razgovor traje od 30 do 60 minuta i besplatan je. Tokom njega se upoznajemo, razgovaramo o tvojoj temi i dogovaramo dalju saradnju.",
+      },
+      {
+        q: "Čemu služi uvodni razgovor?",
+        a: "Uvodni razgovor je prilika da se upoznamo, razgovaramo o tome šta želiš da promeniš ili postigneš i razjasnimo kako coaching može da ti pomogne. Objašnjavam ti kako radim, a ti imaš prostor da postaviš pitanja i proceniš da li ti takav način rada odgovara.\n\nRazgovor je besplatan, traje od 30 do 60 minuta i ne obavezuje te na nastavak saradnje.",
+      },
+      {
+        q: "Kako se dogovara saradnja?",
+        a: "Pre početka rada potpisujemo ugovor o coachingu kojim definišemo cilj saradnje, broj i trajanje sesija, način održavanja i plaćanja, poverljivost i međusobne odgovornosti. Dogovaramo i uslove pomeranja i otkazivanja termina, kao i prekida saradnje.",
+      },
+      {
+        q: "Kako se održavaju sesije?",
+        a: "Sesije se održavaju online i traju po sat vremena. Termine dogovaramo zajedno.",
+      },
+      {
+        q: "Da li moram unapred da znam svoj cilj?",
+        a: "Ne moraš da imaš potpuno definisan cilj. Možeš da dođeš sa situacijom, dilemom ili promenom koju želiš da napraviš. Tokom uvodnog razgovora zajedno razjašnjavamo temu i cilj saradnje.",
+      },
+      {
+        q: "Kako da napravim prvi korak?",
+        a: "Javi mi se putem [[form|kontakt forme]] ili piši na [[email|andrejatrajkovic999@gmail.com]] i ukratko napiši na čemu želiš da radiš. Zatim dogovaramo termin uvodnog razgovora.",
+      },
+    ],
+    contactTitle: "Dogovori uvodni razgovor",
+  },
+  en: {
+    pageTitle: "Coaching for individuals · Andreja Trajkovic",
+    pill: "Individual coaching · Online",
+    aboutTitle: "My coaching approach",
+    about: [
+      "In coaching I apply the knowledge and skills gained in my mentor training, as well as those I am gaining through the Coaching Plus methodology programme, which I am currently attending.",
+      "I use a range of coaching methods and approaches, in line with your goal and needs. I help you see your challenges, recognize what holds you back and find different ways of approaching the situations that matter to you. Together we define concrete steps and follow how they are applied.",
+      "I am guided by the principles of confidentiality, respect and responsibility. Before we begin, we clearly agree on the goal, the way of working and our mutual responsibilities. I keep our conversations confidential within the agreed limits and work within the scope of my competence.",
+      "You make the decisions about your own life. My role is to support you and encourage you to question your previous approaches and explore other possibilities.",
+    ],
+    faq: [
+      {
+        q: "How much does coaching cost and how is it paid?",
+        a: "One 60-minute online coaching session costs 3,000 dinars and is paid before the scheduled appointment.\n\nFor a package of five sessions you get a 10% discount when paying in advance. The package costs 13,500 dinars instead of 15,000 dinars.\n\nThe introductory conversation lasts 30 to 60 minutes and is free. During it we get to know each other, talk about your topic and agree on how to continue.",
+      },
+      {
+        q: "What is the introductory conversation for?",
+        a: "The introductory conversation is a chance to get to know each other, talk about what you want to change or achieve, and clarify how coaching can help you. I explain how I work, and you have space to ask questions and judge whether that way of working suits you.\n\nThe conversation is free, lasts 30 to 60 minutes and does not commit you to continuing.",
+      },
+      {
+        q: "How is the collaboration agreed?",
+        a: "Before we start, we sign a coaching agreement that defines the goal of our work, the number and length of sessions, how they are held and paid for, confidentiality and mutual responsibilities. We also agree on the terms for rescheduling and cancelling appointments, as well as for ending the collaboration.",
+      },
+      {
+        q: "How are the sessions held?",
+        a: "Sessions are held online and last one hour each. We agree on appointments together.",
+      },
+      {
+        q: "Do I need to know my goal in advance?",
+        a: "You don't need a fully defined goal. You can come with a situation, a dilemma or a change you want to make. During the introductory conversation we clarify the topic and the goal of our work together.",
+      },
+      {
+        q: "How do I take the first step?",
+        a: "Get in touch through the [[form|contact form]] or write to [[email|andrejatrajkovic999@gmail.com]] and briefly describe what you want to work on. Then we agree on a time for the introductory conversation.",
+      },
+    ],
+    contactTitle: "Arrange an introductory conversation",
+  },
+};
+
+/* Pro bono page (#/coaching). COACHING_OPEN switches between the sign-up and the
+   waiting-list wording: `open` / `closed` below replace the matching parts. */
+const PROBONO = {
+  sr: {
+    pageTitle: "Pro bono coaching · Andreja Trajković",
+    h1Before: "Pro bono ",
+    h1Em: "individualni coaching",
+    intro:
+      "Želiš da radiš na nekoj promeni, odluci ili svom cilju? Kroz pro bono program možeš da iskusiš coaching i posvetiš se onome što ti je važno, bez novčane naknade.",
+    sections: [
+      {
+        title: "Šta program obuhvata?",
+        blocks: [
+          { p: "Program je predviđen za 10 osoba. Svaki učesnik dobija:" },
+          {
+            ul: [
+              "pet individualnih online sesija od po 60 minuta;",
+              "besplatan uvodni razgovor od 30 do 60 minuta.",
+            ],
+          },
+          {
+            p: "Na uvodnom razgovoru se upoznajemo, razgovaramo o tvojoj temi i razjašnjavamo kako možemo da radimo zajedno. Razgovor te ne obavezuje na nastavak saradnje.",
+          },
+          { p: "Termine sesija dogovaramo zajedno." },
+        ],
+      },
+      {
+        title: "Sa kojom temom možeš da dođeš?",
+        blocks: [
+          {
+            p: "Možda želiš da unaprediš komunikaciju, postaviš granice, bolje organizuješ vreme ili budeš istrajniji u onome što započneš. Možda razmatraš važnu odluku ili želiš promenu, ali ne znaš odakle da počneš.",
+          },
+          {
+            p: "Ne moraš unapred da imaš potpuno definisan cilj. Dovoljno je da znaš o čemu želiš da razgovaramo, pa ćemo zajedno razjasniti temu i cilj saradnje.",
+          },
+        ],
+      },
+      {
+        title: "Zašto nudim pro bono program?",
+        blocks: [
+          {
+            p: "Trenutno sam polaznica edukacije za Coaching Plus metodologiju i razvijam svoju coaching praksu. Ovaj program vidim kao dobru priliku da steknem praksu i u isto vreme pomognem ljudima da unaprede neki aspekt života.",
+          },
+        ],
+      },
+      {
+        title: "Kako ćemo raditi?",
+        link: true,
+        blocks: [
+          {
+            p: "Koristim različite coaching metode i pristupe, u skladu sa tvojim ciljem i potrebama. Istražujemo ono što ti je važno, sagledavamo šta te ograničava i definišemo konkretne korake. Kroz naredne susrete pratimo njihovu primenu i ono što se menja.",
+          },
+          {
+            p: "Pre početka rada potpisujemo ugovor kojim dogovaramo cilj saradnje, termine, poverljivost i međusobne odgovornosti.",
+          },
+          {
+            p: "Program je besplatan, ali podrazumeva da odvojiš vreme za dogovorene sesije i rad na svom cilju između susreta. Ti donosiš odluke i preduzimaš korake, a moja uloga je da te u tome podržim.",
+          },
+        ],
+      },
+    ],
+    moreLink: "Više o mom coaching pristupu i načinu rada",
+    emailLead: "Ili piši na",
+    copiedLabel: "Kopirano",
+    copyAria: "Kopiraj email adresu",
+    /* Sign-up wording, used while COACHING_OPEN is true */
+    open: {
+      cta: "Prijavi se za pro bono program",
+      pill: null,
+      contactTitle: "Prijavi se za pro bono program",
+      contactLead: [
+        "Napiši ukratko na čemu želiš da radiš. Nije potrebno da u prijavi iznosiš osetljive lične detalje. Nakon prijave javiću ti se da dogovorimo uvodni razgovor.",
+      ],
+      hideMessage: false,
+      form: {
+        formMessage: "Na čemu želiš da radiš kroz coaching?",
+        formSend: "Pošalji prijavu",
+        formIncomplete: "Popuni ime i email.",
+        formFillAll: "Polja označena sa * su obavezna.",
+        formSuccess: "Hvala. Tvoja prijava je primljena. Javiću ti se da dogovorimo uvodni razgovor.",
+        formError: "Došlo je do greške. Pokušaj ponovo.",
+        formBadEmail: "Proveri adresu e-pošte.",
+        formPrivacy: "Tvoji podaci koriste se isključivo za odgovor na poruku i ne prosleđuju se trećim licima.",
+      },
+    },
+    /* Waiting-list wording, used when COACHING_OPEN is false */
+    closed: {
+      cta: "Prijavi se na listu čekanja",
+      pill: "Trenutno su sva mesta popunjena",
+      contactTitle: "Prijavi se na listu čekanja",
+      contactLead: [
+        "Trenutno su sva mesta u pro bono programu popunjena. Ako želiš da te obavestim kada ponovo bude slobodnih mesta, ostavi ime i email.",
+        "Prijava na listu čekanja ne garantuje mesto u narednom programu i ne uključuje prijavu na newsletter. Tvoj email koristiću da ti javim kada se otvore nove pro bono prijave. Sa liste možeš da se odjaviš u svakom trenutku.",
+      ],
+      hideMessage: true,
+      form: {
+        formSend: "Obavesti me kada bude mesta",
+        formIncomplete: "Popuni ime i email.",
+        formFillAll: "Polja označena sa * su obavezna.",
+        formSuccess: "Hvala. Tvoja prijava za listu čekanja je primljena. Javiću ti se putem emaila kada se otvori nova tura.",
+        formError: "Došlo je do greške. Pokušaj ponovo.",
+        formBadEmail: "Proveri adresu e-pošte.",
+        formPrivacy: "Tvoji podaci koriste se isključivo za odgovor na poruku i ne prosleđuju se trećim licima.",
+      },
+    },
+  },
+  en: {
+    pageTitle: "Pro bono coaching · Andreja Trajkovic",
+    h1Before: "Pro bono ",
+    h1Em: "individual coaching",
+    intro:
+      "Do you want to work on a change, a decision or a goal of yours? Through the pro bono programme you can experience coaching and focus on what matters to you, free of charge.",
+    sections: [
+      {
+        title: "What does the programme include?",
+        blocks: [
+          { p: "The programme is planned for 10 people. Each participant receives:" },
+          {
+            ul: [
+              "five individual online sessions of 60 minutes each;",
+              "a free introductory conversation of 30 to 60 minutes.",
+            ],
+          },
+          {
+            p: "In the introductory conversation we get to know each other, talk about your topic and clarify how we can work together. The conversation does not commit you to continuing.",
+          },
+          { p: "We agree on session times together." },
+        ],
+      },
+      {
+        title: "What topic can you come with?",
+        blocks: [
+          {
+            p: "You may want to improve communication, set boundaries, organize your time better or be more persistent in what you start. You may be considering an important decision, or want a change but not know where to begin.",
+          },
+          {
+            p: "You don't need to have a fully defined goal in advance. It is enough to know what you want to talk about, and together we will clarify the topic and the goal of our work.",
+          },
+        ],
+      },
+      {
+        title: "Why do I offer a pro bono programme?",
+        blocks: [
+          {
+            p: "I am currently attending a programme in the Coaching Plus methodology and developing my coaching practice. I see this programme as a good opportunity to gain practice and, at the same time, help people improve some aspect of their lives.",
+          },
+        ],
+      },
+      {
+        title: "How will we work?",
+        link: true,
+        blocks: [
+          {
+            p: "I use a range of coaching methods and approaches, in line with your goal and needs. We explore what matters to you, look at what holds you back and define concrete steps. Over the following sessions we follow how they are applied and what changes.",
+          },
+          {
+            p: "Before we start, we sign an agreement that sets the goal of our work, session times, confidentiality and mutual responsibilities.",
+          },
+          {
+            p: "The programme is free, but it means setting aside time for the agreed sessions and working on your goal between meetings. You make the decisions and take the steps, and my role is to support you in that.",
+          },
+        ],
+      },
+    ],
+    moreLink: "More about my coaching approach and way of working",
+    emailLead: "Or write to",
+    copiedLabel: "Copied",
+    copyAria: "Copy email address",
+    open: {
+      cta: "Apply for the pro bono programme",
+      pill: null,
+      contactTitle: "Apply for the pro bono programme",
+      contactLead: [
+        "Briefly write what you want to work on. There is no need to share sensitive personal details in your application. After you apply, I will get back to you to arrange the introductory conversation.",
+      ],
+      hideMessage: false,
+      form: {
+        formMessage: "What do you want to work on through coaching?",
+        formSend: "Send application",
+        formIncomplete: "Please fill in your name and email.",
+        formFillAll: "Fields marked with * are required.",
+        formSuccess: "Thank you. Your application has been received. I'll get back to you to arrange the introductory conversation.",
+        formError: "Something went wrong. Please try again.",
+        formBadEmail: "Please check the email address.",
+        formPrivacy: "Your details are used only to reply to your message and are not shared with third parties.",
+      },
+    },
+    closed: {
+      cta: "Join the waiting list",
+      pill: "All places are currently taken",
+      contactTitle: "Join the waiting list",
+      contactLead: [
+        "All places in the pro bono programme are currently taken. If you'd like me to let you know when places become available again, leave your name and email.",
+        "Joining the waiting list does not guarantee a place in the next programme and does not include signing up for a newsletter. I will use your email only to let you know when new pro bono applications open. You can unsubscribe from the list at any time.",
+      ],
+      hideMessage: true,
+      form: {
+        formSend: "Let me know when there's a place",
+        formIncomplete: "Please fill in your name and email.",
+        formFillAll: "Fields marked with * are required.",
+        formSuccess: "Thank you. You're on the waiting list. I'll email you when a new round opens.",
+        formError: "Something went wrong. Please try again.",
+        formBadEmail: "Please check the email address.",
+        formPrivacy: "Your details are used only to reply to your message and are not shared with third parties.",
+      },
+    },
+  },
+};
+
+function ProBonoPage({ c, lang, scrollToSection, navigate }) {
+  const base = PROBONO[lang];
+  const d = { ...base, ...(COACHING_OPEN ? base.open : base.closed) };
+  const formText = { ...c, ...d.form };
+
+  return (
+    <main className="coaching">
+      <section className="c-section c-hero">
+        <div className="c-inner">
+          <div className="c-hero-grid">
+            <Reveal className="c-hero-text">
+              <h1>
+                {d.h1Before}
+                <em>{d.h1Em}</em>
+              </h1>
+              <p className="c-hero-intro">{d.intro}</p>
+              <div className="c-hero-cta">
+                <button className="btn btn-primary" onClick={() => scrollToSection("coaching-contact")}>
+                  {d.cta}
+                </button>
+              </div>
+              {d.pill && <p className="c-pill">{d.pill}</p>}
+            </Reveal>
+
+            {PORTRAIT && (
+              <Reveal className="c-hero-portrait" delay={120}>
+                <img src={PORTRAIT} alt={PORTRAIT_ALT[lang]} />
+              </Reveal>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {d.sections.map((sec, i) => (
+        <section
+          key={sec.title}
+          className={
+            "c-section" + (i === 0 ? " c-flush" : "") + (i % 2 === 1 ? " c-band" : "")
+          }
+        >
+          <div className="c-inner">
+            <Reveal><h2 className="c-h2">{sec.title}</h2></Reveal>
+            <div className="c-prose">
+              {sec.blocks.map((b, k) => (
+                <Reveal key={k} delay={Math.min(k, 3) * 80}>
+                  {b.ul ? (
+                    <ul className="c-list">
+                      {b.ul.map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>{b.p}</p>
+                  )}
+                </Reveal>
+              ))}
+              {sec.link && (
+                <Reveal delay={240}>
+                  <p>
+                    <a
+                      className="c-textlink"
+                      href="#/coaching/pojedinci"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        navigate("#/coaching/pojedinci");
+                      }}
+                    >
+                      {d.moreLink}
+                    </a>
+                  </p>
+                </Reveal>
+              )}
+            </div>
+          </div>
+        </section>
+      ))}
+
+      <section className="c-section c-contact" id="coaching-contact">
+        <div className="c-inner">
+          <Reveal>
+            <h2 className="c-h2 has-lead">{d.contactTitle}</h2>
+          </Reveal>
+          <Reveal delay={60}>
+            {d.contactLead.map((t, i) => (
+              <p key={i} className={i === 0 ? "c-contact-lead" : "c-contact-lead is-small"}>{t}</p>
+            ))}
+          </Reveal>
+          <Reveal delay={120}>
+            <div className="c-form-card">
+              <ContactForm
+                c={formText}
+                source={COACHING_OPEN ? "coaching" : "coaching-waitlist"}
+                strict
+                hideMessage={d.hideMessage}
+              />
+            </div>
+            <EmailLine d={d} />
+          </Reveal>
+        </div>
+      </section>
+    </main>
+  );
+}
+
+/* Certificate with an enlarged view. Escape closes it, the page behind stops
+   scrolling, focus moves to the close button and returns to the thumbnail. */
+function CertFigure({ d }) {
   const [certOpen, setCertOpen] = useState(false);
+  const certTrigger = useRef(null);
+  const certClose = useRef(null);
+
+  useEffect(() => {
+    if (!certOpen) return;
+    const trigger = certTrigger.current;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    certClose.current?.focus();
+    const onKey = (e) => {
+      if (e.key === "Escape") setCertOpen(false);
+      if (e.key === "Tab") {
+        e.preventDefault();
+        certClose.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = previousOverflow;
+      trigger?.focus();
+    };
+  }, [certOpen]);
+
+  return (
+    <>
+      <Reveal delay={100}>
+        <figure className="c-cert">
+          <button
+            type="button"
+            ref={certTrigger}
+            className="c-cert-btn"
+            onClick={() => setCertOpen(true)}
+            aria-haspopup="dialog"
+          >
+            <img src={CERTIFICATE} alt={d.certAlt} loading="lazy" width="1600" height="1131" />
+            <span className="c-cert-hint">{d.certEnlarge}</span>
+          </button>
+          <figcaption className="c-cert-info">
+            <h3>{d.certTitle}</h3>
+            <p className="c-cert-org">{d.certOrg}</p>
+          </figcaption>
+        </figure>
+      </Reveal>
+
+      {certOpen && (
+        <div
+          className="c-lightbox"
+          role="dialog"
+          aria-modal="true"
+          aria-label={d.certAlt}
+          onClick={() => setCertOpen(false)}
+        >
+          <button
+            type="button"
+            ref={certClose}
+            className="c-lightbox-close"
+            onClick={() => setCertOpen(false)}
+            aria-label={d.certClose}
+          >
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+              <path d="M5 5l14 14M19 5L5 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none" />
+            </svg>
+          </button>
+          <img src={CERTIFICATE} alt={d.certAlt} onClick={(e) => e.stopPropagation()} />
+        </div>
+      )}
+    </>
+  );
+}
+
+/* "Or write to" line: visible address plus an icon-only copy button.
+   Copies the address; falls back to a hidden field where the clipboard API is blocked. */
+function EmailLine({ d }) {
   const [copied, setCopied] = useState(false);
   const copyTimer = useRef(null);
   useEffect(() => () => clearTimeout(copyTimer.current), []);
 
-  /* Copies the address; falls back to a hidden field where the clipboard API is blocked */
   const copyEmail = async () => {
     let done = false;
     try {
@@ -1532,32 +2069,39 @@ function CoachingPage({ c, lang, scrollToSection }) {
       copyTimer.current = setTimeout(() => setCopied(false), 2200);
     }
   };
-  const certTrigger = useRef(null);
-  const certClose = useRef(null);
-  const formText = { ...c, ...d.form };
 
-  /* Enlarged certificate: Escape closes it, the page behind stops scrolling,
-     focus moves to the close button and returns to the thumbnail afterwards */
-  useEffect(() => {
-    if (!certOpen) return;
-    const trigger = certTrigger.current;
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    certClose.current?.focus();
-    const onKey = (e) => {
-      if (e.key === "Escape") setCertOpen(false);
-      if (e.key === "Tab") {
-        e.preventDefault();
-        certClose.current?.focus();
-      }
-    };
-    window.addEventListener("keydown", onKey);
-    return () => {
-      window.removeEventListener("keydown", onKey);
-      document.body.style.overflow = previousOverflow;
-      trigger?.focus();
-    };
-  }, [certOpen]);
+  return (
+    <p className="c-email-line">
+      <span>{d.emailLead}</span>
+      <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
+      <button
+        type="button"
+        className="c-copy-btn"
+        onClick={copyEmail}
+        aria-label={d.copyAria}
+        title={copied ? d.copiedLabel : d.copyAria}
+      >
+        {copied ? (
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <path d="M5 12.5l4.5 4.5L19 7.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+          </svg>
+        ) : (
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <rect x="9" y="9" width="11" height="11" rx="2.5" stroke="currentColor" strokeWidth="1.8" fill="none" />
+            <path d="M15 9V6.5A2.5 2.5 0 0 0 12.5 4h-6A2.5 2.5 0 0 0 4 6.5v6A2.5 2.5 0 0 0 6.5 15H9" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" fill="none" />
+          </svg>
+        )}
+      </button>
+      <span className="c-sr-only" role="status" aria-live="polite">{copied ? d.copiedLabel : ""}</span>
+    </p>
+  );
+}
+
+function IndividualsPage({ c, lang, scrollToSection }) {
+  const selfHash = "#/coaching/pojedinci";
+  const d = { ...COACHING[lang], ...COACHING_INDIVIDUALS[lang] };
+  const [openFaq, setOpenFaq] = useState({});
+  const formText = { ...c, ...d.form };
 
   /* FAQ answers can hold two kinds of link, written as [[form|label]] and
      [[email|label]]: the first scrolls to the form, the second opens a message */
@@ -1568,7 +2112,7 @@ function CoachingPage({ c, lang, scrollToSection }) {
       return m[1] === "form" ? (
         <a
           key={i}
-          href="/coaching/"
+          href={selfHash}
           onClick={(e) => {
             e.preventDefault();
             scrollToSection("coaching-contact");
@@ -1603,7 +2147,7 @@ function CoachingPage({ c, lang, scrollToSection }) {
                 <button className="btn btn-primary" onClick={() => scrollToSection("coaching-contact")}>
                   {d.ctaPrimary}
                 </button>
-                <a className="c-textlink" href="/coaching/" onClick={go("coaching-how")}>
+                <a className="c-textlink" href={selfHash} onClick={go("coaching-how")}>
                   {d.ctaSecondary}
                 </a>
               </div>
@@ -1655,12 +2199,6 @@ function CoachingPage({ c, lang, scrollToSection }) {
               </li>
             ))}
           </ol>
-          <Reveal delay={150}>
-            <div className="c-note">
-              <h3>{d.programTitle}</h3>
-              <p>{d.programText}</p>
-            </div>
-          </Reveal>
         </div>
       </section>
 
@@ -1680,49 +2218,9 @@ function CoachingPage({ c, lang, scrollToSection }) {
             </Reveal>
           </div>
 
-          <Reveal delay={100}>
-            <figure className="c-cert">
-              <button
-                type="button"
-                ref={certTrigger}
-                className="c-cert-btn"
-                onClick={() => setCertOpen(true)}
-                aria-haspopup="dialog"
-              >
-                <img src={CERTIFICATE} alt={d.certAlt} loading="lazy" width="1600" height="1131" />
-                <span className="c-cert-hint">{d.certEnlarge}</span>
-              </button>
-              <figcaption className="c-cert-info">
-                <h3>{d.certTitle}</h3>
-                <p className="c-cert-org">{d.certOrg}</p>
-              </figcaption>
-            </figure>
-          </Reveal>
+          <CertFigure d={d} />
         </div>
       </section>
-
-      {certOpen && (
-        <div
-          className="c-lightbox"
-          role="dialog"
-          aria-modal="true"
-          aria-label={d.certAlt}
-          onClick={() => setCertOpen(false)}
-        >
-          <button
-            type="button"
-            ref={certClose}
-            className="c-lightbox-close"
-            onClick={() => setCertOpen(false)}
-            aria-label={d.certClose}
-          >
-            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-              <path d="M5 5l14 14M19 5L5 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none" />
-            </svg>
-          </button>
-          <img src={CERTIFICATE} alt={d.certAlt} onClick={(e) => e.stopPropagation()} />
-        </div>
-      )}
 
       <section className="c-section c-band" id="coaching-faq">
         <div className="c-inner">
@@ -1753,7 +2251,9 @@ function CoachingPage({ c, lang, scrollToSection }) {
                       className="c-faq-a"
                       hidden={!open}
                     >
-                      <p>{richText(item.a)}</p>
+                      {item.a.split("\n\n").map((para, k) => (
+                        <p key={k}>{richText(para)}</p>
+                      ))}
                     </div>
                   </div>
                 );
@@ -1770,31 +2270,9 @@ function CoachingPage({ c, lang, scrollToSection }) {
           </Reveal>
           <Reveal delay={120}>
             <div className="c-form-card">
-              <ContactForm c={formText} source={COACHING_OPEN ? "coaching" : "coaching-waitlist"} strict />
+              <ContactForm c={formText} source="coaching-individuals" strict />
             </div>
-            <p className="c-email-line">
-              <span>{d.emailLead}</span>
-              <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
-              <button
-                type="button"
-                className="c-copy-btn"
-                onClick={copyEmail}
-                aria-label={d.copyAria}
-                title={copied ? d.copiedLabel : d.copyAria}
-              >
-                {copied ? (
-                  <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-                    <path d="M5 12.5l4.5 4.5L19 7.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-                  </svg>
-                ) : (
-                  <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-                    <rect x="9" y="9" width="11" height="11" rx="2.5" stroke="currentColor" strokeWidth="1.8" fill="none" />
-                    <path d="M15 9V6.5A2.5 2.5 0 0 0 12.5 4h-6A2.5 2.5 0 0 0 4 6.5v6A2.5 2.5 0 0 0 6.5 15H9" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" fill="none" />
-                  </svg>
-                )}
-              </button>
-              <span className="c-sr-only" role="status" aria-live="polite">{copied ? d.copiedLabel : ""}</span>
-            </p>
+            <EmailLine d={d} />
           </Reveal>
         </div>
       </section>
@@ -1802,29 +2280,16 @@ function CoachingPage({ c, lang, scrollToSection }) {
   );
 }
 
-/* Turns any address into the route form the app uses: "/", "/coaching/",
-   "/work/<slug>/". Old "#/..." links (shared before the switch to real
-   addresses) are read the same way, so they keep working. */
-function normalizePath(pathname = "/", hash = "") {
-  let path = hash && hash.startsWith("#/") && hash.length > 2 ? hash.slice(1) : pathname;
-  path = path.split(/[?#]/)[0] || "/";
-  if (!path.startsWith("/")) path = "/" + path;
-  if (!path.endsWith("/")) path += "/";
-  return path;
-}
-
-export default function Portfolio({ initialPath }) {
+export default function Portfolio() {
   /* The whole site opens in Serbian, since that is the main audience.
      English is one click away and is kept while moving around the site. */
   const [lang, setLang] = useState("sr");
-  const [path, setPath] = useState(() =>
-    initialPath
-      ? normalizePath(initialPath)
-      : typeof window === "undefined"
-        ? "/"
-        : normalizePath(window.location.pathname)
+  const [hash, setHash] = useState(() =>
+    typeof window === "undefined" ? "" : window.location.hash
   );
   const [menuOpen, setMenuOpen] = useState(false);
+  const [coachingMenu, setCoachingMenu] = useState(false);
+  const coachingRef = useRef(null);
   const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState("");
   const c = t[lang];
@@ -1843,48 +2308,54 @@ export default function Portfolio({ initialPath }) {
     return () => window.removeEventListener("keydown", onKey);
   }, [menuOpen]);
 
-  /* Old "#/coaching" style links are rewritten to the real address, and the
-     browser's back and forward buttons move between pages */
+  /* Escape and a click elsewhere close the Coaching dropdown */
   useEffect(() => {
-    const { hash } = window.location;
-    if (hash.startsWith("#/") && hash.length > 2) {
-      const target = normalizePath("/", hash);
-      try {
-        window.history.replaceState(null, "", target);
-      } catch (err) {
-        /* preview sandbox: the page still shows the right content */
-      }
-      setPath(target);
-    }
-    const onPopState = () => {
-      setPath(normalizePath(window.location.pathname, window.location.hash));
+    if (!coachingMenu) return;
+    const onKey = (e) => {
+      if (e.key === "Escape") setCoachingMenu(false);
+    };
+    const onDown = (e) => {
+      if (coachingRef.current && !coachingRef.current.contains(e.target)) setCoachingMenu(false);
+    };
+    window.addEventListener("keydown", onKey);
+    document.addEventListener("mousedown", onDown);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.removeEventListener("mousedown", onDown);
+    };
+  }, [coachingMenu]);
+
+  useEffect(() => {
+    const onHashChange = () => {
+      setHash(window.location.hash);
       setMenuOpen(false);
       window.scrollTo(0, 0);
     };
-    window.addEventListener("popstate", onPopState);
-    return () => window.removeEventListener("popstate", onPopState);
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
   }, []);
 
-  const match = path.match(/^\/work\/([^/]+)\/$/);
+  const match = hash.match(/^#\/work\/(.+)$/);
   const project = match ? projects.find((p) => p.slug === match[1]) : null;
   const isProjectRoute = Boolean(match);
-  const isCoachingRoute = path === "/coaching/";
-  const isSubRoute = isProjectRoute || isCoachingRoute;
+  const isCoachingRoute = /^#\/coaching\/?$/.test(hash);
+  const soonMatch = hash.match(/^#\/coaching\/(kompanije|pojedinci)\/?$/);
+  const soonKind = soonMatch ? (soonMatch[1] === "kompanije" ? "companies" : "individuals") : null;
+  const isCoachingArea = isCoachingRoute || Boolean(soonKind);
+  const isCoachingPage = isCoachingArea;
+  const isSubRoute = isProjectRoute || isCoachingArea;
 
-  /* Tab title: in Serbian it matches what Google sees (src/seo.js);
-     in English it follows the English wording of the page */
+  /* The coaching page gets its own tab title; every other page keeps the original */
+  const baseTitle = useRef(typeof document === "undefined" ? "" : document.title);
   useEffect(() => {
-    const seo = SEO_ROUTES.find((r) => r.path === path) || SEO_ROUTES[0];
-    if (lang === "sr") {
-      document.title = seo.title;
-    } else {
-      document.title = isCoachingRoute
-        ? COACHING.en.pageTitle
-        : project
-          ? `${project.title.en} · Andreja Trajkovic`
-          : "Andreja Trajkovic — People Development Consultant";
-    }
-  }, [path, isCoachingRoute, project, lang]);
+    document.title = isCoachingRoute
+      ? PROBONO[lang].pageTitle
+      : soonKind === "companies"
+      ? COACHING_COMPANIES[lang].pageTitle
+      : soonKind
+      ? COACHING_INDIVIDUALS[lang].pageTitle
+      : baseTitle.current;
+  }, [isCoachingRoute, soonKind, lang]);
 
   /* Tracks which section is currently on screen, for the active menu item */
   useEffect(() => {
@@ -1904,16 +2375,15 @@ export default function Portfolio({ initialPath }) {
   }, [isSubRoute]);
 
   /* Route changes are driven by state, with the address bar updated when the
-     browser allows it. Sandboxed previews block history writes, so state comes first. */
+     browser allows it. Sandboxed previews block hash writes, so state comes first. */
   const navigate = (target) => {
-    const next = normalizePath(target);
-    setPath(next);
+    const next = target === "#/" ? "" : target;
+    setHash(next);
     setMenuOpen(false);
+    setCoachingMenu(false);
     window.scrollTo(0, 0);
     try {
-      if (window.location.pathname !== next || window.location.hash) {
-        window.history.pushState(null, "", next);
-      }
+      window.location.hash = target === "#/" ? "/" : target.replace(/^#/, "");
     } catch (err) {
       /* preview sandbox: state has already changed, nothing else to do */
     }
@@ -1945,30 +2415,34 @@ export default function Portfolio({ initialPath }) {
   const goToSection = (id) => {
     setMenuOpen(false);
     if (isSubRoute) {
-      navigate("/");
+      navigate("#/");
       setTimeout(() => scrollToSection(id), 90);
       return;
     }
     scrollToSection(id);
   };
 
-  const openNavEntry = (id) => {
-    if (id === "coaching") {
-      if (isCoachingRoute) {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-        setMenuOpen(false);
-      } else {
-        navigate("/coaching/");
-      }
-      return;
+  const isCurrentCoachingLink = (link) =>
+    link.id === "probono" ? isCoachingRoute : soonKind === link.id;
+
+  const openCoachingLink = (link) => {
+    setCoachingMenu(false);
+    if (isCurrentCoachingLink(link)) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      setMenuOpen(false);
+    } else {
+      navigate(link.hash);
     }
+  };
+
+  const openNavEntry = (id) => {
     goToSection(id);
   };
 
   /* The monogram in the bar goes home, from wherever you are */
   const goHome = () => {
     if (isSubRoute) {
-      navigate("/");
+      navigate("#/");
       return;
     }
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -1984,9 +2458,7 @@ export default function Portfolio({ initialPath }) {
 
   return (
     <div className="site">
-      {/* Set as raw CSS so the built HTML keeps quotes intact (React would
-          escape them as text, which breaks the fonts before the page loads) */}
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style>{`
         :root {
           --bg: #F0EAE0;
           --surface: #F7F3EA;
@@ -2043,8 +2515,31 @@ export default function Portfolio({ initialPath }) {
         }
         .nav-link:hover { color: var(--ink); background: rgba(43,36,29,.06); }
         .nav-link.is-active { color: var(--ink); font-weight: 700; }
-        a.nav-link { display: inline-block; text-decoration: none; line-height: normal; }
         .topbar-right { display: flex; align-items: center; gap: 10px; margin-left: 8px; }
+
+        /* Coaching dropdown */
+        .nav-dropdown { position: relative; }
+        .nav-caret {
+          display: inline-block; width: 6px; height: 6px; margin-left: 7px;
+          border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor;
+          transform: rotate(45deg); position: relative; top: -2px;
+        }
+        .nav-submenu {
+          list-style: none; display: none; position: absolute; top: calc(100% - 2px); left: 0;
+          min-width: 190px; padding: 6px; z-index: 70;
+          background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+          box-shadow: 0 10px 28px rgba(43,36,29,.12);
+        }
+        .nav-dropdown:hover .nav-submenu,
+        .nav-submenu.is-open { display: block; }
+        .nav-sublink {
+          display: block; width: 100%; text-align: left; white-space: nowrap;
+          font-family: 'Karla Variable', system-ui, sans-serif; font-size: 14px; font-weight: 500;
+          background: none; border: none; cursor: pointer; color: var(--muted);
+          padding: 9px 12px; border-radius: 8px;
+        }
+        .nav-sublink:hover { color: var(--ink); background: rgba(43,36,29,.06); }
+        .nav-sublink.is-active { color: var(--ink); font-weight: 700; }
 
         .lang-toggle {
           display: flex; gap: 4px; padding: 3px;
@@ -2075,6 +2570,12 @@ export default function Portfolio({ initialPath }) {
           border-bottom: 1px solid var(--line); color: var(--ink); cursor: pointer;
         }
         .mobile-link:last-child { border-bottom: none; }
+        .mobile-group { border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+        .mobile-group-label {
+          padding: 14px 24px 4px; font-size: 13px; font-weight: 700;
+          letter-spacing: .12em; text-transform: uppercase; color: var(--accent);
+        }
+        .mobile-link.mobile-sub { display: block; width: 100%; padding: 11px 24px 11px 40px; border-bottom: none; }
         .mobile-link:hover { background: var(--bg); color: var(--accent); }
 
         @media (max-width: 1000px) {
@@ -2113,6 +2614,7 @@ export default function Portfolio({ initialPath }) {
         .lang-toggle button:focus-visible,
         .nav-link:focus-visible,
         .mobile-link:focus-visible,
+        .nav-sublink:focus-visible,
         .brand:focus-visible,
         .burger:focus-visible,
         .floating-linkedin:focus-visible,
@@ -2557,6 +3059,7 @@ export default function Portfolio({ initialPath }) {
           font-size: 18px; line-height: 1.65; color: var(--muted);
           max-width: 520px; margin-bottom: 34px;
         }
+        .c-soon { min-height: 46vh; }
         .c-hero-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; }
         .c-textlink {
           font-size: 15px; font-weight: 700; color: var(--accent);
@@ -2582,6 +3085,22 @@ export default function Portfolio({ initialPath }) {
 
         .c-h2.has-intro { margin-bottom: 20px; }
         .c-lead { font-size: 18px; line-height: 1.65; color: var(--muted); max-width: 62ch; margin-bottom: 36px; }
+        .c-lead.c-lead-wide { max-width: none; }
+        .c-prose p { max-width: 62ch; margin-bottom: 16px; font-size: 17.5px; line-height: 1.65; }
+        .c-prose > div:last-child p { margin-bottom: 0; }
+        .c-list { list-style: none; display: grid; gap: 10px; max-width: 62ch; margin: 0 0 18px; }
+        .c-list li { position: relative; padding-left: 26px; font-size: 17.5px; line-height: 1.6; }
+        .c-list li::before {
+          content: ""; position: absolute; left: 4px; top: .62em;
+          width: 8px; height: 8px; border-radius: 50%; background: var(--terra);
+        }
+        .c-contact .c-h2.has-lead { margin-bottom: 18px; }
+        .c-contact-lead {
+          max-width: 620px; margin: 0 auto 14px; font-size: 17px; line-height: 1.65;
+          color: rgba(240,234,224,.88);
+        }
+        .c-contact-lead.is-small { font-size: 15px; color: rgba(240,234,224,.72); margin-bottom: 14px; }
+        .c-contact-lead:last-of-type { margin-bottom: 34px; }
         .c-outro {
           margin-top: 40px; max-width: 62ch;
           font-family: 'Fraunces Variable', Georgia, serif; font-weight: 500;
@@ -2628,6 +3147,7 @@ export default function Portfolio({ initialPath }) {
 
         /* Approach + pull quote */
         .c-about-grid { display: grid; grid-template-columns: 1fr; gap: 40px; align-items: center; }
+        .coaching .c-about-grid.is-single { grid-template-columns: minmax(0, 1fr); }
         .c-about-text p { max-width: 60ch; margin-bottom: 16px; font-size: 17.5px; line-height: 1.65; }
         /* Certificate */
         .c-cert {
@@ -2703,9 +3223,10 @@ export default function Portfolio({ initialPath }) {
         .c-faq-icon::after { transform: rotate(90deg); }
         .c-faq-q[aria-expanded="true"] .c-faq-icon::after { transform: rotate(0deg); }
         .c-faq-a p {
-          padding: 0 44px 24px 4px; color: var(--muted); max-width: 62ch;
+          padding: 0 44px 12px 4px; color: var(--muted); max-width: 62ch;
           font-size: 17px; line-height: 1.65;
         }
+        .c-faq-a p:last-child { padding-bottom: 24px; }
         .c-faq-a[hidden] { display: none; }
         .c-faq-a a {
           color: var(--accent); font-weight: 700;
@@ -2846,7 +3367,7 @@ export default function Portfolio({ initialPath }) {
           section { padding: 64px 20px; }
           .project-page { padding: 80px 20px 64px; }
         }
-      ` }} />
+      `}</style>
 
       <nav className="topbar" aria-label="Main">
         <div className="topbar-inner">
@@ -2854,29 +3375,55 @@ export default function Portfolio({ initialPath }) {
 
           <ul className="nav-links">
             {NAV_ENTRIES.map((id) => {
-              const isActive = id === "coaching" ? isCoachingRoute : active === id;
+              if (id === "coaching") {
+                return (
+                  <li
+                    key={id}
+                    className="nav-dropdown"
+                    ref={coachingRef}
+                    onMouseLeave={() => setCoachingMenu(false)}
+                    onBlur={(e) => {
+                      if (!e.currentTarget.contains(e.relatedTarget)) setCoachingMenu(false);
+                    }}
+                  >
+                    <button
+                      className={isCoachingArea ? "nav-link is-active" : "nav-link"}
+                      aria-haspopup="true"
+                      aria-expanded={coachingMenu}
+                      aria-controls="coaching-submenu"
+                      onClick={() => setCoachingMenu((v) => !v)}
+                    >
+                      {c.nav.coaching}
+                      <span className="nav-caret" aria-hidden="true" />
+                    </button>
+                    <ul
+                      id="coaching-submenu"
+                      className={coachingMenu ? "nav-submenu is-open" : "nav-submenu"}
+                    >
+                      {COACHING_LINKS.map((link) => (
+                        <li key={link.id}>
+                          <button
+                            className={isCurrentCoachingLink(link) ? "nav-sublink is-active" : "nav-sublink"}
+                            aria-current={isCurrentCoachingLink(link) ? "page" : undefined}
+                            onClick={() => openCoachingLink(link)}
+                          >
+                            {c.nav[link.key]}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </li>
+                );
+              }
+              const isActive = active === id;
               return (
                 <li key={id}>
-                  {id === "coaching" ? (
-                    <a
-                      className={isActive ? "nav-link is-active" : "nav-link"}
-                      href="/coaching/"
-                      aria-current={isCoachingRoute ? "page" : undefined}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        openNavEntry(id);
-                      }}
-                    >
-                      {c.nav[id]}
-                    </a>
-                  ) : (
-                    <button
-                      className={isActive ? "nav-link is-active" : "nav-link"}
-                      onClick={() => openNavEntry(id)}
-                    >
-                      {c.nav[id]}
-                    </button>
-                  )}
+                  <button
+                    className={isActive ? "nav-link is-active" : "nav-link"}
+                    onClick={() => openNavEntry(id)}
+                  >
+                    {c.nav[id]}
+                  </button>
                 </li>
               );
             })}
@@ -2900,16 +3447,27 @@ export default function Portfolio({ initialPath }) {
         </div>
 
         <div id="mobile-menu" className={menuOpen ? "mobile-menu is-open" : "mobile-menu"}>
-          {NAV_ENTRIES.map((id) => (
-            <button
-              key={id}
-              className="mobile-link"
-              aria-current={id === "coaching" && isCoachingRoute ? "page" : undefined}
-              onClick={() => openNavEntry(id)}
-            >
-              {c.nav[id]}
-            </button>
-          ))}
+          {NAV_ENTRIES.map((id) =>
+            id === "coaching" ? (
+              <div key={id} className="mobile-group" role="group" aria-labelledby="mobile-coaching-label">
+                <p className="mobile-group-label" id="mobile-coaching-label">{c.nav.coaching}</p>
+                {COACHING_LINKS.map((link) => (
+                  <button
+                    key={link.id}
+                    className="mobile-link mobile-sub"
+                    aria-current={isCurrentCoachingLink(link) ? "page" : undefined}
+                    onClick={() => openCoachingLink(link)}
+                  >
+                    {c.nav[link.key]}
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <button key={id} className="mobile-link" onClick={() => openNavEntry(id)}>
+                {c.nav[id]}
+              </button>
+            )
+          )}
         </div>
       </nav>
 
@@ -2928,10 +3486,10 @@ export default function Portfolio({ initialPath }) {
             <div className="inner">
               <a
             className="back-link"
-            href="/"
+            href="#/"
             onClick={(e) => {
               e.preventDefault();
-              navigate("/");
+              navigate("#/");
             }}
           >
             ← {c.backToWork}
@@ -2941,7 +3499,11 @@ export default function Portfolio({ initialPath }) {
           </article>
         )
       ) : isCoachingRoute ? (
-        <CoachingPage c={c} lang={lang} scrollToSection={scrollToSection} />
+        <ProBonoPage c={c} lang={lang} scrollToSection={scrollToSection} navigate={navigate} />
+      ) : soonKind === "companies" ? (
+        <CoachingCompaniesPage c={c} lang={lang} scrollToSection={scrollToSection} />
+      ) : soonKind ? (
+        <IndividualsPage c={c} lang={lang} scrollToSection={scrollToSection} />
       ) : (
         <HomePage c={c} lang={lang} goToSection={goToSection} navigate={navigate} />
       )}
@@ -2955,7 +3517,7 @@ export default function Portfolio({ initialPath }) {
         >
           ↑
         </button>
-        {!isCoachingRoute && (
+        {!isCoachingPage && (
         <a
           className="floating-linkedin"
           href={LINKEDIN_URL}
@@ -2973,7 +3535,7 @@ export default function Portfolio({ initialPath }) {
 
       <footer>
         <span>{c.footer}</span>
-        {isCoachingRoute && (
+        {isCoachingPage && (
           <>
             <span className="footer-sep" aria-hidden="true">·</span>
             <a className="footer-link" href={LINKEDIN_URL} target="_blank" rel="noreferrer">
