@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { routes as SEO_ROUTES } from "./seo.js";
 
 /* =========================================================
    TRANSLATIONS
@@ -539,7 +540,7 @@ const PROCESS_VISUAL = { en: "", sr: "" };
    PROJECTS
 
    Each project needs a `slug`. It becomes the address of that
-   project's own page: #/work/<slug>. Clicking the card opens it.
+   project's own page: /work/<slug>/. Clicking the card opens it.
 
    Set caseStudy: true and the button label changes on its own.
 
@@ -592,12 +593,12 @@ const NAV_IDS = ["projects", "offer", "story", ...(SHOW_BLOG ? ["blog"] : []), "
 const NAV_ENTRIES = NAV_IDS.flatMap((id) => (id === "offer" ? [id, "coaching"] : [id]));
 
 /* Coaching submenu, in menu order. "Pro bono" is the existing coaching page
-   (the printed QR code points to #/coaching, so that address must not change).
+   (the printed QR code points to #/coaching; old #/ links are sent to /coaching/ automatically).
    The other two are short "coming soon" pages until their text is ready. */
 const COACHING_LINKS = [
-  { id: "companies", hash: "#/coaching/kompanije", key: "coachingCompanies" },
-  { id: "individuals", hash: "#/coaching/pojedinci", key: "coachingIndividuals" },
-  { id: "probono", hash: "#/coaching", key: "coachingProBono" },
+  { id: "companies", href: "/coaching/kompanije/", key: "coachingCompanies" },
+  { id: "individuals", href: "/coaching/pojedinci/", key: "coachingIndividuals" },
+  { id: "probono", href: "/coaching/", key: "coachingProBono" },
 ];
 
 /* Where the contact form posts. Create a free form at formspree.io or
@@ -827,7 +828,7 @@ function CardSection({
         ) : (
           <div className="card-grid">
             {items.map((item, i) => {
-              const href = item.slug ? `#/work/${item.slug}` : item.url;
+              const href = item.slug ? `/work/${item.slug}/` : item.url;
               const isExternal = !item.slug && !!item.url;
               const label = item.caseStudy && caseStudyLabel ? caseStudyLabel : linkLabel;
               const inner = (
@@ -1093,10 +1094,10 @@ function ProjectPage({ project, c, lang, setLang, goToSection, navigate }) {
         <Reveal>
           <a
             className="back-link"
-            href="#/"
+            href="/"
             onClick={(e) => {
               e.preventDefault();
-              navigate("#/");
+              navigate("/");
             }}
           >
             ← {c.backToWork}
@@ -1143,10 +1144,10 @@ function ProjectPage({ project, c, lang, setLang, goToSection, navigate }) {
           <div className="project-footer-nav">
             <a
               className="btn btn-ghost"
-              href="#/"
+              href="/"
               onClick={(e) => {
                 e.preventDefault();
-                navigate("#/");
+                navigate("/");
               }}
             >
               ← {c.backToWork}
@@ -1349,6 +1350,42 @@ function HomePage({ c, lang, goToSection, navigate }) {
         </div>
       </section>
 
+      {/* Coaching offers, linked from the home page so visitors (and Google)
+          reach them from here too. Texts come from each coaching page. */}
+      <section className="home-section" id="coaching-offers">
+        <div className="inner">
+          <Reveal><h2 className="section-title">{c.nav.coaching}</h2></Reveal>
+          <div className="card-grid">
+            {[
+              { href: "/coaching/kompanije/", title: c.nav.coachingCompanies, text: COACHING_COMPANIES[lang].intro.split(". ")[0] + "." },
+              { href: "/coaching/pojedinci/", title: c.nav.coachingIndividuals, text: COACHING[lang].intro },
+              ...(COACHING_OPEN
+                ? [{ href: "/coaching/", title: c.nav.coachingProBono, text: PROBONO[lang].intro.split("? ").slice(-1)[0] }]
+                : []),
+            ].map((item, i) => (
+              <Reveal key={item.href} delay={i * 100}>
+                <a
+                  className="card entry-card card-link"
+                  href={item.href}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigate(item.href);
+                  }}
+                >
+                  <div>
+                    <h3>{item.title}</h3>
+                    <p>{item.text}</p>
+                  </div>
+                  <p className="entry-link-row">
+                    <span className="entry-link">{c.readMore} →</span>
+                  </p>
+                </a>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="story band home-section" id="story">
         <div className="inner">
           <Reveal><h2 className="section-title">{c.storyTitle}</h2></Reveal>
@@ -1426,7 +1463,7 @@ function HomePage({ c, lang, goToSection, navigate }) {
 }
 
 /* ============ Coaching page ============ */
-/* "Coaching za kompanije" page (#/coaching/kompanije). Certificate and e-mail
+/* "Coaching za kompanije" page (/coaching/kompanije/). Certificate and e-mail
    wording are shared with the pro bono page (COACHING). Companies are addressed
    with "vi". */
 const COACHING_COMPANIES = {
@@ -1566,7 +1603,7 @@ const COACHING_COMPANIES = {
   },
 };
 
-/* "Coaching za pojedince" page (#/coaching/pojedinci). Same page as the pro bono one;
+/* "Coaching za pojedince" page (/coaching/pojedinci/). Same page as the pro bono one;
    only the keys below differ, everything else (hero, "Za koga", steps, quote,
    certificate, form wording) is taken from COACHING. */
 const COACHING_INDIVIDUALS = {
@@ -1648,7 +1685,7 @@ const COACHING_INDIVIDUALS = {
   },
 };
 
-/* Pro bono page (#/coaching). COACHING_OPEN switches between the sign-up and the
+/* Pro bono page (/coaching/). COACHING_OPEN switches between the sign-up and the
    waiting-list wording: `open` / `closed` below replace the matching parts. */
 const PROBONO = {
   sr: {
@@ -1918,10 +1955,10 @@ function ProBonoPage({ c, lang, scrollToSection, navigate }) {
                   <p>
                     <a
                       className="c-textlink"
-                      href="#/coaching/pojedinci"
+                      href="/coaching/pojedinci/"
                       onClick={(e) => {
                         e.preventDefault();
-                        navigate("#/coaching/pojedinci");
+                        navigate("/coaching/pojedinci/");
                       }}
                     >
                       {d.moreLink}
@@ -1987,7 +2024,7 @@ function CoachingCompaniesPage({ c, lang, scrollToSection }) {
                 <button className="btn btn-primary" onClick={() => scrollToSection("coaching-contact")}>
                   {d.ctaPrimary}
                 </button>
-                <a className="c-textlink" href="#/coaching/kompanije" onClick={go("coaching-how")}>
+                <a className="c-textlink" href="/coaching/kompanije/" onClick={go("coaching-how")}>
                   {d.ctaSecondary}
                 </a>
               </div>
@@ -2209,7 +2246,7 @@ function EmailLine({ d }) {
 }
 
 function IndividualsPage({ c, lang, scrollToSection }) {
-  const selfHash = "#/coaching/pojedinci";
+  const selfHash = "/coaching/pojedinci/";
   const d = { ...COACHING[lang], ...COACHING_INDIVIDUALS[lang] };
   const [openFaq, setOpenFaq] = useState({});
   const formText = { ...c, ...d.form };
@@ -2391,12 +2428,27 @@ function IndividualsPage({ c, lang, scrollToSection }) {
   );
 }
 
-export default function Portfolio() {
+/* Turns any address into the route form the app uses: "/", "/coaching/",
+   "/coaching/kompanije/", "/work/<slug>/". Old "#/..." links (the printed QR
+   code, links shared before the switch) are read the same way, so they keep working. */
+function normalizePath(pathname = "/", hash = "") {
+  let path = hash && hash.startsWith("#/") && hash.length > 2 ? hash.slice(1) : pathname;
+  path = path.split(/[?#]/)[0] || "/";
+  if (!path.startsWith("/")) path = "/" + path;
+  if (!path.endsWith("/")) path += "/";
+  return path;
+}
+
+export default function Portfolio({ initialPath }) {
   /* The whole site opens in Serbian, since that is the main audience.
      English is one click away and is kept while moving around the site. */
   const [lang, setLang] = useState("sr");
-  const [hash, setHash] = useState(() =>
-    typeof window === "undefined" ? "" : window.location.hash
+  const [path, setPath] = useState(() =>
+    initialPath
+      ? normalizePath(initialPath)
+      : typeof window === "undefined"
+        ? "/"
+        : normalizePath(window.location.pathname)
   );
   const [menuOpen, setMenuOpen] = useState(false);
   const [coachingMenu, setCoachingMenu] = useState(false);
@@ -2436,37 +2488,56 @@ export default function Portfolio() {
     };
   }, [coachingMenu]);
 
+  /* Old "#/coaching" style links are rewritten to the real address, and the
+     browser's back and forward buttons move between pages */
   useEffect(() => {
-    const onHashChange = () => {
-      setHash(window.location.hash);
+    const { hash } = window.location;
+    if (hash.startsWith("#/") && hash.length > 2) {
+      const target = normalizePath("/", hash);
+      try {
+        window.history.replaceState(null, "", target);
+      } catch (err) {
+        /* preview sandbox: the page still shows the right content */
+      }
+      setPath(target);
+    }
+    const onPopState = () => {
+      setPath(normalizePath(window.location.pathname, window.location.hash));
       setMenuOpen(false);
       window.scrollTo(0, 0);
     };
-    window.addEventListener("hashchange", onHashChange);
-    return () => window.removeEventListener("hashchange", onHashChange);
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
   }, []);
 
-  const match = hash.match(/^#\/work\/(.+)$/);
+  const match = path.match(/^\/work\/([^/]+)\/$/);
   const project = match ? projects.find((p) => p.slug === match[1]) : null;
   const isProjectRoute = Boolean(match);
-  const isCoachingRoute = /^#\/coaching\/?$/.test(hash);
-  const soonMatch = hash.match(/^#\/coaching\/(kompanije|pojedinci)\/?$/);
+  const isCoachingRoute = path === "/coaching/";
+  const soonMatch = path.match(/^\/coaching\/(kompanije|pojedinci)\/$/);
   const soonKind = soonMatch ? (soonMatch[1] === "kompanije" ? "companies" : "individuals") : null;
   const isCoachingArea = isCoachingRoute || Boolean(soonKind);
   const isCoachingPage = isCoachingArea;
   const isSubRoute = isProjectRoute || isCoachingArea;
 
-  /* The coaching page gets its own tab title; every other page keeps the original */
-  const baseTitle = useRef(typeof document === "undefined" ? "" : document.title);
+  /* Tab title: in Serbian it matches what Google sees (src/seo.js);
+     in English it follows the English wording of each page */
   useEffect(() => {
+    if (lang === "sr") {
+      const seo = SEO_ROUTES.find((r) => r.path === path) || SEO_ROUTES[0];
+      document.title = seo.title;
+      return;
+    }
     document.title = isCoachingRoute
-      ? PROBONO[lang].pageTitle
+      ? PROBONO.en.pageTitle
       : soonKind === "companies"
-      ? COACHING_COMPANIES[lang].pageTitle
+      ? COACHING_COMPANIES.en.pageTitle
       : soonKind
-      ? COACHING_INDIVIDUALS[lang].pageTitle
-      : baseTitle.current;
-  }, [isCoachingRoute, soonKind, lang]);
+      ? COACHING_INDIVIDUALS.en.pageTitle
+      : project
+      ? `${project.title.en} · Andreja Trajkovic`
+      : "Andreja Trajkovic — People Development Consultant";
+  }, [path, isCoachingRoute, soonKind, project, lang]);
 
   /* Tracks which section is currently on screen, for the active menu item */
   useEffect(() => {
@@ -2486,15 +2557,17 @@ export default function Portfolio() {
   }, [isSubRoute]);
 
   /* Route changes are driven by state, with the address bar updated when the
-     browser allows it. Sandboxed previews block hash writes, so state comes first. */
+     browser allows it. Sandboxed previews block history writes, so state comes first. */
   const navigate = (target) => {
-    const next = target === "#/" ? "" : target;
-    setHash(next);
+    const next = normalizePath(target);
+    setPath(next);
     setMenuOpen(false);
     setCoachingMenu(false);
     window.scrollTo(0, 0);
     try {
-      window.location.hash = target === "#/" ? "/" : target.replace(/^#/, "");
+      if (window.location.pathname !== next || window.location.hash) {
+        window.history.pushState(null, "", next);
+      }
     } catch (err) {
       /* preview sandbox: state has already changed, nothing else to do */
     }
@@ -2526,7 +2599,7 @@ export default function Portfolio() {
   const goToSection = (id) => {
     setMenuOpen(false);
     if (isSubRoute) {
-      navigate("#/");
+      navigate("/");
       setTimeout(() => scrollToSection(id), 90);
       return;
     }
@@ -2542,7 +2615,7 @@ export default function Portfolio() {
       window.scrollTo({ top: 0, behavior: "smooth" });
       setMenuOpen(false);
     } else {
-      navigate(link.hash);
+      navigate(link.href);
     }
   };
 
@@ -2553,7 +2626,7 @@ export default function Portfolio() {
   /* The monogram in the bar goes home, from wherever you are */
   const goHome = () => {
     if (isSubRoute) {
-      navigate("#/");
+      navigate("/");
       return;
     }
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -2569,7 +2642,9 @@ export default function Portfolio() {
 
   return (
     <div className="site">
-      <style>{`
+      {/* Set as raw CSS so the built HTML keeps quotes intact (React would
+          escape them as text, which breaks the fonts before the page loads) */}
+      <style dangerouslySetInnerHTML={{ __html: `
         :root {
           --bg: #F0EAE0;
           --surface: #F7F3EA;
@@ -3142,6 +3217,7 @@ export default function Portfolio() {
           color: var(--muted); border-top: 1px solid var(--line);
         }
         .footer-sep { margin: 0 10px; }
+        .footer-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 22px; margin-bottom: 12px; }
         .footer-link { color: var(--accent); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
         .footer-link:hover { color: var(--ink); }
 
@@ -3478,7 +3554,7 @@ export default function Portfolio() {
           section { padding: 64px 20px; }
           .project-page { padding: 80px 20px 64px; }
         }
-      `}</style>
+      ` }} />
 
       <nav className="topbar" aria-label="Main">
         <div className="topbar-inner">
@@ -3513,13 +3589,17 @@ export default function Portfolio() {
                     >
                       {COACHING_LINKS.map((link) => (
                         <li key={link.id}>
-                          <button
+                          <a
                             className={isCurrentCoachingLink(link) ? "nav-sublink is-active" : "nav-sublink"}
+                            href={link.href}
                             aria-current={isCurrentCoachingLink(link) ? "page" : undefined}
-                            onClick={() => openCoachingLink(link)}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              openCoachingLink(link);
+                            }}
                           >
                             {c.nav[link.key]}
-                          </button>
+                          </a>
                         </li>
                       ))}
                     </ul>
@@ -3563,14 +3643,18 @@ export default function Portfolio() {
               <div key={id} className="mobile-group" role="group" aria-labelledby="mobile-coaching-label">
                 <p className="mobile-group-label" id="mobile-coaching-label">{c.nav.coaching}</p>
                 {COACHING_LINKS.map((link) => (
-                  <button
+                  <a
                     key={link.id}
                     className="mobile-link mobile-sub"
+                    href={link.href}
                     aria-current={isCurrentCoachingLink(link) ? "page" : undefined}
-                    onClick={() => openCoachingLink(link)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      openCoachingLink(link);
+                    }}
                   >
                     {c.nav[link.key]}
-                  </button>
+                  </a>
                 ))}
               </div>
             ) : (
@@ -3597,10 +3681,10 @@ export default function Portfolio() {
             <div className="inner">
               <a
             className="back-link"
-            href="#/"
+            href="/"
             onClick={(e) => {
               e.preventDefault();
-              navigate("#/");
+              navigate("/");
             }}
           >
             ← {c.backToWork}
@@ -3645,15 +3729,27 @@ export default function Portfolio() {
       </div>
 
       <footer>
-        <span>{c.footer}</span>
-        {isCoachingPage && (
-          <>
-            <span className="footer-sep" aria-hidden="true">·</span>
-            <a className="footer-link" href={LINKEDIN_URL} target="_blank" rel="noreferrer">
-              LinkedIn
+        {/* Links to every service page, on every page: helps visitors and lets
+            Google find the coaching pages from anywhere on the site */}
+        <nav className="footer-nav" aria-label={c.nav.coaching}>
+          {COACHING_LINKS.map((link) => (
+            <a
+              key={link.id}
+              className="footer-link"
+              href={link.href}
+              onClick={(e) => {
+                e.preventDefault();
+                openCoachingLink(link);
+              }}
+            >
+              {c.nav[link.key]}
             </a>
-          </>
-        )}
+          ))}
+          <a className="footer-link" href={LINKEDIN_URL} target="_blank" rel="noreferrer">
+            LinkedIn
+          </a>
+        </nav>
+        <span>{c.footer}</span>
       </footer>
     </div>
   );
