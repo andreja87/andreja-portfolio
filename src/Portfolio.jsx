@@ -601,6 +601,31 @@ const COACHING_LINKS = [
   { id: "probono", href: "/coaching/", key: "coachingProBono" },
 ];
 
+/* Addresses of the home page sections, used by the menu links (/#kontakt).
+   The section ids stay in English; only the visible address is in Serbian. */
+const SECTION_SLUGS = {
+  projects: "projekti",
+  offer: "oblasti-rada",
+  "coaching-offers": "coaching",
+  story: "o-meni",
+  blog: "blog",
+  contact: "kontakt",
+};
+const sectionHref = (id) => `/#${SECTION_SLUGS[id] || id}`;
+const sectionFromHash = (hash) => {
+  const slug = (hash || "").replace(/^#/, "");
+  if (!slug || slug.startsWith("/")) return null;
+  const id = Object.keys(SECTION_SLUGS).find((k) => SECTION_SLUGS[k] === slug || k === slug);
+  return id || null;
+};
+
+/* A link that keeps a real address but scrolls in place when clicked */
+const linkClick = (fn) => (e) => {
+  if (e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return; // new tab: let the browser open it
+  e.preventDefault();
+  fn();
+};
+
 /* Where the contact form posts. Create a free form at formspree.io or
    web3forms.com, point it at the email address below, and paste the
    endpoint they give you here. See the README for the steps. */
@@ -1152,9 +1177,9 @@ function ProjectPage({ project, c, lang, setLang, goToSection, navigate }) {
             >
               ← {c.backToWork}
             </a>
-            <button className="btn btn-primary" onClick={() => goToSection("contact")}>
+            <a className="btn btn-primary" href={sectionHref("contact")} onClick={linkClick(() => goToSection("contact"))}>
               {c.ctaSecondary}
-            </button>
+            </a>
           </div>
         </Reveal>
       </div>
@@ -1313,8 +1338,8 @@ function HomePage({ c, lang, goToSection, navigate }) {
           </h1>
           <p className="hero-sub">{c.heroSub}</p>
           <div className="cta-row">
-            <button className="btn btn-primary" onClick={() => goToSection("projects")}>{c.ctaPrimary}</button>
-            <button className="btn btn-ghost" onClick={() => goToSection("contact")}>{c.ctaSecondary}</button>
+            <a className="btn btn-primary" href={sectionHref("projects")} onClick={linkClick(() => goToSection("projects"))}>{c.ctaPrimary}</a>
+            <a className="btn btn-ghost" href={sectionHref("contact")} onClick={linkClick(() => goToSection("contact"))}>{c.ctaSecondary}</a>
           </div>
         </Reveal>
       </header>
@@ -1367,10 +1392,7 @@ function HomePage({ c, lang, goToSection, navigate }) {
                 <a
                   className="card entry-card card-link"
                   href={item.href}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    navigate(item.href);
-                  }}
+                  onClick={linkClick(() => navigate(item.href))}
                 >
                   <div>
                     <h3>{item.title}</h3>
@@ -2601,10 +2623,42 @@ export default function Portfolio({ initialPath }) {
     if (isSubRoute) {
       navigate("/");
       setTimeout(() => scrollToSection(id), 90);
-      return;
+    } else {
+      scrollToSection(id);
     }
-    scrollToSection(id);
+    try {
+      window.history.replaceState(null, "", sectionHref(id));
+    } catch (err) {
+      /* preview sandbox: scrolling still works */
+    }
   };
+
+  /* Opening /#kontakt (or any section address) scrolls to that section,
+     on first load and when the address changes on the same page */
+  useEffect(() => {
+    const jump = (delay) => {
+      const id = sectionFromHash(window.location.hash);
+      if (id && window.location.pathname === "/") setTimeout(() => scrollToSection(id), delay);
+    };
+    const onHashChange = () => {
+      const { hash } = window.location;
+      if (hash.startsWith("#/") && hash.length > 2) {
+        navigate(normalizePath("/", hash));
+        try {
+          window.history.replaceState(null, "", normalizePath("/", hash));
+        } catch (err) {
+          /* preview sandbox */
+        }
+        return;
+      }
+      jump(0);
+    };
+    if (document.readyState === "complete") jump(300);
+    else window.addEventListener("load", () => jump(300), { once: true });
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const isCurrentCoachingLink = (link) =>
     link.id === "probono" ? isCoachingRoute : soonKind === link.id;
@@ -2689,6 +2743,8 @@ export default function Portfolio({ initialPath }) {
           color: var(--ink); padding: 4px 2px; line-height: 1;
         }
         .brand:hover { color: var(--accent); }
+        a.brand, a.nav-link, a.mobile-link { text-decoration: none; display: inline-block; }
+        a.mobile-link { display: block; }
         .nav-links {
           list-style: none; display: flex; align-items: center; gap: 2px;
           margin-left: auto;
@@ -3558,7 +3614,7 @@ export default function Portfolio({ initialPath }) {
 
       <nav className="topbar" aria-label="Main">
         <div className="topbar-inner">
-          <button className="brand" onClick={goHome} aria-label={c.name}>AT</button>
+          <a className="brand" href="/" onClick={linkClick(goHome)} aria-label={c.name}>AT</a>
 
           <ul className="nav-links">
             {NAV_ENTRIES.map((id) => {
@@ -3593,10 +3649,7 @@ export default function Portfolio({ initialPath }) {
                             className={isCurrentCoachingLink(link) ? "nav-sublink is-active" : "nav-sublink"}
                             href={link.href}
                             aria-current={isCurrentCoachingLink(link) ? "page" : undefined}
-                            onClick={(e) => {
-                              e.preventDefault();
-                              openCoachingLink(link);
-                            }}
+                            onClick={linkClick(() => openCoachingLink(link))}
                           >
                             {c.nav[link.key]}
                           </a>
@@ -3609,12 +3662,13 @@ export default function Portfolio({ initialPath }) {
               const isActive = active === id;
               return (
                 <li key={id}>
-                  <button
+                  <a
                     className={isActive ? "nav-link is-active" : "nav-link"}
-                    onClick={() => openNavEntry(id)}
+                    href={sectionHref(id)}
+                    onClick={linkClick(() => openNavEntry(id))}
                   >
                     {c.nav[id]}
-                  </button>
+                  </a>
                 </li>
               );
             })}
@@ -3648,19 +3702,16 @@ export default function Portfolio({ initialPath }) {
                     className="mobile-link mobile-sub"
                     href={link.href}
                     aria-current={isCurrentCoachingLink(link) ? "page" : undefined}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      openCoachingLink(link);
-                    }}
+                    onClick={linkClick(() => openCoachingLink(link))}
                   >
                     {c.nav[link.key]}
                   </a>
                 ))}
               </div>
             ) : (
-              <button key={id} className="mobile-link" onClick={() => openNavEntry(id)}>
+              <a key={id} className="mobile-link" href={sectionHref(id)} onClick={linkClick(() => openNavEntry(id))}>
                 {c.nav[id]}
-              </button>
+              </a>
             )
           )}
         </div>
@@ -3737,10 +3788,7 @@ export default function Portfolio({ initialPath }) {
               key={link.id}
               className="footer-link"
               href={link.href}
-              onClick={(e) => {
-                e.preventDefault();
-                openCoachingLink(link);
-              }}
+              onClick={linkClick(() => openCoachingLink(link))}
             >
               {c.nav[link.key]}
             </a>
