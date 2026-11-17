@@ -118,9 +118,15 @@ const t = {
     blogComingSoon: "The first articles are in the works. Check back soon.",
     readMore: "Read more",
     contactTitle: "Let's connect",
-    contactBody: "For collaboration or an exchange of ideas about L&D and healthier workplaces, feel free to send me a message.",
+    contactBody: "Whether you'd like to discuss individual coaching, professional collaboration, or people development in organizations, feel free to send me a message.",
     formName: "Name",
     formEmail: "Email",
+    formCompanyOptional: "Company (optional)",
+    formCompanyPlaceholder: "Company name",
+    formSubject: "Subject (optional)",
+    formSubjectPlaceholder: "Select a subject",
+    formSubjects: ["Individual Coaching", "Professional Collaboration", "Other"],
+    contactEmailLead: "Or contact me directly by email:",
     formMessage: "Message",
     formSend: "Send message",
     formSending: "Sending...",
@@ -246,9 +252,15 @@ const t = {
     blogComingSoon: "Prvi \u010dlanci su u pripremi. Navratite ponovo.",
     readMore: "Pro\u010ditaj vi\u0161e",
     contactTitle: "Pove\u017eimo se",
-    contactBody: "Za saradnju ili razmenu ideja o razvoju zaposlenih i zdravijim radnim okru\u017eenjima, slobodno mi pi\u0161ite.",
+    contactBody: "Bilo da \u017eeli\u0161 da razgovaramo o individualnom coachingu, profesionalnoj saradnji ili razvoju ljudi u organizacijama, mo\u017ee\u0161 mi pisati ovde.",
     formName: "Ime",
     formEmail: "Email",
+    formCompanyOptional: "Kompanija (opciono)",
+    formCompanyPlaceholder: "Naziv kompanije",
+    formSubject: "Tema (opciono)",
+    formSubjectPlaceholder: "Izaberi temu",
+    formSubjects: ["Individualni coaching", "Profesionalna saradnja", "Drugo"],
+    contactEmailLead: "Ili me kontaktiraj direktno putem emaila:",
     formMessage: "Poruka",
     formSend: "Po\u0161alji poruku",
     formSending: "Slanje u toku...",
@@ -1272,8 +1284,9 @@ function ProjectPage({ project, c, lang, setLang, goToSection, navigate }) {
 }
 
 /* ============ Contact form ============ */
-function ContactForm({ c, source, strict = false, company = false, hideMessage = false }) {
-  const [values, setValues] = useState({ name: "", email: "", company: "", message: "" });
+function ContactForm({ c, source, strict = false, company = false, hideMessage = false, extras = false }) {
+  /* extras = the home page form: an optional company field and an optional subject list */
+  const [values, setValues] = useState({ name: "", email: "", company: "", subject: "", message: "" });
   const [status, setStatus] = useState("idle"); // idle | sending | sent | error
   const [problem, setProblem] = useState("");
 
@@ -1314,14 +1327,15 @@ function ContactForm({ c, source, strict = false, company = false, hideMessage =
         body: JSON.stringify({
           name,
           email,
-          ...(company ? { company: companyName } : {}),
+          ...(company || extras ? { company: companyName } : {}),
+          ...(extras ? { subject: values.subject } : {}),
           message,
           ...(source ? { source } : {}),
         }),
       });
       if (!res.ok) throw new Error("Request failed");
       setStatus("sent");
-      setValues({ name: "", email: "", company: "", message: "" });
+      setValues({ name: "", email: "", company: "", subject: "", message: "" });
     } catch (err) {
       setStatus("error");
     }
@@ -1361,6 +1375,33 @@ function ContactForm({ c, source, strict = false, company = false, hideMessage =
           />
         </label>
       </div>
+      {extras && (
+        <div className="field-row">
+          <label className="field">
+            <span>{c.formCompanyOptional}</span>
+            <input
+              type="text"
+              value={values.company}
+              onChange={update("company")}
+              placeholder={c.formCompanyPlaceholder}
+              autoComplete="organization"
+            />
+          </label>
+          <label className="field">
+            <span>{c.formSubject}</span>
+            <select
+              value={values.subject}
+              onChange={update("subject")}
+              className={values.subject ? "" : "is-empty"}
+            >
+              <option value="">{c.formSubjectPlaceholder}</option>
+              {c.formSubjects.map((o) => (
+                <option key={o} value={o}>{o}</option>
+              ))}
+            </select>
+          </label>
+        </div>
+      )}
       {company && (
         <label className="field">
           <span>{c.formCompany}{mark}</span>
@@ -1659,10 +1700,14 @@ function HomePage({ c, lang, goToSection, navigate }) {
             <p className="contact-lead">{c.contactBody}</p>
           </Reveal>
           <Reveal delay={120}>
-            <ContactForm c={c} />
+            <ContactForm c={c} extras />
           </Reveal>
           <Reveal delay={200}>
-            <p className="linkedin-note">
+            <p className="linkedin-note contact-email-note">
+              {c.contactEmailLead}{" "}
+              <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
+            </p>
+            <p className="linkedin-note contact-linkedin-note">
               {c.linkedinBefore}
               <a href={LINKEDIN_URL} target="_blank" rel="noreferrer">
                 {c.linkedinLink}
@@ -3443,14 +3488,16 @@ export default function Portfolio({ initialPath }) {
           display: block; font-size: 13px; font-weight: 700; letter-spacing: .1em;
           text-transform: uppercase; color: var(--muted); margin-bottom: 5px;
         }
-        .field input, .field textarea {
+        .field input, .field textarea, .field select {
           width: 100%; font-family: 'Karla Variable', system-ui, sans-serif; font-size: 16px; color: var(--ink);
           background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
           padding: 11px 13px; transition: border-color .2s ease, box-shadow .2s ease;
         }
-        .band .field input, .band .field textarea { background: var(--bg); }
+        .band .field input, .band .field textarea, .band .field select { background: var(--bg); }
+        .field select { cursor: pointer; }
+        .field select.is-empty { color: var(--muted); }
         .field textarea { resize: vertical; min-height: 88px; line-height: 1.5; }
-        .field input:focus, .field textarea:focus {
+        .field input:focus, .field textarea:focus, .field select:focus {
           outline: none; border-color: var(--accent);
           box-shadow: 0 0 0 3px rgba(90,107,79,.15);
         }
@@ -3483,6 +3530,9 @@ export default function Portfolio({ initialPath }) {
           text-decoration: underline; text-underline-offset: 3px;
         }
         .linkedin-note a:hover { color: var(--ink); }
+        .contact-email-note a { overflow-wrap: anywhere; }
+        /* Email line and LinkedIn line share one divider */
+        .contact-email-note + .contact-linkedin-note { margin-top: 6px; padding-top: 0; border-top: none; }
 
         @media (max-width: 560px) {
           .field-row { grid-template-columns: 1fr; gap: 0; }
@@ -3726,7 +3776,7 @@ export default function Portfolio({ initialPath }) {
           position: absolute; width: 1px; height: 1px; overflow: hidden;
           clip: rect(0 0 0 0); white-space: nowrap;
         }
-        .c-form-card .field input, .c-form-card .field textarea { background: var(--bg); }
+        .c-form-card .field input, .c-form-card .field textarea, .c-form-card .field select { background: var(--bg); }
         .c-form-card .contact-form, .c-form-card .form-success { max-width: none; }
         .c-form-card .form-success { margin: 0; }
 
@@ -3795,7 +3845,7 @@ export default function Portfolio({ initialPath }) {
           .contact-lead { font-size: 15.5px; margin-bottom: 14px; }
           .field { margin-bottom: 9px; }
           .field span { font-size: 12px; margin-bottom: 4px; }
-          .field input, .field textarea { padding: 9px 12px; font-size: 15px; }
+          .field input, .field textarea, .field select { padding: 9px 12px; font-size: 15px; }
           .field textarea { min-height: 62px; }
           .contact-form .btn { padding: 10px 24px; }
           .linkedin-note { margin-top: 10px; padding-top: 10px; font-size: 14.5px; }
