@@ -7,9 +7,25 @@ import { routes as SEO_ROUTES } from "./seo.js";
    ========================================================= */
 const t = {
   en: {
-    eyebrow: "People Development & Healthy Workplaces",
+    eyebrow: "People Development",
     name: "Andreja Trajkovic",
-    heroSub: "My focus is employee learning and development, together with building healthy workplaces based on respect, support and open communication.",
+    heroDirections: "Learning & Development \u00b7 Individual Coaching",
+    heroSub: "My professional focus is people development \u2014 supporting employee development, helping create healthier workplaces, and providing individual coaching. I'm committed to helping people recognize and create opportunities for their personal and professional growth.",
+    directions: [
+      {
+        title: "People Development",
+        sub: "Learning & Development \u00b7 Healthy Workplaces",
+        desc: "My focus is on employee development and creating workplaces where people have opportunities to build their skills, share knowledge, communicate openly, and work together. I believe that employee development and healthy working relationships contribute to both employee satisfaction and organizational success.",
+        cta: "Explore People Development",
+      },
+      {
+        title: "Individual Coaching",
+        sub: "Personal & Professional Development",
+        desc: "Through individual coaching, I support people in working towards their personal and professional goals, looking at their situation from different perspectives, identifying obstacles, and finding their own solutions and practical steps towards the changes they want to make.",
+        cta: "Explore Individual Coaching",
+        links: { individuals: "For individuals", companies: "For companies", probono: "Pro Bono Program" },
+      },
+    ],
     ctaPrimary: "See my work",
     ctaSecondary: "Get in touch",
     nav: {
@@ -20,6 +36,7 @@ const t = {
       coachingIndividuals: "For individuals",
       coachingProBono: "Pro bono",
       story: "My story",
+      education: "Education",
       blog: "Articles",
       formula: "Formula",
       contact: "Contact",
@@ -27,12 +44,35 @@ const t = {
     backToTop: "Back to top",
     openMenu: "Open menu",
     closeMenu: "Close menu",
+    educationTitle: "Education & Professional Development",
+    education: [
+      {
+        category: "Formal Education",
+        title: "Management in Business and Industrial Systems",
+        lines: ["Vocational Manager", "Visoka \u0161kola strukovnih studija \u201eProf. dr. Radomir Bojkovi\u0107\u201c", "2026"],
+      },
+      {
+        category: "Completed Training",
+        title: "Training for Mentors",
+        lines: ["IMC", "Trainer: Nata\u0161a Vukmirovi\u0107", "2026"],
+      },
+      {
+        category: "Completed Program",
+        title: "Generative AI for L&D Professional Certificate",
+        lines: ["LinkedIn Learning", "2026"],
+      },
+      {
+        category: "Training in Progress",
+        title: "Coaching Plus",
+        lines: ["IMC", "Trainer: Nata\u0161a Vukmirovi\u0107"],
+      },
+    ],
     storyTitle: "My story",
     storyBody: [
-      "I've worked in different roles and industries. These experiences showed me how respect, opportunities to grow, communication and team atmosphere affect how employees feel and work.",
-      "I've been part of teams where support and development were part of everyday work, but I've also seen how their absence affects employees' energy and motivation. That is why I believe respect, support and a strong sense of community are the foundation of a healthy workplace.",
-      "For more than a decade, I've actively worked on my personal development and explored communication and human behavior. Today, I combine that interest with my professional experience and formal education in HR, organizational behavior and business organization.",
-      "My goal is to contribute to workplaces where employees can grow, communicate openly, support one another and build success together.",
+      "From an early age, I did seasonal work in a raspberry field. Later, adapting to circumstances, I took on a range of jobs and used the opportunities I had to learn, develop and move forward. That is how I gained experience in different industries — from a beauty salon, hospitality and service work, through data research and the IT sector, to working in a legal environment.",
+      "These experiences let me get to know different people, teams and ways of working. Many times I saw for myself how much the work environment, relationships between people, communication and opportunities to develop can affect how people feel at work and how much they are able to contribute.",
+      "My experience as a Business Analyst is especially important to me. Alongside my regular responsibilities, I helped onboard new colleagues, shared knowledge and supported them in becoming independent. I have never felt that someone else's progress takes away from mine. On the contrary, I believe that through cooperation and mutual support we can all achieve more.",
+      "Alongside my professional experience, I have spent more than ten years dedicated to personal development and understanding human behavior. I believe in personal responsibility, openness to change, and a willingness to keep learning and to question ourselves. It was these values, together with my professional experience and education, that naturally led me toward people development and individual coaching.",
     ],
     offerTitle: "How I can contribute",
     offerIntro: "I combine professional experience, continuous learning and L&D principles to develop practical approaches focused on employees and their work environment.",
@@ -78,9 +118,15 @@ const t = {
     blogComingSoon: "The first articles are in the works. Check back soon.",
     readMore: "Read more",
     contactTitle: "Let's connect",
-    contactBody: "For collaboration or an exchange of ideas about L&D and healthier workplaces, feel free to send me a message.",
+    contactBody: "Whether you'd like to discuss individual coaching, professional collaboration, or people development in organizations, feel free to send me a message.",
     formName: "Name",
     formEmail: "Email",
+    formCompanyOptional: "Company (optional)",
+    formCompanyPlaceholder: "Company name",
+    formSubject: "Subject (optional)",
+    formSubjectPlaceholder: "Select a subject",
+    formSubjects: ["Individual Coaching", "Professional Collaboration", "Other"],
+    contactEmailLead: "Or contact me directly by email:",
     formMessage: "Message",
     formSend: "Send message",
     formSending: "Sending...",
@@ -95,9 +141,25 @@ const t = {
     footer: "\u00A9 2026 Andreja Trajkovic. All rights reserved.",
   },
   sr: {
-    eyebrow: "Razvoj zaposlenih i zdrava radna okru\u017eenja",
+    eyebrow: "People Development",
     name: "Andreja Trajkovi\u0107",
-    heroSub: "Moj fokus su edukacija i razvoj zaposlenih, kao i stvaranje zdravih radnih okru\u017eenja zasnovanih na po\u0161tovanju, podr\u0161ci i otvorenoj komunikaciji.",
+    heroDirections: "Learning & Development \u00b7 Individual Coaching",
+    heroSub: "Moj profesionalni fokus je razvoj ljudi \u2014 kroz podr\u0161ku razvoju zaposlenih, stvaranje zdravijih radnih okru\u017eenja i individualni coaching. Posve\u0107ena sam tome da ljudima pomognem da prepoznaju i stvaraju prilike za svoj li\u010dni i profesionalni razvoj.",
+    directions: [
+      {
+        title: "People Development",
+        sub: "Learning & Development \u00b7 Healthy Workplaces",
+        desc: "Moj fokus je na razvoju zaposlenih i stvaranju radnih okru\u017eenja u kojima ljudi imaju priliku da razvijaju svoje ve\u0161tine, razmenjuju znanje, otvoreno komuniciraju i sara\u0111uju. Verujem da razvoj zaposlenih i zdravi me\u0111uljudski odnosi doprinose i njihovom zadovoljstvu i uspehu organizacije.",
+        cta: "Saznaj vi\u0161e",
+      },
+      {
+        title: "Individual Coaching",
+        sub: "Personal & Professional Development",
+        desc: "Kroz individualni coaching podr\u017eavam ljude da rade na li\u010dnim i profesionalnim ciljevima, sagledaju svoju situaciju iz razli\u010ditih perspektiva, prepoznaju prepreke i prona\u0111u sopstvena re\u0161enja i konkretne korake ka promeni koju \u017eele da ostvare.",
+        cta: "Saznaj vi\u0161e",
+        links: { individuals: "Za pojedince", companies: "Za kompanije", probono: "Pro bono program" },
+      },
+    ],
     ctaPrimary: "Projekti",
     ctaSecondary: "Kontakt",
     nav: {
@@ -108,6 +170,7 @@ const t = {
       coachingIndividuals: "Za pojedince",
       coachingProBono: "Pro bono",
       story: "O meni",
+      education: "Obrazovanje",
       blog: "Blog",
       formula: "Formula",
       contact: "Kontakt",
@@ -115,12 +178,35 @@ const t = {
     backToTop: "Nazad na vrh",
     openMenu: "Otvori meni",
     closeMenu: "Zatvori meni",
+    educationTitle: "Obrazovanje i profesionalni razvoj",
+    education: [
+      {
+        category: "Formalno obrazovanje",
+        title: "Menad\u017ement u poslovno-industrijskom sistemu",
+        lines: ["Strukovni menad\u017eer", "Visoka \u0161kola strukovnih studija \u201eProf. dr. Radomir Bojkovi\u0107\u201c", "2026"],
+      },
+      {
+        category: "Zavr\u0161ena edukacija",
+        title: "Trening za mentore",
+        lines: ["IMC", "Trener: Nata\u0161a Vukmirovi\u0107", "2026"],
+      },
+      {
+        category: "Zavr\u0161en program",
+        title: "Generative AI for L&D Professional Certificate",
+        lines: ["LinkedIn Learning", "2026"],
+      },
+      {
+        category: "Edukacija u toku",
+        title: "Coaching Plus",
+        lines: ["IMC", "Trener: Nata\u0161a Vukmirovi\u0107"],
+      },
+    ],
     storyTitle: "Moja pri\u010da",
     storyBody: [
-      "Radila sam na razli\u010ditim pozicijama i u razli\u010ditim industrijama. Ta iskustva pokazala su mi koliko po\u0161tovanje, mogu\u0107nost za razvoj, komunikacija i atmosfera u timu uti\u010du na to kako se zaposleni ose\u0107aju i rade.",
-      "Bila sam deo timova u kojima su podr\u0161ka i razvoj bili deo svakodnevnog rada, ali sam videla i kako njihov nedostatak uti\u010de na energiju i motivaciju zaposlenih. Zato verujem da su po\u0161tovanje, podr\u0161ka i ose\u0107aj pripadnosti osnova zdravog radnog okru\u017eenja.",
-      "Vi\u0161e od decenije aktivno radim na li\u010dnom razvoju i prou\u010davam komunikaciju i pona\u0161anje ljudi. Danas to interesovanje povezujem sa profesionalnim iskustvom i formalnim obrazovanjem iz oblasti upravljanja ljudskim resursima, organizacionog pona\u0161anja i organizacije preduze\u0107a.",
-      "\u017delim da doprinesem radnim okru\u017eenjima u kojima se zaposleni razvijaju, otvoreno komuniciraju, podr\u017eavaju jedni druge i zajedno grade uspeh.",
+      "Od malih nogu sam radila sezonske poslove u malinjaku. Kasnije sam, prilagođavajući se okolnostima, prihvatala različite poslove i koristila prilike da učim, razvijam se i napredujem. Tako sam stekla iskustvo u različitim industrijama — od kozmetičkog salona, ugostiteljstva i uslužnih delatnosti, preko istraživanja podataka i IT sektora, do rada u pravnom okruženju.",
+      "Ta iskustva su mi omogućila da upoznam različite ljude, timove i načine rada. Mnogo puta sam se uverila koliko radno okruženje, međuljudski odnosi, komunikacija i prilike za razvoj mogu da utiču na to kako se ljudi osećaju na poslu i koliko mogu da doprinesu.",
+      "Posebno mi je značajno iskustvo rada kao Business Analyst, gde sam, pored svojih redovnih odgovornosti, učestvovala u uvođenju novih kolega u posao, delila znanje i pomagala im da se osamostale. Nikada nisam smatrala da tuđi napredak umanjuje moj. Naprotiv, verujem da kroz saradnju i međusobnu podršku svi možemo više da postignemo.",
+      "Paralelno sa profesionalnim iskustvom, više od deset godina posvećena sam ličnom razvoju i razumevanju ljudskog ponašanja. Verujem u značaj lične odgovornosti, otvorenosti za promene i spremnosti da učimo i preispitujemo sebe. Upravo su me te vrednosti, zajedno sa profesionalnim iskustvom i obrazovanjem, prirodno usmerile ka razvoju ljudi i individualnom coachingu.",
     ],
     offerTitle: "Kako mogu da doprinesem",
     offerIntro: "U svom pristupu povezujem profesionalno iskustvo, kontinuiranu edukaciju i principe L&D-a kako bih razvijala prakti\u010dna re\u0161enja usmerena na zaposlene i njihovo radno okru\u017eenje.",
@@ -166,9 +252,15 @@ const t = {
     blogComingSoon: "Prvi \u010dlanci su u pripremi. Navratite ponovo.",
     readMore: "Pro\u010ditaj vi\u0161e",
     contactTitle: "Pove\u017eimo se",
-    contactBody: "Za saradnju ili razmenu ideja o razvoju zaposlenih i zdravijim radnim okru\u017eenjima, slobodno mi pi\u0161ite.",
+    contactBody: "Bilo da \u017eeli\u0161 da razgovaramo o individualnom coachingu, profesionalnoj saradnji ili razvoju ljudi u organizacijama, mo\u017ee\u0161 mi pisati ovde.",
     formName: "Ime",
     formEmail: "Email",
+    formCompanyOptional: "Kompanija (opciono)",
+    formCompanyPlaceholder: "Naziv kompanije",
+    formSubject: "Tema (opciono)",
+    formSubjectPlaceholder: "Izaberi temu",
+    formSubjects: ["Individualni coaching", "Profesionalna saradnja", "Drugo"],
+    contactEmailLead: "Ili me kontaktiraj direktno putem emaila:",
     formMessage: "Poruka",
     formSend: "Po\u0161alji poruku",
     formSending: "Slanje u toku...",
@@ -585,12 +677,15 @@ const SHOW_BLOG = false;
    waiting list instead (wording lives under `closed` in PROBONO below). */
 const COACHING_OPEN = true;
 
-/* Section order on the page and in the fixed menu */
-const NAV_IDS = ["projects", "offer", "story", ...(SHOW_BLOG ? ["blog"] : []), "contact"];
+/* Section order on the page and in the fixed menu. The home page is now:
+   Hero, Two directions, My story, Education, Let's connect. (The Projects, Focus areas,
+   Coaching offers and Formula sections were taken off the home page; their
+   text is still in the file, see the note above HomePage.) */
+const NAV_IDS = ["story", "education", ...(SHOW_BLOG ? ["blog"] : []), "contact"];
 
-/* Menu order: the Coaching page sits right after "Focus areas". It is a page,
-   not a section, so it opens its own route instead of scrolling. */
-const NAV_ENTRIES = NAV_IDS.flatMap((id) => (id === "offer" ? [id, "coaching"] : [id]));
+/* Menu order: Coaching first. It is a menu of pages, not a section, so it
+   opens its own routes instead of scrolling. */
+const NAV_ENTRIES = ["coaching", ...NAV_IDS];
 
 /* Coaching submenu, in menu order. "Pro bono" is the existing coaching page
    (the printed QR code points to #/coaching; it is sent to /coaching/pro-bono/ automatically).
@@ -608,6 +703,7 @@ const SECTION_SLUGS = {
   offer: "oblasti-rada",
   "coaching-offers": "coaching",
   story: "o-meni",
+  education: "obrazovanje",
   blog: "blog",
   contact: "kontakt",
 };
@@ -1188,8 +1284,9 @@ function ProjectPage({ project, c, lang, setLang, goToSection, navigate }) {
 }
 
 /* ============ Contact form ============ */
-function ContactForm({ c, source, strict = false, company = false, hideMessage = false }) {
-  const [values, setValues] = useState({ name: "", email: "", company: "", message: "" });
+function ContactForm({ c, source, strict = false, company = false, hideMessage = false, extras = false }) {
+  /* extras = the home page form: an optional company field and an optional subject list */
+  const [values, setValues] = useState({ name: "", email: "", company: "", subject: "", message: "" });
   const [status, setStatus] = useState("idle"); // idle | sending | sent | error
   const [problem, setProblem] = useState("");
 
@@ -1230,14 +1327,15 @@ function ContactForm({ c, source, strict = false, company = false, hideMessage =
         body: JSON.stringify({
           name,
           email,
-          ...(company ? { company: companyName } : {}),
+          ...(company || extras ? { company: companyName } : {}),
+          ...(extras ? { subject: values.subject } : {}),
           message,
           ...(source ? { source } : {}),
         }),
       });
       if (!res.ok) throw new Error("Request failed");
       setStatus("sent");
-      setValues({ name: "", email: "", company: "", message: "" });
+      setValues({ name: "", email: "", company: "", subject: "", message: "" });
     } catch (err) {
       setStatus("error");
     }
@@ -1277,6 +1375,33 @@ function ContactForm({ c, source, strict = false, company = false, hideMessage =
           />
         </label>
       </div>
+      {extras && (
+        <div className="field-row">
+          <label className="field">
+            <span>{c.formCompanyOptional}</span>
+            <input
+              type="text"
+              value={values.company}
+              onChange={update("company")}
+              placeholder={c.formCompanyPlaceholder}
+              autoComplete="organization"
+            />
+          </label>
+          <label className="field">
+            <span>{c.formSubject}</span>
+            <select
+              value={values.subject}
+              onChange={update("subject")}
+              className={values.subject ? "" : "is-empty"}
+            >
+              <option value="">{c.formSubjectPlaceholder}</option>
+              {c.formSubjects.map((o) => (
+                <option key={o} value={o}>{o}</option>
+              ))}
+            </select>
+          </label>
+        </div>
+      )}
       {company && (
         <label className="field">
           <span>{c.formCompany}{mark}</span>
@@ -1321,29 +1446,25 @@ function ContactForm({ c, source, strict = false, company = false, hideMessage =
 }
 
 /* ============ Home page ============ */
-function HomePage({ c, lang, goToSection, navigate }) {
+
+/* Where the two cards under the hero lead. Individual Coaching goes to its
+   existing page. There is no People Development page yet, so that card has no
+   link (null) and is shown as a plain card; once the page exists, put its
+   address here and the card becomes a link automatically. */
+const DIRECTION_HREFS = [null, "/coaching/pojedinci/"];
+
+/* Taken off the home page, but not deleted: their text (t.*.projectsTitle,
+   offers, formula...), the `projects` list and the section components below
+   are all still here, and the case study page /work/future-forward/ still
+   works. It is just no longer linked from the home page. */
+/* ---------------------------------------------------------------------
+   Sections taken off the home page, kept here exactly as they were so they
+   can be placed on the future People Development page. They are not rendered
+   anywhere right now.
+   --------------------------------------------------------------------- */
+function ProjectsSection({ c, lang, navigate }) {
   return (
     <>
-      <header className="hero">
-        <div className="monogram" aria-hidden="true">AT</div>
-        <Reveal>
-          <p className="eyebrow">{c.eyebrow}</p>
-          <p className="hero-name">{c.name}</p>
-          <h1>
-            {lang === "en" ? (
-              <>The most important system in any company isn't the software. <em>It's the people.</em></>
-            ) : (
-              <>Najvažniji sistem u svakoj kompaniji nije softver. <em>To su ljudi.</em></>
-            )}
-          </h1>
-          <p className="hero-sub">{c.heroSub}</p>
-          <div className="cta-row">
-            <a className="btn btn-primary" href={sectionHref("projects")} onClick={linkClick(() => goToSection("projects"))}>{c.ctaPrimary}</a>
-            <a className="btn btn-ghost" href={sectionHref("contact")} onClick={linkClick(() => goToSection("contact"))}>{c.ctaSecondary}</a>
-          </div>
-        </Reveal>
-      </header>
-
       <CardSection
         id="projects"
         sectionClass="band home-section"
@@ -1357,7 +1478,13 @@ function HomePage({ c, lang, goToSection, navigate }) {
         emptyTitle={c.projectsComingSoon}
         emptySub={c.projectsComingSoonSub}
       />
+    </>
+  );
+}
 
+function FocusAreasSection({ c }) {
+  return (
+    <>
       <section className="home-section" id="offer">
         <div className="inner">
           <Reveal><h2 className="section-title">{c.offerTitle}</h2></Reveal>
@@ -1377,6 +1504,13 @@ function HomePage({ c, lang, goToSection, navigate }) {
 
       {/* Coaching offers, linked from the home page so visitors (and Google)
           reach them from here too. Texts come from each coaching page. */}
+    </>
+  );
+}
+
+function CoachingOffersSection({ c, navigate }) {
+  return (
+    <>
       <section className="home-section" id="coaching-offers">
         <div className="inner">
           <Reveal><h2 className="section-title">{c.nav.coaching}</h2></Reveal>
@@ -1407,38 +1541,13 @@ function HomePage({ c, lang, goToSection, navigate }) {
           </div>
         </div>
       </section>
+    </>
+  );
+}
 
-      <section className="story band home-section" id="story">
-        <div className="inner">
-          <Reveal><h2 className="section-title">{c.storyTitle}</h2></Reveal>
-          <div className={PORTRAIT ? "story-grid has-portrait" : "story-grid"}>
-            {PORTRAIT && (
-              <Reveal className="story-portrait">
-                <img src={PORTRAIT} alt={PORTRAIT_ALT[lang]} loading="lazy" />
-              </Reveal>
-            )}
-            <div className={lang === "en" ? "story-text justified" : "story-text"}>
-              {c.storyBody.map((p, i) => (
-                <Reveal key={i} delay={120 + i * 120}><p>{p}</p></Reveal>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {SHOW_BLOG && (
-        <CardSection
-          id="blog"
-          sectionClass="home-section"
-          title={c.blogTitle}
-          intro={c.blogIntro}
-          items={blogPosts}
-          lang={lang}
-          linkLabel={c.readMore}
-          emptyTitle={c.blogComingSoon}
-        />
-      )}
-
+function FormulaSection({ c }) {
+  return (
+    <>
       <section className="formula" id="formula">
         <div className="inner">
           <Reveal><h2 className="section-title">{c.formulaTitle}</h2></Reveal>
@@ -1458,6 +1567,131 @@ function HomePage({ c, lang, goToSection, navigate }) {
           <Reveal delay={1050}><p className="formula-note">{c.formulaNote}</p></Reveal>
         </div>
       </section>
+    </>
+  );
+}
+
+
+function HomePage({ c, lang, goToSection, navigate }) {
+  return (
+    <>
+      <header className="hero">
+        <div className="monogram" aria-hidden="true">AT</div>
+        <Reveal>
+          <p className="eyebrow">{c.eyebrow}</p>
+          <h1>Andreja Trajković</h1>
+          <p className="hero-directions">{c.heroDirections}</p>
+          <p className="hero-sub">{c.heroSub}</p>
+        </Reveal>
+      </header>
+
+      {/* Two directions: equally prominent cards, side by side on desktop and
+          stacked on mobile. */}
+      <section className="home-section" id="directions" aria-label={c.heroDirections}>
+        <div className="inner">
+          <div className="direction-grid">
+            {c.directions.map((d, i) => {
+              const href = DIRECTION_HREFS[i];
+              const hasLinks = Boolean(d.links);
+              const text = (
+                <div>
+                  <h2>{d.title}</h2>
+                  <p className="direction-sub">{d.sub}</p>
+                  <p>{d.desc}</p>
+                </div>
+              );
+              /* Coaching card: two main links and a quieter pro bono link */
+              if (hasLinks) {
+                return (
+                  <Reveal key={d.title} delay={i * 100}>
+                    <div className="card entry-card card-static">
+                      {text}
+                      <div className="direction-links">
+                        <div className="direction-main">
+                          <a className="btn btn-ghost" href="/coaching/pojedinci/" onClick={linkClick(() => navigate("/coaching/pojedinci/"))}>{d.links.individuals}</a>
+                          <a className="btn btn-ghost" href="/coaching/kompanije/" onClick={linkClick(() => navigate("/coaching/kompanije/"))}>{d.links.companies}</a>
+                        </div>
+                        <p className="entry-link-row">
+                          <a className="entry-link" href="/coaching/pro-bono/" onClick={linkClick(() => navigate("/coaching/pro-bono/"))}>{d.links.probono} <span aria-hidden="true">→</span></a>
+                        </p>
+                      </div>
+                    </div>
+                  </Reveal>
+                );
+              }
+              const body = (
+                <>
+                  {text}
+                  <p className="entry-link-row">
+                    <span className="entry-link">{d.cta} <span aria-hidden="true">→</span></span>
+                  </p>
+                </>
+              );
+              return (
+                <Reveal key={d.title} delay={i * 100}>
+                  {href ? (
+                    <a className="card entry-card card-link" href={href} onClick={linkClick(() => navigate(href))}>
+                      {body}
+                    </a>
+                  ) : (
+                    <div className="card entry-card card-static">{body}</div>
+                  )}
+                </Reveal>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section className="story band home-section" id="story">
+        <div className="inner">
+          <Reveal><h2 className="section-title">{c.storyTitle}</h2></Reveal>
+          <div className={PORTRAIT ? "story-grid has-portrait" : "story-grid"}>
+            {PORTRAIT && (
+              <Reveal className="story-portrait">
+                <img src={PORTRAIT} alt={PORTRAIT_ALT[lang]} loading="lazy" />
+              </Reveal>
+            )}
+            <div className={lang === "en" ? "story-text justified" : "story-text"}>
+              {c.storyBody.map((p, i) => (
+                <Reveal key={i} delay={120 + i * 120}><p>{p}</p></Reveal>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="home-section" id="education">
+        <div className="inner">
+          <Reveal><h2 className="section-title">{c.educationTitle}</h2></Reveal>
+          <div className="offer-grid">
+            {c.education.map((e, i) => (
+              <Reveal key={e.title} delay={i * 90}>
+                <div className="card edu-card">
+                  <p className="entry-date">{e.category}</p>
+                  <h3>{e.title}</h3>
+                  {e.lines.map((l) => (
+                    <p key={l} className="edu-line">{l}</p>
+                  ))}
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {SHOW_BLOG && (
+        <CardSection
+          id="blog"
+          sectionClass="home-section"
+          title={c.blogTitle}
+          intro={c.blogIntro}
+          items={blogPosts}
+          lang={lang}
+          linkLabel={c.readMore}
+          emptyTitle={c.blogComingSoon}
+        />
+      )}
 
       <section className="contact home-section" id="contact">
         <div className="inner">
@@ -1466,10 +1700,14 @@ function HomePage({ c, lang, goToSection, navigate }) {
             <p className="contact-lead">{c.contactBody}</p>
           </Reveal>
           <Reveal delay={120}>
-            <ContactForm c={c} />
+            <ContactForm c={c} extras />
           </Reveal>
           <Reveal delay={200}>
-            <p className="linkedin-note">
+            <p className="linkedin-note contact-email-note">
+              {c.contactEmailLead}{" "}
+              <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
+            </p>
+            <p className="linkedin-note contact-linkedin-note">
               {c.linkedinBefore}
               <a href={LINKEDIN_URL} target="_blank" rel="noreferrer">
                 {c.linkedinLink}
@@ -2894,7 +3132,11 @@ export default function Portfolio({ initialPath }) {
         }
         .hero h1 { font-size: clamp(34px, 5.4vw, 62px); max-width: 760px; margin-bottom: 22px; }
         .hero h1 em { font-style: italic; color: var(--accent); }
-        .hero-sub { font-size: 19px; color: var(--muted); max-width: 540px; margin-bottom: 36px; }
+        .hero-sub { font-size: 19px; color: var(--muted); max-width: 620px; margin-bottom: 0; }
+        .hero-directions {
+          font-family: 'Fraunces Variable', Georgia, serif; font-size: clamp(18px, 2.1vw, 24px);
+          color: var(--ink); margin-bottom: 22px;
+        }
         .hero-name { font-family: 'Fraunces Variable', Georgia, serif; font-size: 20px; margin-bottom: 6px; }
         .cta-row { display: flex; gap: 14px; flex-wrap: wrap; }
         .btn {
@@ -2931,7 +3173,7 @@ export default function Portfolio({ initialPath }) {
 
         /* Story */
         .story p { max-width: 680px; margin-bottom: 12px; font-size: 16.5px; line-height: 1.55; }
-        .story p:last-child { margin-bottom: 0; }
+        .story-text > .reveal:last-child p { margin-bottom: 0; }
         .story-grid { display: grid; grid-template-columns: 1fr; gap: 36px; align-items: start; }
         .story-portrait img {
           display: block; width: 100%; aspect-ratio: 4 / 5;
@@ -2974,8 +3216,24 @@ export default function Portfolio({ initialPath }) {
         }
         .band .card { background: var(--bg); }
         .card:hover { transform: translateY(-4px); box-shadow: 0 10px 26px rgba(43,36,29,.08); }
-        .card h3 { font-size: 19px; margin-bottom: 8px; }
+        .card h3, .card h2 { font-size: 19px; margin-bottom: 8px; }
         .card p { color: var(--muted); font-size: 15px; }
+        .card-static:hover { transform: none; box-shadow: none; }
+        .direction-links { margin-top: 14px; }
+        .direction-main { display: flex; flex-wrap: wrap; gap: 10px; }
+        .direction-main .btn { font-size: 14.5px; padding: 10px 22px; }
+        .direction-links .entry-link-row { margin-top: 14px; }
+        .direction-links a.entry-link:hover { text-decoration: underline; }
+        .edu-card .entry-date { margin-bottom: 8px; }
+        .edu-card .edu-line { margin-top: 2px; }
+        .direction-grid { display: grid; grid-template-columns: 1fr; gap: 18px; }
+        @media (min-width: 820px) { .direction-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; } }
+        .direction-grid .entry-card { min-height: 0; padding: 28px 26px; }
+        .card h2 { font-size: 24px; }
+        .card .direction-sub {
+          font-size: 13px; letter-spacing: .08em; text-transform: uppercase;
+          color: var(--accent); font-weight: 700; margin-bottom: 12px;
+        }
         .entry-card { min-height: 190px; display: flex; flex-direction: column; justify-content: space-between; }
         .card-link { text-decoration: none; color: inherit; }
         .card-link:hover .entry-link { text-decoration: underline; }
@@ -3230,14 +3488,16 @@ export default function Portfolio({ initialPath }) {
           display: block; font-size: 13px; font-weight: 700; letter-spacing: .1em;
           text-transform: uppercase; color: var(--muted); margin-bottom: 5px;
         }
-        .field input, .field textarea {
+        .field input, .field textarea, .field select {
           width: 100%; font-family: 'Karla Variable', system-ui, sans-serif; font-size: 16px; color: var(--ink);
           background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
           padding: 11px 13px; transition: border-color .2s ease, box-shadow .2s ease;
         }
-        .band .field input, .band .field textarea { background: var(--bg); }
+        .band .field input, .band .field textarea, .band .field select { background: var(--bg); }
+        .field select { cursor: pointer; }
+        .field select.is-empty { color: var(--muted); }
         .field textarea { resize: vertical; min-height: 88px; line-height: 1.5; }
-        .field input:focus, .field textarea:focus {
+        .field input:focus, .field textarea:focus, .field select:focus {
           outline: none; border-color: var(--accent);
           box-shadow: 0 0 0 3px rgba(90,107,79,.15);
         }
@@ -3270,6 +3530,9 @@ export default function Portfolio({ initialPath }) {
           text-decoration: underline; text-underline-offset: 3px;
         }
         .linkedin-note a:hover { color: var(--ink); }
+        .contact-email-note a { overflow-wrap: anywhere; }
+        /* Email line and LinkedIn line share one divider */
+        .contact-email-note + .contact-linkedin-note { margin-top: 6px; padding-top: 0; border-top: none; }
 
         @media (max-width: 560px) {
           .field-row { grid-template-columns: 1fr; gap: 0; }
@@ -3513,7 +3776,7 @@ export default function Portfolio({ initialPath }) {
           position: absolute; width: 1px; height: 1px; overflow: hidden;
           clip: rect(0 0 0 0); white-space: nowrap;
         }
-        .c-form-card .field input, .c-form-card .field textarea { background: var(--bg); }
+        .c-form-card .field input, .c-form-card .field textarea, .c-form-card .field select { background: var(--bg); }
         .c-form-card .contact-form, .c-form-card .form-success { max-width: none; }
         .c-form-card .form-success { margin: 0; }
 
@@ -3582,7 +3845,7 @@ export default function Portfolio({ initialPath }) {
           .contact-lead { font-size: 15.5px; margin-bottom: 14px; }
           .field { margin-bottom: 9px; }
           .field span { font-size: 12px; margin-bottom: 4px; }
-          .field input, .field textarea { padding: 9px 12px; font-size: 15px; }
+          .field input, .field textarea, .field select { padding: 9px 12px; font-size: 15px; }
           .field textarea { min-height: 62px; }
           .contact-form .btn { padding: 10px 24px; }
           .linkedin-note { margin-top: 10px; padding-top: 10px; font-size: 14.5px; }
@@ -3602,6 +3865,7 @@ export default function Portfolio({ initialPath }) {
           .section-intro { font-size: 16px; margin-bottom: 18px; }
           .card { padding: 18px 18px; }
           .card h3 { font-size: 17.5px; }
+          .card h2 { font-size: 21px; }
           .card p { font-size: 14.5px; }
           .story p { font-size: 15.5px; margin-bottom: 10px; }
           .contact { padding: 40px 24px; }
