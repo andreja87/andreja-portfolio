@@ -54,7 +54,7 @@ const t = {
       {
         category: "Completed Training",
         title: "Training for Mentors",
-        lines: ["IMC", "Trainer: Nata\u0161a Vukmirovi\u0107", "2026"],
+        lines: ["ICM", "Trainer: Nata\u0161a Vukmirovi\u0107", "2026"],
       },
       {
         category: "Completed Program",
@@ -64,7 +64,7 @@ const t = {
       {
         category: "Training in Progress",
         title: "Coaching Plus",
-        lines: ["IMC", "Trainer: Nata\u0161a Vukmirovi\u0107"],
+        lines: ["ICM", "Trainer: Nata\u0161a Vukmirovi\u0107"],
       },
     ],
     storyTitle: "My story",
@@ -188,7 +188,7 @@ const t = {
       {
         category: "Zavr\u0161ena edukacija",
         title: "Trening za mentore",
-        lines: ["IMC", "Trener: Nata\u0161a Vukmirovi\u0107", "2026"],
+        lines: ["ICM", "Trener: Nata\u0161a Vukmirovi\u0107", "2026"],
       },
       {
         category: "Zavr\u0161en program",
@@ -198,7 +198,7 @@ const t = {
       {
         category: "Edukacija u toku",
         title: "Coaching Plus",
-        lines: ["IMC", "Trener: Nata\u0161a Vukmirovi\u0107"],
+        lines: ["ICM", "Trener: Nata\u0161a Vukmirovi\u0107"],
       },
     ],
     storyTitle: "Moja pri\u010da",
