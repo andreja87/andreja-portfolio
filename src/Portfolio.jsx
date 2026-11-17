@@ -7,9 +7,24 @@ import { routes as SEO_ROUTES } from "./seo.js";
    ========================================================= */
 const t = {
   en: {
-    eyebrow: "People Development & Healthy Workplaces",
+    eyebrow: "People Development",
     name: "Andreja Trajkovic",
-    heroSub: "My focus is employee learning and development, together with building healthy workplaces based on respect, support and open communication.",
+    heroDirections: "Learning & Development \u00b7 Individual Coaching",
+    heroSub: "My professional focus is people development \u2014 supporting employee development, helping create healthier workplaces, and providing individual coaching. I'm committed to helping people recognize and create opportunities for their personal and professional growth.",
+    directions: [
+      {
+        title: "People Development",
+        sub: "Learning & Development \u00b7 Healthy Workplaces",
+        desc: "My focus is on employee development and creating workplaces where people have opportunities to build their skills, share knowledge, communicate openly, and work together. I believe that employee development and healthy working relationships contribute to both employee satisfaction and organizational success.",
+        cta: "Explore People Development",
+      },
+      {
+        title: "Individual Coaching",
+        sub: "Personal & Professional Development",
+        desc: "Through individual coaching, I support people in working towards their personal and professional goals, looking at their situation from different perspectives, identifying obstacles, and finding their own solutions and practical steps towards the changes they want to make.",
+        cta: "Explore Individual Coaching",
+      },
+    ],
     ctaPrimary: "See my work",
     ctaSecondary: "Get in touch",
     nav: {
@@ -95,9 +110,24 @@ const t = {
     footer: "\u00A9 2026 Andreja Trajkovic. All rights reserved.",
   },
   sr: {
-    eyebrow: "Razvoj zaposlenih i zdrava radna okru\u017eenja",
+    eyebrow: "People Development",
     name: "Andreja Trajkovi\u0107",
-    heroSub: "Moj fokus su edukacija i razvoj zaposlenih, kao i stvaranje zdravih radnih okru\u017eenja zasnovanih na po\u0161tovanju, podr\u0161ci i otvorenoj komunikaciji.",
+    heroDirections: "Learning & Development \u00b7 Individual Coaching",
+    heroSub: "Moj profesionalni fokus je razvoj ljudi \u2014 kroz podr\u0161ku razvoju zaposlenih, stvaranje zdravijih radnih okru\u017eenja i individualni coaching. Posve\u0107ena sam tome da ljudima pomognem da prepoznaju i stvaraju prilike za svoj li\u010dni i profesionalni razvoj.",
+    directions: [
+      {
+        title: "People Development",
+        sub: "Learning & Development \u00b7 Healthy Workplaces",
+        desc: "Moj fokus je na razvoju zaposlenih i stvaranju radnih okru\u017eenja u kojima ljudi imaju priliku da razvijaju svoje ve\u0161tine, razmenjuju znanje, otvoreno komuniciraju i sara\u0111uju. Verujem da razvoj zaposlenih i zdravi me\u0111uljudski odnosi doprinose i njihovom zadovoljstvu i uspehu organizacije.",
+        cta: "Saznaj vi\u0161e",
+      },
+      {
+        title: "Individual Coaching",
+        sub: "Personal & Professional Development",
+        desc: "Kroz individualni coaching podr\u017eavam ljude da rade na li\u010dnim i profesionalnim ciljevima, sagledaju svoju situaciju iz razli\u010ditih perspektiva, prepoznaju prepreke i prona\u0111u sopstvena re\u0161enja i konkretne korake ka promeni koju \u017eele da ostvare.",
+        cta: "Saznaj vi\u0161e",
+      },
+    ],
     ctaPrimary: "Projekti",
     ctaSecondary: "Kontakt",
     nav: {
@@ -1321,6 +1351,13 @@ function ContactForm({ c, source, strict = false, company = false, hideMessage =
 }
 
 /* ============ Home page ============ */
+
+/* Where the two cards under the hero lead. Individual Coaching goes to its
+   existing page. There is no People Development page yet, so that card has no
+   link (null) and is shown as a plain card; once the page exists, put its
+   address here and the card becomes a link automatically. */
+const DIRECTION_HREFS = [null, "/coaching/pojedinci/"];
+
 function HomePage({ c, lang, goToSection, navigate }) {
   return (
     <>
@@ -1328,21 +1365,46 @@ function HomePage({ c, lang, goToSection, navigate }) {
         <div className="monogram" aria-hidden="true">AT</div>
         <Reveal>
           <p className="eyebrow">{c.eyebrow}</p>
-          <p className="hero-name">{c.name}</p>
-          <h1>
-            {lang === "en" ? (
-              <>The most important system in any company isn't the software. <em>It's the people.</em></>
-            ) : (
-              <>Najvažniji sistem u svakoj kompaniji nije softver. <em>To su ljudi.</em></>
-            )}
-          </h1>
+          <h1>Andreja Trajković</h1>
+          <p className="hero-directions">{c.heroDirections}</p>
           <p className="hero-sub">{c.heroSub}</p>
-          <div className="cta-row">
-            <a className="btn btn-primary" href={sectionHref("projects")} onClick={linkClick(() => goToSection("projects"))}>{c.ctaPrimary}</a>
-            <a className="btn btn-ghost" href={sectionHref("contact")} onClick={linkClick(() => goToSection("contact"))}>{c.ctaSecondary}</a>
-          </div>
         </Reveal>
       </header>
+
+      {/* Two directions: equally prominent cards, side by side on desktop and
+          stacked on mobile. */}
+      <section className="home-section" id="directions" aria-label={c.heroDirections}>
+        <div className="inner">
+          <div className="direction-grid">
+            {c.directions.map((d, i) => {
+              const href = DIRECTION_HREFS[i];
+              const body = (
+                <>
+                  <div>
+                    <h2>{d.title}</h2>
+                    <p className="direction-sub">{d.sub}</p>
+                    <p>{d.desc}</p>
+                  </div>
+                  <p className="entry-link-row">
+                    <span className="entry-link">{d.cta} <span aria-hidden="true">→</span></span>
+                  </p>
+                </>
+              );
+              return (
+                <Reveal key={d.title} delay={i * 100}>
+                  {href ? (
+                    <a className="card entry-card card-link" href={href} onClick={linkClick(() => navigate(href))}>
+                      {body}
+                    </a>
+                  ) : (
+                    <div className="card entry-card card-static">{body}</div>
+                  )}
+                </Reveal>
+              );
+            })}
+          </div>
+        </div>
+      </section>
 
       <CardSection
         id="projects"
@@ -2894,7 +2956,11 @@ export default function Portfolio({ initialPath }) {
         }
         .hero h1 { font-size: clamp(34px, 5.4vw, 62px); max-width: 760px; margin-bottom: 22px; }
         .hero h1 em { font-style: italic; color: var(--accent); }
-        .hero-sub { font-size: 19px; color: var(--muted); max-width: 540px; margin-bottom: 36px; }
+        .hero-sub { font-size: 19px; color: var(--muted); max-width: 620px; margin-bottom: 0; }
+        .hero-directions {
+          font-family: 'Fraunces Variable', Georgia, serif; font-size: clamp(18px, 2.1vw, 24px);
+          color: var(--ink); margin-bottom: 22px;
+        }
         .hero-name { font-family: 'Fraunces Variable', Georgia, serif; font-size: 20px; margin-bottom: 6px; }
         .cta-row { display: flex; gap: 14px; flex-wrap: wrap; }
         .btn {
@@ -2974,8 +3040,17 @@ export default function Portfolio({ initialPath }) {
         }
         .band .card { background: var(--bg); }
         .card:hover { transform: translateY(-4px); box-shadow: 0 10px 26px rgba(43,36,29,.08); }
-        .card h3 { font-size: 19px; margin-bottom: 8px; }
+        .card h3, .card h2 { font-size: 19px; margin-bottom: 8px; }
         .card p { color: var(--muted); font-size: 15px; }
+        .card-static:hover { transform: none; box-shadow: none; }
+        .direction-grid { display: grid; grid-template-columns: 1fr; gap: 18px; }
+        @media (min-width: 820px) { .direction-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; } }
+        .direction-grid .entry-card { min-height: 0; padding: 28px 26px; }
+        .card h2 { font-size: 24px; }
+        .card .direction-sub {
+          font-size: 13px; letter-spacing: .08em; text-transform: uppercase;
+          color: var(--accent); font-weight: 700; margin-bottom: 12px;
+        }
         .entry-card { min-height: 190px; display: flex; flex-direction: column; justify-content: space-between; }
         .card-link { text-decoration: none; color: inherit; }
         .card-link:hover .entry-link { text-decoration: underline; }
@@ -3602,6 +3677,7 @@ export default function Portfolio({ initialPath }) {
           .section-intro { font-size: 16px; margin-bottom: 18px; }
           .card { padding: 18px 18px; }
           .card h3 { font-size: 17.5px; }
+          .card h2 { font-size: 21px; }
           .card p { font-size: 14.5px; }
           .story p { font-size: 15.5px; margin-bottom: 10px; }
           .contact { padding: 40px 24px; }
