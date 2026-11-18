@@ -54,7 +54,7 @@ const t = {
       {
         category: "Completed Training",
         title: "Training for Mentors",
-        lines: ["ICM", "Trainer: Nata\u0161a Vukmirovi\u0107", "2026"],
+        lines: ["ICM London", "Trainer: Nata\u0161a Vukmirovi\u0107", "2026"],
       },
       {
         category: "Completed Program",
@@ -64,7 +64,7 @@ const t = {
       {
         category: "Training in Progress",
         title: "Coaching Plus",
-        lines: ["ICM", "Trainer: Nata\u0161a Vukmirovi\u0107"],
+        lines: ["ICM London", "Trainer: Nata\u0161a Vukmirovi\u0107"],
       },
     ],
     storyTitle: "My story",
@@ -188,7 +188,7 @@ const t = {
       {
         category: "Zavr\u0161ena edukacija",
         title: "Trening za mentore",
-        lines: ["ICM", "Trener: Nata\u0161a Vukmirovi\u0107", "2026"],
+        lines: ["ICM London", "Trener: Nata\u0161a Vukmirovi\u0107", "2026"],
       },
       {
         category: "Zavr\u0161en program",
@@ -198,7 +198,7 @@ const t = {
       {
         category: "Edukacija u toku",
         title: "Coaching Plus",
-        lines: ["ICM", "Trener: Nata\u0161a Vukmirovi\u0107"],
+        lines: ["ICM London", "Trener: Nata\u0161a Vukmirovi\u0107"],
       },
     ],
     storyTitle: "Moja pri\u010da",
@@ -3201,9 +3201,8 @@ export default function Portfolio({ initialPath }) {
           }
           .story-grid.has-portrait .story-portrait { display: flex; }
           .story-grid.has-portrait .story-portrait img {
-            /* Follows the text column, but never grows past the screen, so the
-               Serbian and English versions stay the same visual size */
-            aspect-ratio: auto; height: 100%; min-height: 360px; max-height: 58vh;
+            /* Always as tall as the text next to it */
+            aspect-ratio: auto; height: 100%; min-height: 360px;
           }
         }
 
@@ -3836,7 +3835,7 @@ export default function Portfolio({ initialPath }) {
           .story p { font-size: 15px; line-height: 1.5; margin-bottom: 8px; }
           .story-grid { gap: 26px; }
           .story-grid.has-portrait .story-portrait img {
-            min-height: 220px; max-height: 44vh; object-position: 38% 18%;
+            min-height: 220px; object-position: 38% 18%;
           }
           .formula-flow { margin: 6px 0 18px; }
           .formula-note { font-size: 16px; }
