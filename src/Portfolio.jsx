@@ -74,6 +74,12 @@ const t = {
       "My experience as a Business Analyst is especially important to me. Alongside my regular responsibilities, I helped onboard new colleagues, shared knowledge and supported them in becoming independent. I have never felt that someone else's progress takes away from mine. On the contrary, I believe that through cooperation and mutual support we can all achieve more.",
       "Alongside my professional experience, I have spent more than ten years dedicated to personal development and understanding human behavior. I believe in personal responsibility, openness to change, and a willingness to keep learning and to question ourselves. It was these values, together with my professional experience and education, that naturally led me toward people development and individual coaching.",
     ],
+    storyInterests: [
+      "I am interested in how people learn, develop their potential, and overcome challenges, and how organizations can create conditions that support their growth.",
+      "My approach combines structured thinking, creativity, curiosity, and respect for individual perspectives. I enjoy organizing complex information, connecting ideas across disciplines, and exploring their practical applications.",
+      "I value collaboration, mutual respect, and responsibility. I am particularly interested in how knowledge, self-awareness, and personal insights can translate into meaningful changes in everyday and professional life.",
+      "I am developing my professional expertise in coaching, people development, organizational culture, and creating healthy workplace environments.",
+    ],
     offerTitle: "How I can contribute",
     offerIntro: "I combine professional experience, continuous learning and L&D principles to develop practical approaches focused on employees and their work environment.",
     offers: [
@@ -207,6 +213,12 @@ const t = {
       "Ta iskustva su mi omogućila da upoznam različite ljude, timove i načine rada. Mnogo puta sam se uverila koliko radno okruženje, međuljudski odnosi, komunikacija i prilike za razvoj mogu da utiču na to kako se ljudi osećaju na poslu i koliko mogu da doprinesu.",
       "Posebno mi je značajno iskustvo rada kao Business Analyst, gde sam, pored svojih redovnih odgovornosti, učestvovala u uvođenju novih kolega u posao, delila znanje i pomagala im da se osamostale. Nikada nisam smatrala da tuđi napredak umanjuje moj. Naprotiv, verujem da kroz saradnju i međusobnu podršku svi možemo više da postignemo.",
       "Paralelno sa profesionalnim iskustvom, više od deset godina posvećena sam ličnom razvoju i razumevanju ljudskog ponašanja. Verujem u značaj lične odgovornosti, otvorenosti za promene i spremnosti da učimo i preispitujemo sebe. Upravo su me te vrednosti, zajedno sa profesionalnim iskustvom i obrazovanjem, prirodno usmerile ka razvoju ljudi i individualnom coachingu.",
+    ],
+    storyInterests: [
+      "Zanima me kako ljudi u\u010de, razvijaju svoj potencijal i prevazilaze izazove, kao i kako organizacije mogu da stvore uslove koji podr\u017eavaju njihov rast.",
+      "Moj pristup spaja strukturisano razmi\u0161ljanje, kreativnost, radoznalost i uva\u017eavanje individualnih perspektiva. U\u017eivam u organizovanju slo\u017eenih informacija, povezivanju ideja iz razli\u010ditih disciplina i istra\u017eivanju njihove prakti\u010dne primene.",
+      "Cenim saradnju, uzajamno po\u0161tovanje i odgovornost. Posebno me zanima kako znanje, svest o sebi i li\u010dna saznanja mogu da se pretvore u smislene promene u svakodnevnom i profesionalnom \u017eivotu.",
+      "Razvijam svoju profesionalnu stru\u010dnost u oblastima coachinga, razvoja ljudi, organizacione kulture i stvaranja zdravog radnog okru\u017eenja.",
     ],
     offerTitle: "Kako mogu da doprinesem",
     offerIntro: "U svom pristupu povezujem profesionalno iskustvo, kontinuiranu edukaciju i principe L&D-a kako bih razvijala prakti\u010dna re\u0161enja usmerena na zaposlene i njihovo radno okru\u017eenje.",
@@ -1655,6 +1667,11 @@ function HomePage({ c, lang, goToSection, navigate }) {
             <div className={lang === "en" ? "story-text justified" : "story-text"}>
               {c.storyBody.map((p, i) => (
                 <Reveal key={i} delay={120 + i * 120}><p>{p}</p></Reveal>
+              ))}
+              {c.storyInterests.map((p, i) => (
+                <Reveal key={"i" + i} delay={120}>
+                  <p className={i === 0 ? "story-interests-first" : undefined}>{p}</p>
+                </Reveal>
               ))}
             </div>
           </div>
@@ -3174,6 +3191,7 @@ export default function Portfolio({ initialPath }) {
         /* Story */
         .story p { max-width: 680px; margin-bottom: 12px; font-size: 16.5px; line-height: 1.55; }
         .story-text > .reveal:last-child p { margin-bottom: 0; }
+        .story-text p.story-interests-first { margin-top: 28px; padding-top: 28px; border-top: 1px solid var(--line); }
         .story-grid { display: grid; grid-template-columns: 1fr; gap: 36px; align-items: start; }
         .story-portrait img {
           display: block; width: 100%; aspect-ratio: 4 / 5;
